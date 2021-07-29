@@ -35,3 +35,12 @@ div.row{
   letter-spacing: -0.035em;
   color: #333333;
 }
+.column.six.right p{
+  font-family: 'Space Mono', monospace;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: -0.035em;
+  color: #4F4F4F;
+}
