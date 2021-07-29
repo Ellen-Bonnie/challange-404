@@ -1,9 +1,17 @@
 .not-found p{
-  position: relative;
-width: 1440px;
-height: 1080px;
+  position: absolute;
+  width: 133px;
+  height: 25px;
+  left: 77px;
+  top: 40px;
 
-background: #FFFFFF;
-box-shadow: 0px 2px 24px rgba(0, 0, 0, 0.1);
-border-radius: 8px;
+  font-family: 'Inconsolata', monospace;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 25px;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+
+  color: #333333;
 }
