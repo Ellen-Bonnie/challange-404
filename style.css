@@ -13,6 +13,7 @@
   color: #333333;
 }
 div.row{
+  max-width: 1280px;
   width:100%;
   position: relative;
 }
