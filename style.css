@@ -46,20 +46,23 @@ div.row{
   color: #4F4F4F;
 }
 button{
-  width: 216px;
-  height: 21px;
-  left: 783px;
-  top: 687px;
-  font-family: 'Space Mono', monospace;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 21px;
-  letter-spacing: -0.035em;
-  text-transform: uppercase;
-  text-decoration:none;
-  background: #000;
+font-style: normal;
+font-weight: bold;
+font-size: 14px;
+font-family: 'Space Mono', monospace;
+line-height: 21px;
+text-transform: none;
+letter-spacing: 0.035em;
+color: #ffffff;
+height: 68px;
+padding-left: 40px;
+padding-right: 40px;
+background: #333;
+border: #333;
+display: block;
+margin-bottom:20px;
 }
+
 #footer {
   position: fixed;
   bottom: 0;
