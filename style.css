@@ -12,3 +12,14 @@
   text-transform: uppercase;
   color: #333333;
 }
+div.row{
+  width:100%;
+  position: relative;}
+.column.six{
+  position: relative;
+  width: 50%;
+}
+.column.six img{
+  width: 100%;
+  height: 100%;
+}
