@@ -45,3 +45,17 @@ div.row{
   letter-spacing: -0.035em;
   color: #4F4F4F;
 }
+a.button{
+  width: 130px;
+  height: 21px;
+  left: 783px;
+  top: 687px;
+  font-family: 'Space Mono', monospace;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
