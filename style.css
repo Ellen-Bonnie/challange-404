@@ -14,11 +14,13 @@
 }
 div.row{
   width:100%;
-  position: relative;}
+  position: relative;
+}
 .column.six{
   position: relative;
   display: inline-block;
   width: 50%;
+  float: left;
 }
 .column.six img{
   width: 100%;
