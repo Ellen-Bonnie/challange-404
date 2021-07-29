@@ -57,7 +57,8 @@ a.button{
   line-height: 21px;
   letter-spacing: -0.035em;
   text-transform: uppercase;
-  color: #FFFFFF;
+  text-decoration:none;
+  background: #000;
 }
 #footer {
   position: fixed;
