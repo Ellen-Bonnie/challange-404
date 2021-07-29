@@ -17,6 +17,7 @@ div.row{
   position: relative;}
 .column.six{
   position: relative;
+  display: inline-block;
   width: 50%;
 }
 .column.six img{
