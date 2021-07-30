@@ -152,6 +152,7 @@ background-color: rgba(0,0,0,.8);
 	-ms-animation: filter;
 	 -o-animation: filter;
 	animation: filter;
+	animation-iteration-count: infinite;
 }
 .column.six img.one{
     text-align: center;
@@ -230,6 +231,6 @@ background-color: rgba(0,0,0,.8);
 /*filter*/
 @keyframes filter {
     0 { filter: brightness(1); }
-    50% { filter: brightness(0.8);}
+    50% { filter: brightness(0.5);}
     100% { filter: brightness(1); }
 }
