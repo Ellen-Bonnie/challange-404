@@ -155,7 +155,7 @@ background-color: rgba(0,0,0,.8);
         -ms-animation: fadein 3s; /* Internet Explorer */
          -o-animation: fadein 3s; /* Opera < 12.1 */
             animation: fadein 3s;
-	filter: brightness(0.8);
+	animation: filter;
 }
 .column.six img.four{
     text-align: center;
@@ -165,6 +165,7 @@ background-color: rgba(0,0,0,.8);
         -ms-animation: fadein 5s; /* Internet Explorer */
          -o-animation: fadein 5s; /* Opera < 12.1 */
             animation: fadein 5s;
+	animation: filter;
 }
 .column.six img.five{
     text-align: center;
@@ -174,6 +175,7 @@ background-color: rgba(0,0,0,.8);
         -ms-animation: fadein 7s; /* Internet Explorer */
          -o-animation: fadein 7s; /* Opera < 12.1 */
             animation: fadein 7s;
+	animation: filter;
 }
 .column.six img.two{
     text-align: center;
@@ -183,6 +185,7 @@ background-color: rgba(0,0,0,.8);
         -ms-animation: fadein 4s; /* Internet Explorer */
          -o-animation: fadein 4s; /* Opera < 12.1 */
             animation: fadein 4s;
+	animation: filter;
 }
 .column.six img.three{
     text-align: center;
@@ -192,6 +195,7 @@ background-color: rgba(0,0,0,.8);
         -ms-animation: fadein 7s; /* Internet Explorer */
          -o-animation: fadein 7s; /* Opera < 12.1 */
             animation: fadein 7s;
+	animation: filter;
 }
 @keyframes fadein {
     from { opacity: 0; }
