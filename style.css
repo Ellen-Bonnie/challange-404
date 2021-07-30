@@ -53,8 +53,10 @@ div.row{
 	}
 }
 .column.six.left div{
+padding-right: 10%;
+}
+.column.six.left div{
 	position:relative;
-	padding-right: 20%;
 }
 .column.six img{
 	width: 100%;
