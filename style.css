@@ -1,7 +1,6 @@
 body{
 	max-width:1400px;
 	margin: 0 auto;
-	min-width: 100%;
 }
 .not-found p{
 	width: 133px;
@@ -38,6 +37,9 @@ div.row{
 		width: 100%;
 		margin: 0 50px;
 		margin-bottom: 50px;
+}
+.column.six >*{
+	white-space:normal;
 }
 }
 .column.six img{
