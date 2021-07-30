@@ -35,7 +35,7 @@ div.row{
 @media only screen and (min-width: 801px){
 	.column.six{
 		width: 100%;
-		margin: 0 50px;
+		padding: 0 50px;
 		margin-bottom: 50px;
 }
 .column.six >*{
@@ -46,11 +46,6 @@ div.row{
   width: 100%;
   height: 100%;
 }
-@media only screen and (min-width: 801px){
-	.column.six img{
-  		width: 238px;
-			height:286px;
-}}
 .column.six.right h1{
   font-family: 'Space Mono', monospace;
   font-style: normal;
