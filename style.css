@@ -22,6 +22,10 @@ body *{
 	margin-bottom:0;
 	padding-bottom:64px
 }
+.not-found p a{
+	text-decoration: none;
+	color: inherit;
+}
 div.row{
 	max-width: 1280px;
 	width:100%;
