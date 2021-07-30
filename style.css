@@ -56,6 +56,9 @@ div.row{
 	width: 100%;
 	height: 100%;
 }
+.column.six img:not(.main){
+	position:absolute;
+}
 .column.six.right h1{
 	font-family: 'Space Mono', monospace;
 	font-style: normal;
