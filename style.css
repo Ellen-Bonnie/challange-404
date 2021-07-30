@@ -147,11 +147,11 @@ background-color: rgba(0,0,0,.8);
 
 /*image animation*/
 .column.six img.main{
-	-webkit-animation: filter 3s;
-	-moz-animation: filter 3s;
-	-ms-animation: filter 3s;
-	 -o-animation: filter 3s;
-	animation: filter 3s;
+	-webkit-animation: filter;
+	-moz-animation: filter;
+	-ms-animation: filter;
+	 -o-animation: filter;
+	animation: filter;
 }
 .column.six img.one{
     text-align: center;
