@@ -230,6 +230,6 @@ background-color: rgba(0,0,0,.8);
 /*filter*/
 @keyframes filter {
     0 { filter: brightness(1); }
-    50% { filter: brightness(0.5);}
+    50% { filter: brightness(0.7);}
     100% { filter: brightness(1); }
 }
