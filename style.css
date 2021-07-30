@@ -96,6 +96,7 @@ button{
 	border: #333;
 	display: block;
 	margin-bottom:20px;
+	cursor: pointer;
 }
 
 #footer {
