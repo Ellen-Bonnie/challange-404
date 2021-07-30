@@ -221,3 +221,10 @@ background-color: rgba(0,0,0,.8);
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+/*filter*/
+@keyframes filter {
+    0 { filter: brightness(1); }
+    50% { filter: brightness(0.8);}
+    100% { filter: brightness(1); }
+}
