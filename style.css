@@ -55,6 +55,7 @@ div.row{
 .column.six img{
 	width: 100%;
 	height: 100%;
+	padding-right: 20%;
 }
 .column.six img:not(.main){
 	position:absolute;
