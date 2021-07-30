@@ -9,8 +9,6 @@ body *{
     box-sizing: border-box;
 }
 .not-found p{
-	width: 133px;
-  height: 25px;
   padding-left: 77px;
   padding-top: 40px;
   font-family: 'Inconsolata', monospace;
