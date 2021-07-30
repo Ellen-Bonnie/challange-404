@@ -1,6 +1,7 @@
 body{
 	max-width:1400px;
 	margin: 0 auto;
+	min-width: 100%;
 }
 .not-found p{
 	width: 133px;
