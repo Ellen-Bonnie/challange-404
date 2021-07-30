@@ -11,6 +11,8 @@
   letter-spacing: -0.08em;
   text-transform: uppercase;
   color: #333333;
+  margin-bottom:0;
+  padding-bottom:64px
 }
 div.row{
   max-width: 1280px;
