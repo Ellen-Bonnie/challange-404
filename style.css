@@ -137,3 +137,28 @@ border-radius: 5px;
 ::-webkit-scrollbar-thumb:hover {
 background-color: rgba(0,0,0,.8);
 }
+
+/*image animation*/
+
+.six.left img {
+  0% {
+  opacity:1;
+}
+45% {
+opacity:1;
+}
+55% {
+opacity:0;
+}
+100% {
+opacity:0;
+}
+}
+
+.six.left img {
+animation-name: cf3FadeInOut;
+animation-timing-function: ease-in-out;
+animation-iteration-count: infinite;
+animation-duration: 10s;
+animation-direction: alternate;
+}
