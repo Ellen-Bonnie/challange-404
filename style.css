@@ -140,7 +140,7 @@ background-color: rgba(0,0,0,.8);
 
 /*image animation*/
 
-{
+.column.six img:not(.main){
     margin-top: 25px;
     font-size: 21px;
     text-align: center;
