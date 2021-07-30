@@ -155,6 +155,7 @@ background-color: rgba(0,0,0,.8);
         -ms-animation: fadein 3s; /* Internet Explorer */
          -o-animation: fadein 3s; /* Opera < 12.1 */
             animation: fadein 3s;
+	    transform: scale(2.5);
 }
 .column.six img.four{
     text-align: center;
