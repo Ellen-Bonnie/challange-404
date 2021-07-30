@@ -140,8 +140,34 @@ background-color: rgba(0,0,0,.8);
 
 /*image animation*/
 
-.column.six img:not(.main){
-    font-size: 21px;
+.column.six img.one{
+    text-align: center;
+
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
+}
+.column.six img.four{
+    text-align: center;
+
+    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+         -o-animation: fadein 2s; /* Opera < 12.1 */
+            animation: fadein 2s;
+}
+.column.six img.five{
+    text-align: center;
+
+    -webkit-animation: fadein 3s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 3s; /* Firefox < 16 */
+        -ms-animation: fadein 3s; /* Internet Explorer */
+         -o-animation: fadein 3s; /* Opera < 12.1 */
+            animation: fadein 3s;
+}
+.column.six img.two{
     text-align: center;
 
     -webkit-animation: fadein 4s; /* Safari, Chrome and Opera > 12.1 */
@@ -150,7 +176,15 @@ background-color: rgba(0,0,0,.8);
          -o-animation: fadein 4s; /* Opera < 12.1 */
             animation: fadein 4s;
 }
+.column.six img.three{
+    text-align: center;
 
+    -webkit-animation: fadein 5s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 5s; /* Firefox < 16 */
+        -ms-animation: fadein 5s; /* Internet Explorer */
+         -o-animation: fadein 5s; /* Opera < 12.1 */
+            animation: fadein 5s;
+}
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
