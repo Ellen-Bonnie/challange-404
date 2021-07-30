@@ -32,7 +32,7 @@ div.row{
   float: left;
 }
 
-@media screen and (max-width: 800px){
+@media only screen and (min-width: 1101px){
 	.column.six{
 		width: 100%;
 		float: left;
