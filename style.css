@@ -52,10 +52,13 @@ div.row{
 		white-space:normal;
 	}
 }
+.column.six.left div{
+	position:relative;
+	padding-right: 20%;
+}
 .column.six img{
 	width: 100%;
 	height: 100%;
-	padding-right: 20%;
 }
 .column.six img:not(.main){
 	position:absolute;
