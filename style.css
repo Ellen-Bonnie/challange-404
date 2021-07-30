@@ -31,6 +31,13 @@ div.row{
   width: 50%;
   float: left;
 }
+
+@media screen and (max-width: 800px){
+	.column.six{
+		width: 100%;
+		float: left;
+}
+}
 .column.six img{
   width: 100%;
   height: 100%;
