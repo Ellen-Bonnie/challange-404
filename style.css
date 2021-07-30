@@ -1,8 +1,8 @@
 .not-found p{
   width: 133px;
   height: 25px;
-  left: 77px;
-  top: 40px;
+  padding-left: 77px;
+  padding-top: 40px;
   font-family: 'Inconsolata', monospace;
   font-style: normal;
   font-weight: bold;
