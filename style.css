@@ -115,3 +115,20 @@ button{
 	text-align: center;
 	color: #BDBDBD;
 }
+/*scrollbar*/
+::-webkit-scrollbar {
+width: 8px;
+margin-right: 20px;
+}
+::-webkit-scrollbar-track {
+background-color: transparent;
+border: none;
+}
+::-webkit-scrollbar-thumb {
+height: 80px;
+background-color: rgba(0,0,0,.4);
+border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+background-color: rgba(0,0,0,.8);
+}
