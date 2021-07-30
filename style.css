@@ -58,6 +58,8 @@ div.row{
 }
 .column.six img:not(.main){
 	position:absolute;
+	top:0;
+	left:0;
 }
 .column.six.right h1{
 	font-family: 'Space Mono', monospace;
