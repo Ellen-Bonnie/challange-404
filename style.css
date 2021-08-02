@@ -8,6 +8,7 @@ body *{
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+/*404 page*/
 .not-found p{
 	padding-left: 77px;
 	padding-top: 40px;
@@ -233,3 +234,17 @@ background-color: rgba(0,0,0,.8);
     50% { filter: brightness(0.7);}
     100% { filter: brightness(1); }
 }
+
+/*Team page*/
+#team{
+	position: absolute;
+	left: 243px;
+	top: 110px;
+	font-family: PT Serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 36px;
+	line-height: 48px;
+	letter-spacing: -0.045em;
+	color: #000000;
+	}
