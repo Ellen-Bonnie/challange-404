@@ -245,3 +245,13 @@ background-color: rgba(0,0,0,.8);
 	letter-spacing: -0.045em;
 	color: #000000;
 }
+#team h2 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+    text-transform: uppercase;
+    color: #000000;
+    margin-top: 30px;
+}
