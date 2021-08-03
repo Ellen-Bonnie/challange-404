@@ -236,7 +236,7 @@ background-color: rgba(0,0,0,.8);
 }
 
 /*Team page*/
-#team{
+#team h1{
 	position: absolute;
 	left: 243px;
 	top: 110px;
@@ -247,4 +247,4 @@ background-color: rgba(0,0,0,.8);
 	line-height: 48px;
 	letter-spacing: -0.045em;
 	color: #000000;
-	}
+}
