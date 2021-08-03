@@ -264,7 +264,7 @@ line-height: 27px;
 color: #000000;
 }
 
-#portfolio .column.four{
+.portfolio .column.four{
 	float: left;
 	width:33.3%;
 }
