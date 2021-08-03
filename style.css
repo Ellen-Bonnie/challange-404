@@ -255,7 +255,7 @@ background-color: rgba(0,0,0,.8);
     color: #000000;
     margin-top: 30px;
 }
-#team p{
+#team .column.six.right p{
 font-family: Poppins;
 font-style: normal;
 font-weight: normal;
