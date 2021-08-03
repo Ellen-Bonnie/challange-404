@@ -276,3 +276,6 @@ font-size: 18px;
 line-height: 27px;
 color: #000000;
 }
+.portfolio .column.four:nth-child(2){
+	margin-top: 100px;
+}
