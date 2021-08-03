@@ -267,6 +267,7 @@ color: #000000;
 .portfolio .column.four{
 	float: left;
 	width:33.3%;
+	position: relative;
 }
 .portfolio .column.four p{
 font-family: Poppins;
