@@ -309,3 +309,6 @@ display: none;
 .portfolio.mobile .column.four:nth-child(even) {
     margin-top: 100px;
 }}
+div.row.portfolio.mobile{
+	padding: 0 10%;
+}
