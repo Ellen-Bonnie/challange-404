@@ -280,3 +280,13 @@ color: #000000;
 .portfolio .column.four:nth-child(2){
 	margin-top: 100px;
 }
+.team-image{
+	overflow: hidden;
+}
+.team-image img{
+	float: left;
+}
+.team-info{
+	writing-mode:vertical-lr;
+	display:block;
+}
