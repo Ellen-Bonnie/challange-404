@@ -301,3 +301,11 @@ display: none;
 div.row.portfolio.pc{
 display: none;
 	}}
+@media only screen and (max-device-width: 801px) {
+	.portfolio.mobile .column.four{
+		width: 50%;
+	}
+
+.portfolio.mobile .column.four:nth-child(even) {
+    margin-top: 100px;
+}}
