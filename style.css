@@ -9,6 +9,7 @@ body *{
 	box-sizing: border-box;
 }
 /*404 page*/
+.main-menu,
 .not-found p{
 	padding-left: 77px;
 	padding-top: 40px;
@@ -312,3 +313,9 @@ display: none;
 div.row.portfolio.mobile{
 	padding: 0 10%;
 }
+/*home page*/
+
+.main-menu ul{
+	list-style:none;
+}
+
