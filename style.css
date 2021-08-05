@@ -331,7 +331,8 @@ div.row.portfolio.mobile{
 	padding-left: 10px;
 }
 
-@media only screen and (max-width: 670px) {
-body div.row.portfolio.mobile{
-    padding: 0 5%;
-}}
+@media only screen and (max-width: 610px) {
+	.team-image img {
+		width: 150px;
+		height: 256px;
+	}}
