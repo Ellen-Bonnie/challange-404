@@ -401,3 +401,7 @@ line-height: 16px;
 text-transform: uppercase;
 color: #FFFFFF;
 }
+.main-menu{
+	display: inline-block;
+	float:right;
+}
