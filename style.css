@@ -379,3 +379,9 @@ div.row.portfolio{
 	padding: 0 20px;
 	}
 }
+@media only screen and (max-device-width: 670px) {
+.team-page
+	{
+	padding: 0 20px;
+	}
+}
