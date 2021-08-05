@@ -336,3 +336,18 @@ div.row.portfolio.mobile{
 		width: 150px;
 		height: 256px;
 	}}
+
+.portfolio.pc.top .team-image img {
+  animation: slide-down 8s;
+  animation-iteration-count:1;
+}
+
+
+@keyframes slide-down {
+  0% {
+    top: -200px; ;
+  }
+  100% {
+    top:0; 
+  }
+}
