@@ -353,7 +353,8 @@ div.row.portfolio.mobile{
 }
 .portfolio.pc.bottom .team-image {
   animation: slide-up 4s;
-		position: relative;
+	position: relative;
+	animation-delay:20s;
 }
 @keyframes slide-up {
   0% {
