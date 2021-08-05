@@ -363,4 +363,6 @@ div.row.portfolio.mobile{
     top:0; 
   }
 }
-
+div.row.portfolio{
+	margin-top:0;
+}
