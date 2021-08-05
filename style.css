@@ -338,8 +338,8 @@ div.row.portfolio.mobile{
 	}}
 
 .portfolio.pc.top .team-image img {
-  animation: slide-down 8s;
-  animation-iteration-count:1;
+  animation: slide-down;
+  animation-dusation: 8s;
 }
 
 
@@ -352,12 +352,10 @@ div.row.portfolio.mobile{
   }
 }
 .portfolio.pc.bottom .team-image img {
-  animation: slide-down 8s;
-  animation-iteration-count:1;
+  animation: slide-up;
+  animation-dusation: 8s;
 }
-
-
-@keyframes slide-dowm {
+@keyframes slide-up {
   0% {
     top: 200px; ;
   }
@@ -365,3 +363,4 @@ div.row.portfolio.mobile{
     top:0; 
   }
 }
+
