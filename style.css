@@ -351,3 +351,17 @@ div.row.portfolio.mobile{
     top:0; 
   }
 }
+.portfolio.pc.bottom .team-image img {
+  animation: slide-down 8s;
+  animation-iteration-count:1;
+}
+
+
+@keyframes slide-dowm {
+  0% {
+    top: 200px; ;
+  }
+  100% {
+    top:0; 
+  }
+}
