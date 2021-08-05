@@ -390,3 +390,14 @@ div.row.portfolio{
 	padding: 0 20px;
 	}
 }
+
+/*interior page*/
+.row.menu span{
+font-family: 'Crimson Pro', serif;
+font-style: normal;
+font-weight: 200;
+font-size: 14px;
+line-height: 16px;
+text-transform: uppercase;
+color: #FFFFFF;
+}
