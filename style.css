@@ -338,7 +338,7 @@ div.row.portfolio.mobile{
 	}}
 
 .portfolio.pc.top .team-image {
-  animation: slide-down 4s;
+  animation: slide-down 5s;
 	position: relative;
 }
 
@@ -352,7 +352,7 @@ div.row.portfolio.mobile{
   }
 }
 .portfolio.pc.bottom .team-image {
-      animation: slide-up 4s ease 20s;
+      animation: slide-up 5s;
 	position: relative;
 }
 @keyframes slide-up {
