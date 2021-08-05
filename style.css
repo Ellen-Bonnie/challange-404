@@ -322,14 +322,17 @@ div.row.portfolio.mobile{
  ul{
 	list-style:none;
 }
+ul.main-menu li,
 .main-menu ul li{
     display: inline-block;
 }
+ul.main-menu li A,
 .main-menu ul li A{
 	    text-decoration: none;
 	    color: #77c4ff;
 
-}	
+}
+ul.main-menu li A:after
 .main-menu ul li A:after{
 	content:"/";
 	padding-left: 10px;
