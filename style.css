@@ -330,3 +330,8 @@ div.row.portfolio.mobile{
 	content:"/";
 	padding-left: 10px;
 }
+
+@media only screen and (max-width: 670px) {
+body div.row.portfolio.mobile{
+    padding: 0 5%;
+}}
