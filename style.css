@@ -337,7 +337,7 @@ div.row.portfolio.mobile{
 		height: 256px;
 	}}
 
-.portfolio.pc.top .team-image img {
+.portfolio.pc.top .team-image {
   animation: slide-down 8s;
 }
 
@@ -350,7 +350,7 @@ div.row.portfolio.mobile{
     top:0; 
   }
 }
-.portfolio.pc.bottom .team-image img {
+.portfolio.pc.bottom .team-image {
   animation: slide-up 8s;
 }
 @keyframes slide-up {
