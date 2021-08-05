@@ -294,31 +294,19 @@ color: #000000;
 div.row.portfolio{
 	margin-right:0px;
 }
-@media only screen and (min-device-width: 801px) {
-div.row.portfolio.mobile{
-display: none;
-	}}
-@media only screen and (min-width: 801px) {
-div.row.portfolio.mobile{
-display: none;
-	}}
-@media only screen and (max-device-width: 800px) {
-div.row.portfolio.pc{
-display: none;
-	}}
-@media only screen and (max-width: 800px) {
-div.row.portfolio.pc{
-display: none;
-	}}
-@media only screen and (max-device-width: 801px) {
-	.portfolio.mobile .column.four{
-		width: 50%;
-	}
-.portfolio.mobile .column.four:nth-child(even) {
-    margin-top: 100px;
-}}
 
-@media only screen and (max-width: 801px) {
+@media only screen and (min-width: 1101px) {
+div.row.portfolio.mobile{
+display: none;
+	}}
+
+@media only screen and (max-width: 1100px) {
+div.row.portfolio.pc{
+display: none;
+	}}
+
+
+@media only screen and (max-width: 1101px) {
 	.portfolio.mobile .column.four{
 		width: 50%;
 	}
