@@ -428,7 +428,7 @@ ul.main-menu li{
 ul.main-menu li a{
 text-decoration: none;
 }
-ul.main-menu li a:before:first-child{
+ul.main-menu li:first-child a:before{
 	content:"";
 	display: block;
 	width: 10px;
