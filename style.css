@@ -415,7 +415,6 @@ div.menu{
 }
 ul.main-menu li a{
 	font-family: 'Montserrat', sans-serif;
-	font-family: Montserrat;
 	font-style: normal;
 	font-weight: 500;
 	font-size: 18px;
@@ -426,7 +425,7 @@ ul.main-menu li{
 	padding-right: 88px;
 	float: left;
 }
-ul.main-menu li:not(.home) a{
-	text-decoration: none;
+ul.main-menu li a:not(.home){
+text-decoration: none;
 }
 
