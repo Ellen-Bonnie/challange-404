@@ -321,17 +321,14 @@ div.row.portfolio.mobile{
  ul{
 	list-style:none;
 }
-ul.main-menu li,
 .main-menu ul li{
     display: inline-block;
 }
-ul.main-menu li A,
 .main-menu ul li A{
 	    text-decoration: none;
 	    color: #77c4ff;
 
 }
-ul.main-menu li A:after
 .main-menu ul li A:after{
 	content:"/";
 	padding-left: 10px;
@@ -415,4 +412,13 @@ div.menu{
 }
 .row.header{
 	display: block;
+}
+ul.main-menu li a{
+	font-family: 'Montserrat', sans-serif;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 18px;
+	line-height: 22px;
+	color: #FFFFFF;
 }
