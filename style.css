@@ -422,3 +422,10 @@ ul.main-menu li a{
 	line-height: 22px;
 	color: #FFFFFF;
 }
+ul.main-menu li{
+	padding-right: 88px;
+	float: left;
+}
+ul.main-menu li a{
+	text-decoration: none;
+}
