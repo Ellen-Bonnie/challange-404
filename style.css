@@ -441,3 +441,6 @@ ul.main-menu li:first-child a:before{
 .interior #footer {
 	background: #333;
 }
+.interior #footer .copyright, .interior #footer .copyright span{
+	color:#fff;
+}
