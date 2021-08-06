@@ -438,4 +438,6 @@ ul.main-menu li:first-child a:before{
 	background: #fff;
 }
 	
-
+.interior #footer {
+	background: #333;
+}
