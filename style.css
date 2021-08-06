@@ -433,7 +433,7 @@ ul.main-menu li:first-child a:before{
 	position: absolute;
 	bottom: 0px;
 	display: block;
-	width: 10px;
+	width: 60px;
 	height: 2px;
 	background: #fff;
 }
