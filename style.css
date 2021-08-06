@@ -428,10 +428,10 @@ ul.main-menu li{
 ul.main-menu li a{
 text-decoration: none;
 }
-ul.main-menu li a:before{
+ul.main-menu li a:before:first-child{
 	content:"";
 	display: block;
-	width:10px;
+	width: 10px;
 	height: 2px;
 	background: #fff;
 }
