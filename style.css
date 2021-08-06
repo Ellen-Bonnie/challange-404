@@ -9,7 +9,6 @@ body *{
 	box-sizing: border-box;
 }
 /*404 page*/
-.main-menu,
 .not-found p{
 	padding-left: 77px;
 	padding-top: 40px;
@@ -409,4 +408,11 @@ color: #FFFFFF;
 	border: 1px solid #fff;
 	padding: 5px 10px;
 	overflow: visible;
+}
+div.menu{
+	display: inline-block;
+	margin-top: 5px;
+}
+.row.header{
+	display: block;
 }
