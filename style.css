@@ -405,3 +405,8 @@ color: #FFFFFF;
 	display: inline-block;
 	float:right;
 }
+.row .menu span {
+	border: 1px solid #fff;
+	padding: 5px 10px;
+	overflow: visible;
+}
