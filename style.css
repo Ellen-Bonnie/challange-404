@@ -425,7 +425,15 @@ ul.main-menu li{
 	padding-right: 88px;
 	float: left;
 }
-ul.main-menu li a:not(.home){
+ul.main-menu li a{
 text-decoration: none;
 }
+ul.main-menu li a:before{
+	content:"";
+	display: block;
+	width:10px;
+	height: 2px;
+	background: #fff;
+}
+	
 
