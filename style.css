@@ -430,6 +430,8 @@ text-decoration: none;
 }
 ul.main-menu li:first-child a:before{
 	content:"";
+	position: absolute;
+	bottom: 0px;
 	display: block;
 	width: 10px;
 	height: 2px;
