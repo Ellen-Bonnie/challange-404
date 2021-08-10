@@ -444,3 +444,9 @@ ul.main-menu li:first-child a:before{
 .interior #footer .copyright, .interior #footer .copyright span{
 	color:#fff;
 }
+.seven {
+    width: 58.33333%;
+}
+.five {
+    width: 41.66667%;
+}
