@@ -446,7 +446,11 @@ ul.main-menu li:first-child a:before{
 }
 .column.seven {
     width: 58.33333%;
+	display: inline-block;
+    float: left;
 }
 .column.five {
     width: 41.66667%;
+	display: inline-block;
+    float: left;
 }
