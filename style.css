@@ -444,9 +444,9 @@ ul.main-menu li:first-child a:before{
 .interior #footer .copyright, .interior #footer .copyright span{
 	color:#fff;
 }
-div.row.seven {
+.column.seven {
     width: 58.33333%;
 }
-div.row.five {
+.column.five {
     width: 41.66667%;
 }
