@@ -454,3 +454,7 @@ ul.main-menu li:first-child a:before{
 	display: inline-block;
     float: left;
 }
+
+.interior h1{
+	font-family: 'Lora', serif;
+}
