@@ -482,6 +482,7 @@ a.read-more{
 	font-size: 18px;
 	line-height: 22px;
 	color: #FFFFFF;
+	text-decoration:none;
 }
 .interior .column.five i{
 	color:#fff;
