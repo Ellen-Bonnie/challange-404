@@ -475,3 +475,11 @@ ul.main-menu li:first-child a:before{
 	line-height: 29px;
 	color: #FFFFFF;
 }
+.read-more{
+	font-family: 'Montserrat', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 18px;
+	line-height: 22px;
+	color: #FFFFFF;
+}
