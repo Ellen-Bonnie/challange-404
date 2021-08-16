@@ -491,7 +491,9 @@ a.read-more{
 .interior .inner-column{
 	max-width: 329px;
 	margin-top: -80px;
+	margin-left: 295px;
     z-index: 999;
+	background: #000;
 }
 .interior .girl{
 	border-radius:50%;
