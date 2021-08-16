@@ -488,7 +488,10 @@ a.read-more{
 .interior .column.five i{
 	color:#fff;
 }
-
+.interior .inner-column{
+	max-width: 329px;
+}
 .interior .girl{
 	border-radius:50%;
+	float: left;
 }
