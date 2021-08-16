@@ -494,6 +494,7 @@ a.read-more{
 	margin-left: 295px;
     z-index: 999;
 	background: #000;
+	position: relative;
 }
 .interior .girl{
 	border-radius:50%;
