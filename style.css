@@ -522,6 +522,7 @@ a.read-more{
 	font-weight: 500;
 	font-size: 12px;
 	line-height: 15px;
+	color: #828282;
 }
 .interior .content{
 	font-family: Lora;
@@ -532,5 +533,5 @@ a.read-more{
 }
 .interior .girl-info h4{
 	margin-top: 0;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
