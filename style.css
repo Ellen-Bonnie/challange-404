@@ -516,3 +516,11 @@ a.read-more{
 .interior .inner-column{
 	padding: 20px;
 }
+
+.interior .subtitle{
+	font-family: Lora;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 24px;
+	line-height: 31px;
+}
