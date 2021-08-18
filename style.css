@@ -516,8 +516,14 @@ a.read-more{
 .interior .inner-column{
 	padding: 20px;
 }
-
 .interior .subtitle{
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 15px;
+}
+.interior .content{
 	font-family: Lora;
 	font-style: normal;
 	font-weight: bold;
