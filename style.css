@@ -510,3 +510,9 @@ a.read-more{
 .interior .girl-info{
 	margin-left: 60px;
 }
+.interior .girl-info >*{
+	color: #fff;
+}
+.interior .inner-column{
+	padding: 20px;
+}
