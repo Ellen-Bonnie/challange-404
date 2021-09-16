@@ -545,3 +545,12 @@ a.read-more{
 .row.six-mobile .column{
 	width: 100%;
 }}
+
+@media only screen and (max-width: 800px) { 
+.main-menu{
+	display:none;
+}}
+@media only screen and (min-width: 800px) { 
+.mob-menu{
+	display:none;
+}}
