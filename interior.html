@@ -19,11 +19,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/e074bdd2a1.js" crossorigin="anonymous"></script>
-<script >function active() {
-  var element = document.getElementById("mobile-menu");
-  element.classList.toggle("active");
-  console.log("lalalalala");
-}</script>
+<script >(function() {
+
+  var mobile-menu = document.querySelector('#mobile-menu');
+  var box = document.querySelector('.box');
+
+  button.addEventListener('click', function() {
+    
+    box.classList.toggle('open');
+
+  });
+  
+});</script>
 </head>
 	<body style="background:#333;" class="interior">
 		<div class="row header">
