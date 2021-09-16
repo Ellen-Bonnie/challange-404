@@ -1,4 +1,4 @@
-<script type="text/javascript">
+
 $(function() {
   $("#mobile-menu").click(function() {
     // cssで背景色を切り替え
@@ -6,4 +6,3 @@ $(function() {
     $("#mobile-menu").toggleClass("open");
   });
 });
-</script>
