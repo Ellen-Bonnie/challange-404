@@ -53,7 +53,7 @@ div.row{
 	.column.six >*{
 		white-space:normal;
 	}
-body .column.six h1{
+body .column.six.right h1{
 font-size: 48px;
 line-height: 71px;
 }}
