@@ -1,0 +1,4 @@
+function active() {
+  var element = document.getElementById("sidr");
+  element.classList.toggle("active");
+}
