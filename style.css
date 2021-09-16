@@ -574,7 +574,7 @@ a.read-more{
 
 
 /*general responsive*/
-@media only screen and (min-device-width: 800px) { 
+@media only screen and (max-width: 800px) { 
 body #footer .copyright,
 body #footer .copyright span{
 	margin-left: 0;
