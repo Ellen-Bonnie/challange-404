@@ -572,7 +572,7 @@ a.read-more{
 	display:none;
 }}
 @media only screen and (min-width: 800px) { 
-.mob-menu{
+.icon-mobile-menu,.mob-menu{
 	display:none;
 }}
 
@@ -582,7 +582,12 @@ a.read-more{
     background: #fff;
     display: block;
 }
-
+.icon-mobile-menu .icon-wrap.dfd-middle-line{
+	margin-top:5px;
+}
+.icon-mobile-menu .icon-wrap.dfd-bottom-line{
+	margin-top:10px;
+}
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
