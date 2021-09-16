@@ -56,11 +56,6 @@ div.row{
 body .column.six.right h1{
 font-size: 48px;
 line-height: 71px;
-}
-body #footer .copyright,
-body #footer .copyright span{
-	margin-left: 0;
-	transform: none;
 }}
 /* end 404 responsive*/
 .column.six.left{
@@ -567,9 +562,6 @@ a.read-more{
 .row.header {
 	padding: 0 20px;
 }
-.icon-wrap >*{
-	
-}
 }
 @media only screen and (min-width: 800px) { 
 .mob-menu{
@@ -581,3 +573,10 @@ a.read-more{
 }}
 
 
+/*general responsive*/
+@media only screen and (min-device-width: 800px) { 
+body #footer .copyright,
+body #footer .copyright span{
+	margin-left: 0;
+	transform: none;
+}}
