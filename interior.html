@@ -20,12 +20,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/e074bdd2a1.js" crossorigin="anonymous"></script>
 <script type="text/javascript">
-	(function($){
-			var $mobile_menu= $(".dl-menuwrapper");
-					$mobile_menu.find('.icon-mobile-menu').toggleClass('open');
-
-
-	});
+$(function() {
+  $("#mobile-menu").click(function() {
+    // cssで背景色を切り替え
+    //toggleClassメソッドは 指定したクラス名の CSS がある場合は削除を行い、なければ追加する というメソッド
+    $("#mobile-menu").toggleClass("open");
+  });
+});
 </script>
 
 </head>
