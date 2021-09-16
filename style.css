@@ -540,18 +540,19 @@ a.read-more{
 @media only screen and (max-width: 800px) {
 .row.six-mobile .column{
 	width: 100%;
-}}
-@media only screen and (max-device-width: 800px) {
+}
 .row.six-mobile .column{
 	width: 100%;
 	padding: 0 20px;
-}}
-
-@media only screen and (max-width: 800px) { 
+}
 .main-menu{
 	display:none;
+}
+.row.header {
+	padding: 0 20px;
 }}
 @media only screen and (min-width: 800px) { 
 .mob-menu{
 	display:none;
 }}
+
