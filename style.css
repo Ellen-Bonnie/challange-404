@@ -551,7 +551,25 @@ a.read-more{
 .row.header {
 	padding: 0 20px;
 }}
+@media only screen and (max-device-width: 800px) {
+.row.six-mobile .column{
+	width: 100%;
+}
+.row.six-mobile .column{
+	width: 100%;
+	padding: 0 20px;
+}
+.main-menu{
+	display:none;
+}
+.row.header {
+	padding: 0 20px;
+}}
 @media only screen and (min-width: 800px) { 
+.mob-menu{
+	display:none;
+}}
+@media only screen and (min-device-width: 800px) { 
 .mob-menu{
 	display:none;
 }}
