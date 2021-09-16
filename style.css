@@ -538,6 +538,6 @@ a.read-more{
 
 /*interior responsive*/
 @media only screen and (max-width: 800px) {
-.row.six-mobile column{
+.row.six-mobile .column{
 	width: 50%;
 }}
