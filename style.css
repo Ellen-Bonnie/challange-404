@@ -572,7 +572,7 @@ a.read-more{
 	display:none;
 }}
 @media only screen and (min-width: 800px) { 
-.icon-mobile-menu,.mob-menu{
+.dl-menuwrapper,.icon-mobile-menu,.mob-menu{
 	display:none;
 }}
 
@@ -602,6 +602,7 @@ a.read-more{
     width: 50px;
     top: 10px;
 }
+
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
