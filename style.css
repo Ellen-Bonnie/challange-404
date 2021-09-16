@@ -46,7 +46,7 @@ div.row{
 @media only screen and (max-width: 800px) {
 	.column.six{
 		width: 100%;
-		padding: 0 70px;
+		padding: 0 20px;
 		margin-bottom: 50px;
 		float: none;
 	}
