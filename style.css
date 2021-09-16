@@ -2,6 +2,7 @@ body{
 	max-width: 1400px;
 	margin: 0 auto;
 	padding-bottom:50px;
+	width:100%;
 }
 body *{
 	-webkit-box-sizing: border-box;
@@ -564,7 +565,11 @@ a.read-more{
 }
 .row.header {
 	padding: 0 20px;
-}}
+}
+.icon-wrap >*{
+	
+}
+}
 @media only screen and (min-width: 800px) { 
 .mob-menu{
 	display:none;
@@ -573,4 +578,5 @@ a.read-more{
 .mob-menu{
 	display:none;
 }}
+
 
