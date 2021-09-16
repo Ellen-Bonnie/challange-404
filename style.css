@@ -576,6 +576,13 @@ a.read-more{
 	display:none;
 }}
 
+.icon-mobile-menu .icon-wrap{
+    width: 30px;
+    height: 2px;
+    background: #fff;
+    display: block;
+}
+
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
