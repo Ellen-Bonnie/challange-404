@@ -316,6 +316,10 @@ display: none;
 	}
 .portfolio.mobile .column.four:nth-child(even) {
     margin-top: 100px;
+}
+.portfolio .column.four p {
+    font-size: 16px;
+    line-height: 16px;
 }}
 
 div.row.portfolio.mobile{
