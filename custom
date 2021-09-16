@@ -1,4 +1,4 @@
 function active() {
-  var element = document.getElementById("sidr");
+  var element = document.getElementById("mobile-menu");
   element.classList.toggle("active");
 }
