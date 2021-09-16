@@ -42,7 +42,7 @@ div.row{
 	width: 50%;
 	float: left;
 }
-
+/*404 responsive*/
 @media only screen and (max-width: 800px) {
 	.column.six{
 		width: 100%;
@@ -53,7 +53,11 @@ div.row{
 	.column.six >*{
 		white-space:normal;
 	}
-}
+.column.six h1{
+font-size: 48px;
+line-height: 71px;
+}}
+/* end 404 responsive*/
 .column.six.left{
 padding-right: 10%;
 }
