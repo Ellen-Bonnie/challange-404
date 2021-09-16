@@ -595,6 +595,13 @@ a.read-more{
     text-indent: -900em;
     z-index: 2;
 }
+.header-icons-wrapper{
+    float: right;
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    top: 10px;
+}
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
