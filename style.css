@@ -535,3 +535,9 @@ a.read-more{
 	margin-top: 0;
 	margin-bottom: 10px;
 }
+
+/*interior responsive*/
+@media only screen and (max-width: 800px) {
+.row.six-mobile column{
+	width: 50%;
+}}
