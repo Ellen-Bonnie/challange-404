@@ -57,10 +57,10 @@ body .column.six.right h1{
 font-size: 48px;
 line-height: 71px;
 }
-#footer .copyright,
-#footer .copyright span{
+body #footer .copyright,
+body #footer .copyright span{
 	margin-left: 0;
-	transform: none);
+	transform: none;
 }}
 /* end 404 responsive*/
 .column.six.left{
