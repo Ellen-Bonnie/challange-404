@@ -541,3 +541,7 @@ a.read-more{
 .row.six-mobile .column{
 	width: 100%;
 }}
+@media only screen and (max-device-width: 800px) {
+.row.six-mobile .column{
+	width: 100%;
+}}
