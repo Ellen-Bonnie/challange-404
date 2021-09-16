@@ -349,18 +349,10 @@ div.row.portfolio.mobile{
 		width: 150px;
 		height: 256px;
 	}}
-@media only screen and (max-device-width: 670px) {
-	.team-image img {
-		width: 150px;
-		height: 256px;
-	}}
-
 .portfolio.pc.top .team-image {
   animation: slide-down 5s;
 	position: relative;
 }
-
-
 @keyframes slide-down {
   0% {
     top: -200px; ;
