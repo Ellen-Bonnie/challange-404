@@ -1,4 +1,6 @@
 
-function toggleActive() {
-  $("#mobile-menu").toggleClass("active");  
-}
+
+
+$('#mobile-menu').click(function(){
+  $('.dl-menuwrapper').toggleClass('active');
+});
