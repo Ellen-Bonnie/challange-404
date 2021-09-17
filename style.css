@@ -605,7 +605,7 @@ a.read-more{
 /*mobile header*/
 .dl-menuwrapper:not(.active) ul.mob-menu{
 	display: none;
-}
+} 
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
