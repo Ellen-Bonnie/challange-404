@@ -605,7 +605,13 @@ a.read-more{
 /*mobile header*/
 .dl-menuwrapper:not(.active) ul.mob-menu{
 	display: none;
+	
 } 
+ul.mob-menu li A{
+	    text-decoration: none;
+	    color: #77c4ff;
+
+}
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
