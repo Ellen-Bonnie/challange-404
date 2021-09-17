@@ -1,8 +1,9 @@
 
 function toggleActive() {
 
-$('#mobile-menu').click(function( event ) {
+$('#mobile-menu').on('click touchend'function( event ) {
   event.preventDefault();
   $('.dl-menuwrapper').toggleClass('active');
 });
 }
+
