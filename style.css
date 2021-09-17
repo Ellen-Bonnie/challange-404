@@ -606,20 +606,20 @@ a.read-more{
 	display: none;
 	
 } 
-.interior ul.mob-menu li a{
+.interior div.mob-menu a{
 	    text-decoration: none;
 	    color: #fff;
 		font-size:22;
 		display:block;
 
 }
-ul.mob-menu{
+div.mob-menu{
 	position:absolute;
 	width: 100%;
 	top:0;
 }
 
-ul.mob-menu li{
+div.mob-menu a{
     position: relative;
     width: 100%;
 	display:block;
