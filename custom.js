@@ -1,7 +1,8 @@
 
 function toggleActive() {
-		event.preventDefault();
-$('#mobile-menu').click(function(){
+
+$('#mobile-menu').click(function(event){
+			event.preventDefault();
   $('.dl-menuwrapper').toggleClass('active');
 });
 }
