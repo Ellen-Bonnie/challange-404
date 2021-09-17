@@ -1,6 +1,4 @@
 
-(function() {
-  $("a#mobile-menu").click(function() {
-    $("#mobile-menu").toggleClass("open");
-  });
-});
+function toggleActive() {
+  $("#mobile-menu").toggleClass("blue");  
+}
