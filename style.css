@@ -574,13 +574,7 @@ a.read-more{
 @media only screen and (min-width: 800px) { 
 .dl-menuwrapper,.icon-mobile-menu,.mob-menu{
 	display:none;
-}}.bgBox{
-  background-color:skyblue;
-  padding : 20px;
-}
-.bgPink{
-  background-color:pink;
-}
+}}
 
 .icon-mobile-menu .icon-wrap{
     width: 30px;
