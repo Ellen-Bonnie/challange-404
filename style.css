@@ -611,6 +611,11 @@ ul.mob-menu li A{
 	    color: #77c4ff;
 
 }
+ul.mob-menu{
+	position:absolute;
+	width: 100%;
+	top:0;
+}
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
