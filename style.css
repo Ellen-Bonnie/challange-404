@@ -615,13 +615,13 @@ body:not(.active) div.mob-menu{
 div.mob-menu{
 	position:absolute;
 	width: 100%;
+	height:100%;
 	top:0;
 }
 
 div.mob-menu a{
     position: relative;
     width: 100%;
-	height:100%;
 	display:block;
 }
 
