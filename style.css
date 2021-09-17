@@ -599,7 +599,7 @@ a.read-more{
     display: inline-block;
     position: relative;
     width: 50px;
-    top: 10px;
+    top: 5px;
 }
 /*mobile header*/
 .dl-menuwrapper:not(.active) ul.mob-menu{
@@ -608,7 +608,7 @@ a.read-more{
 } 
 .interior ul.mob-menu li a{
 	    text-decoration: none;
-	    color: #77c4ff;
+	    color: #fff;
 
 }
 ul.mob-menu{
