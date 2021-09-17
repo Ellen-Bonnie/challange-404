@@ -621,7 +621,10 @@ div.mob-menu {
     z-index: 9999;
 }
 div.mob-menu ul{
-	top:50%
+	margin-top: 50%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+
 }
 div.mob-menu a{
     position: relative;
