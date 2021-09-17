@@ -1,4 +1,4 @@
 
 function toggleActive() {
-  $("#mobile-menu").toggleClass("blue");  
+  $("#mobile-menu").toggleClass("active");  
 }
