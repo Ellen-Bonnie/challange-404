@@ -609,12 +609,20 @@ a.read-more{
 .interior ul.mob-menu li a{
 	    text-decoration: none;
 	    color: #fff;
+		font-size:22;
+		display:block;
 
 }
 ul.mob-menu{
 	position:absolute;
 	width: 100%;
 	top:0;
+}
+
+ul.mob-menu li{
+    position: relative;
+    width: 100%;
+	display:block;
 }
 
 /*general responsive*/
