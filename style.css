@@ -601,7 +601,7 @@ a.read-more{
     top: 5px;
 }
 /*mobile header*/
-.dl-menuwrapper:not(.active) div.mob-menu{
+body:not(.active) div.mob-menu{
 	display: none;
 	
 } 
