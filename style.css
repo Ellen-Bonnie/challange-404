@@ -631,6 +631,27 @@ div.mob-menu a{
     width: 100%;
 	display:block;
 }
+body.active .icon-mobile-menu .icon-wrap.dfd-middle-line{
+	display:none;
+}
+body.active .icon-mobile-menu .icon-wrap.dfd-top-line {
+    margin-top: 0;
+    -webkit-transform: rotate(
+45deg) scaleX(0.8) scaleY(1.5);
+    -moz-transform: rotate(45deg) scaleX(0.8) scaleY(1.5);
+    -o-transform: rotate(45deg) scaleX(0.8) scaleY(1.5);
+    transform: rotate(
+45deg) scaleX(0.8) scaleY(1.5);
+}
+body.active .icon-mobile-menu .icon-wrap.dfd-bottom-line{
+	margin-top: 0;
+    -webkit-transform: rotate(
+-45deg) scaleX(0.8) scaleY(1.5);
+    -moz-transform: rotate(-45deg) scaleX(0.8) scaleY(1.5);
+    -o-transform: rotate(-45deg) scaleX(0.8) scaleY(1.5);
+    transform: rotate(
+-45deg) scaleX(0.8) scaleY(1.5);
+}
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
