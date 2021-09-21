@@ -585,7 +585,7 @@ a.read-more{
     -moz-transition: transform 0.3s ease;
     transition: transform 0.3s ease;
 }
-}
+
 .icon-mobile-menu .icon-wrap.dfd-bottom-line,
 .icon-mobile-menu .icon-wrap.dfd-middle-line{
 	margin-top:5px;
