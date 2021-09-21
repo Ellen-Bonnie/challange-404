@@ -644,7 +644,7 @@ body.active .icon-mobile-menu .icon-wrap.dfd-top-line {
 45deg) scaleX(0.8) scaleY(1.5);
 }
 body.active .icon-mobile-menu .icon-wrap.dfd-bottom-line{
-	margin-top: 0;
+	margin-top: -2px;
     -webkit-transform: rotate(
 -45deg) scaleX(0.8) scaleY(1.5);
     -moz-transform: rotate(-45deg) scaleX(0.8) scaleY(1.5);
