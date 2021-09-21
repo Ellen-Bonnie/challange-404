@@ -652,6 +652,11 @@ body.active .icon-mobile-menu .icon-wrap.dfd-bottom-line{
     transform: rotate(
 -45deg) scaleX(0.8) scaleY(1.5);
 }
+.icon-mobile-menu{
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
 
 /*general responsive*/
 @media only screen and (max-width: 800px) { 
