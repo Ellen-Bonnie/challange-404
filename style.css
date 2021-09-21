@@ -566,6 +566,9 @@ a.read-more{
 .row.header {
 	padding: 0 20px;
 }
+div.menu{
+	margin-top: 10px;
+}
 }
 @media only screen and (min-width: 800px) { 
 .mob-menu{
