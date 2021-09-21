@@ -581,6 +581,10 @@ a.read-more{
     height: 2px;
     background: #fff;
     display: block;
+	-webkit-transition: backgrouns 0.3s ease;
+    -moz-transition: backgrouns 0.3s ease;
+    transition: backgrouns 0.3s ease;
+}
 }
 .icon-mobile-menu .icon-wrap.dfd-bottom-line,
 .icon-mobile-menu .icon-wrap.dfd-middle-line{
