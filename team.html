@@ -24,7 +24,7 @@
 
 $data = simplexml_load_file('/test.xml'); // path of XML file consists of data you shared above.
 foreach($data as $key => $node) {
-    echo $node->attributes(sample)->Value . "\n";
+    echo $node->attributes()->Value . "\n";
 }
  ?> 
 
