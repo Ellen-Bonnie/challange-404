@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels)</h2>
+<h2>XML Coordinate Parser LOVE U (Areas, Lines, Circles, Coast Lines, Labels)</h2>
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
 <br>
@@ -25,18 +25,15 @@
 <script>
   let parsedOutput = '';
 
-  function toDMS(deg, isLat) {
+  // Convert decimal degrees → degrees + decimal minutes (DD° MM.mmm′ N/E/S/W)
+  function toDM(deg, isLat) {
     const absolute = Math.abs(deg);
     const degrees = Math.floor(absolute);
-    const minutesNotTruncated = (absolute - degrees) * 60;
-    const minutes = Math.floor(minutesNotTruncated);
-    const seconds = ((minutesNotTruncated - minutes) * 60).toFixed(2);
-
+    const minutes = (absolute - degrees) * 60;
     const direction = deg >= 0
       ? (isLat ? "N" : "E")
       : (isLat ? "S" : "W");
-
-    return `${degrees}°${minutes}′${seconds}″ ${direction}`;
+    return `${degrees}° ${minutes.toFixed(3)}′ ${direction}`;
   }
 
   function parseXML() {
@@ -62,12 +59,11 @@
       for (let area of areas) {
         const name = area.getAttribute('name') || '(No name)';
         output += `🟨 AREA: ${name}\n`;
-
         const vertices = area.getElementsByTagName('vertex');
         for (let v of vertices) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
+          output += `  ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
         }
         output += '\n';
       }
@@ -79,12 +75,11 @@
         const attr = line.querySelector('attribute');
         const type = attr ? attr.getAttribute('lineType') : '(no type)';
         output += `🟦 LINE: ${name}\n  Type: ${type}\n`;
-
         const vertices = line.getElementsByTagName('vertex');
         for (let v of vertices) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
+          output += `  ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
         }
         output += '\n';
       }
@@ -96,12 +91,11 @@
         const attr = circle.querySelector('attribute');
         const range = attr ? attr.getAttribute('range') : '(no range)';
         output += `🔵 CIRCLE: ${name}\n  Range: ${range} NM\n`;
-
         const v = circle.querySelector('vertex');
         if (v) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  Center Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
+          output += `  Center: ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
         }
         output += '\n';
       }
@@ -111,12 +105,11 @@
       for (let coast of coasts) {
         const name = coast.getAttribute('name') || '(No name)';
         output += `🟫 COAST LINE: ${name}\n`;
-
         const vertices = coast.getElementsByTagName('vertex');
         for (let v of vertices) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
+          output += `  ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
         }
         output += '\n';
       }
@@ -127,12 +120,11 @@
         const name = label.getAttribute('name') || '(No name)';
         const text = label.textContent.trim() || '(no text)';
         const v = label.querySelector('vertex');
-
         output += `🏷️ LABEL: ${name}\n  Text: ${text}\n`;
         if (v) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  Position: ${toDMS(lat, true)}, ${toDMS(lon, false)}\n`;
+          output += `  Position: ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
         }
         output += '\n';
       }
@@ -149,7 +141,6 @@
       alert("Nothing to download. Please parse XML first.");
       return;
     }
-
     const blob = new Blob([parsedOutput], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
