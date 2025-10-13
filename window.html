@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parse XML Areas</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
+    button { padding: 10px 20px; margin-bottom: 20px; }
+    #result { white-space: pre-wrap; background: #f9f9f9; padding: 15px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+<h2>Paste XML and Extract Area Coordinates</h2>
+
+<textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
+<br>
+<button onclick="parseXML()">Parse XML</button>
+
+<div id="result"></div>
+
+<script>
+  function parseXML() {
+    const xmlString = document.getElementById('xmlInput').value;
+
+    if (!xmlString.trim()) {
+      document.getElementById('result').textContent = 'Please paste XML data first.';
+      return;
+    }
+
+    try {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+
+      // Check for parsing errors
+      if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+        document.getElementById('result').textContent = 'Error parsing XML. Please check the format.';
+        return;
+      }
+
+      const areas = xmlDoc.getElementsByTagName('area');
+      let output = '';
+
+      for (let i = 0; i < areas.length; i++) {
+        const area = areas[i];
+        const areaName = area.getAttribute('name') || '(No name)';
+        output += `Area: ${areaName}\n`;
+
+        const vertices = area.getElementsByTagName('vertex');
+        for (let j = 0; j < vertices.length; j++) {
+          const vertex = vertices[j];
+          const lat = vertex.getAttribute('latitude');
+          const lon = vertex.getAttribute('longitude');
+          output += `  Latitude: ${lat}, Longitude: ${lon}\n`;
+        }
+
+        output += '\n'; // Blank line after each area
+      }
+
+      document.getElementById('result').textContent = output || 'No <area> elements found.';
+    } catch (error) {
+      document.getElementById('result').textContent = `Error: ${error.message}`;
+    }
+  }
+</script>
+
+</body>
+</html>
