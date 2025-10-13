@@ -26,13 +26,17 @@
 	</ul>
   </div>
 	<div>
-		<?php echo "Hello world";
-
-//	$data = simplexml_load_file('/test.xml'); // path of XML file consists of data you shared above.
-//			foreach($data as $key => $node) {
-//			    echo $node->attributes()->Value . "\n";
-//			}
-			 ?> 
+		 <script>
+        let xmlString =
+            "<bookstore><book category='fiction'>Harry Potter</book></bookstore>";
+        let xmlDoc = new DOMParser()
+            .parseFromString(xmlString,
+                             "text/xml");
+        let category = xmlDoc.
+                        getElementsByTagName("book")[0]
+            .getAttribute("category");
+        console.log(category);
+    </script>
 	</div>
   <div><!-- Start of relokia5814 Zendesk Widget script -->
 	<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=c960580f-4f93-4671-8193-34673cd084b1"> </script>
