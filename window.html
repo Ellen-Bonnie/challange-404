@@ -3,28 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Parse XML Areas</title>
+  <title>Parse XML with DMS Coordinates</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; }
     textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
-    button { padding: 10px 20px; margin-bottom: 20px; }
-    #result { white-space: pre-wrap; background: #f9f9f9; padding: 15px; border: 1px solid #ccc; }
+    button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
+    #result { white-space: pre-wrap; background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-<h2>Paste XML and Extract Area Coordinates</h2>
+<h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels)</h2>
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
 <br>
 <button onclick="parseXML()">Parse XML</button>
+<button onclick="downloadTextFile()">Download .txt</button>
 
 <div id="result"></div>
 
 <script>
+  let parsedOutput = '';
+
+  function toDMS(deg, isLat) {
+    const absolute = Math.abs(deg);
+    const degrees = Math.floor(absolute);
+    const minutesNotTruncated = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesNotTruncated);
+    const seconds = ((minutesNotTruncated - minutes) * 60).toFixed(2);
+
+    const direction = deg >= 0
+      ? (isLat ? "N" : "E")
+      : (isLat ? "S" : "W");
+
+    return `${degrees}°${minutes}′${seconds}″ ${direction}`;
+  }
+
   function parseXML() {
     const xmlString = document.getElementById('xmlInput').value;
-
     if (!xmlString.trim()) {
       document.getElementById('result').textContent = 'Please paste XML data first.';
       return;
@@ -34,35 +50,113 @@
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlString, "application/xml");
 
-      // Check for parsing errors
       if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
         document.getElementById('result').textContent = 'Error parsing XML. Please check the format.';
         return;
       }
 
-      const areas = xmlDoc.getElementsByTagName('area');
       let output = '';
 
-      for (let i = 0; i < areas.length; i++) {
-        const area = areas[i];
-        const areaName = area.getAttribute('name') || '(No name)';
-        output += `Area: ${areaName}\n`;
+      // 🟨 Areas
+      const areas = xmlDoc.getElementsByTagName('area');
+      for (let area of areas) {
+        const name = area.getAttribute('name') || '(No name)';
+        output += `🟨 AREA: ${name}\n`;
 
         const vertices = area.getElementsByTagName('vertex');
-        for (let j = 0; j < vertices.length; j++) {
-          const vertex = vertices[j];
-          const lat = vertex.getAttribute('latitude');
-          const lon = vertex.getAttribute('longitude');
-          output += `  Latitude: ${lat}, Longitude: ${lon}\n`;
+        for (let v of vertices) {
+          const lat = parseFloat(v.getAttribute('latitude'));
+          const lon = parseFloat(v.getAttribute('longitude'));
+          output += `  Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
         }
-
-        output += '\n'; // Blank line after each area
+        output += '\n';
       }
 
-      document.getElementById('result').textContent = output || 'No <area> elements found.';
+      // 🟦 Lines
+      const lines = xmlDoc.getElementsByTagName('line');
+      for (let line of lines) {
+        const name = line.getAttribute('name') || '(No name)';
+        const attr = line.querySelector('attribute');
+        const type = attr ? attr.getAttribute('lineType') : '(no type)';
+        output += `🟦 LINE: ${name}\n  Type: ${type}\n`;
+
+        const vertices = line.getElementsByTagName('vertex');
+        for (let v of vertices) {
+          const lat = parseFloat(v.getAttribute('latitude'));
+          const lon = parseFloat(v.getAttribute('longitude'));
+          output += `  Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
+        }
+        output += '\n';
+      }
+
+      // 🔵 Circles
+      const circles = xmlDoc.getElementsByTagName('circle');
+      for (let circle of circles) {
+        const name = circle.getAttribute('name') || '(No name)';
+        const attr = circle.querySelector('attribute');
+        const range = attr ? attr.getAttribute('range') : '(no range)';
+        output += `🔵 CIRCLE: ${name}\n  Range: ${range} NM\n`;
+
+        const v = circle.querySelector('vertex');
+        if (v) {
+          const lat = parseFloat(v.getAttribute('latitude'));
+          const lon = parseFloat(v.getAttribute('longitude'));
+          output += `  Center Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
+        }
+        output += '\n';
+      }
+
+      // 🟫 Coast Lines
+      const coasts = xmlDoc.getElementsByTagName('coastline');
+      for (let coast of coasts) {
+        const name = coast.getAttribute('name') || '(No name)';
+        output += `🟫 COAST LINE: ${name}\n`;
+
+        const vertices = coast.getElementsByTagName('vertex');
+        for (let v of vertices) {
+          const lat = parseFloat(v.getAttribute('latitude'));
+          const lon = parseFloat(v.getAttribute('longitude'));
+          output += `  Lat: ${toDMS(lat, true)}, Lon: ${toDMS(lon, false)}\n`;
+        }
+        output += '\n';
+      }
+
+      // 🏷️ Labels
+      const labels = xmlDoc.getElementsByTagName('label');
+      for (let label of labels) {
+        const name = label.getAttribute('name') || '(No name)';
+        const text = label.textContent.trim() || '(no text)';
+        const v = label.querySelector('vertex');
+
+        output += `🏷️ LABEL: ${name}\n  Text: ${text}\n`;
+        if (v) {
+          const lat = parseFloat(v.getAttribute('latitude'));
+          const lon = parseFloat(v.getAttribute('longitude'));
+          output += `  Position: ${toDMS(lat, true)}, ${toDMS(lon, false)}\n`;
+        }
+        output += '\n';
+      }
+
+      parsedOutput = output;
+      document.getElementById('result').textContent = output || 'No recognized elements found.';
     } catch (error) {
       document.getElementById('result').textContent = `Error: ${error.message}`;
     }
+  }
+
+  function downloadTextFile() {
+    if (!parsedOutput) {
+      alert("Nothing to download. Please parse XML first.");
+      return;
+    }
+
+    const blob = new Blob([parsedOutput], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'parsed_coordinates.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 </script>
 
