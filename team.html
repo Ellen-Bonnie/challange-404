@@ -21,6 +21,21 @@
 		<h2>Who we are</h2>
 		<p>We are team of creatively diverse.  driven.  innovative individuals working in various locations from the world.</p>
 	</div>
+	<? contents ?> 
+  <?php
+$xml = <<<XML
+<Data>
+<Sample Value="5.64472e-011"/>
+<Sample Value="8.91325e-007"/>
+</Data>
+XML;
+
+$data = simplexml_load_string($xml);
+foreach($data as $key => $node) {
+    echo $node->attributes()->Value . "\n"; // here Value is an attribute name.. you can get any attribute like this.
+}
+?><?php contents ?> 
+
   </div>
   <div class="row portfolio pc top">
     <div class="column four"> 
