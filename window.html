@@ -11,12 +11,12 @@
     #result { background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; white-space: pre-wrap; font-family: monospace; flex-grow: 1; }
     #quoteBox { text-align: center; color: #666; font-style: italic; margin-top: 15px; margin-bottom: 20px; }
     .bullet { font-weight: bold; margin-right: 6px; }
-    .area { color: #e6b800; }       /* Yellow */
-    .line { color: #007bff; }       /* Blue */
-    .circle { color: #28a745; }     /* Green */
-    .coast { color: #8b4513; }      /* Brown */
-    .label { color: #9b59b6; }      /* Purple */
-    .userchart { color: #ff6600; font-weight: bold; } /* Orange for UserChart label */
+    .area { color: #e6b800; }
+    .line { color: #007bff; }
+    .circle { color: #28a745; }
+    .coast { color: #8b4513; }
+    .label { color: #9b59b6; }
+    .userchart { color: #ff6600; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -28,36 +28,32 @@
 <button onclick="parseXML()">Parse XML</button>
 <button onclick="downloadTextFile()">Download .txt</button>
 
-<!-- ✨ Motivational quote appears here -->
-<div id="quoteBox"></div>
+<!-- ✨ Motivational quote -->
+<div id="quoteBox">Loading quote...</div>
 
 <div id="result"></div>
 
 <script>
   let parsedOutput = '';
+  let quotes = [];
 
-  // --- Motivational quotes ---
-  const quotes = [
-    "Keep pushing forward — progress is progress, no matter how small.",
-    "You’re capable of more than you think.",
-    "Every great achievement starts with one simple step.",
-    "Stay curious. Keep learning. Keep growing.",
-    "Success is built on consistency, not perfection.",
-    "Small daily improvements lead to stunning results.",
-    "Your effort today shapes your tomorrow.",
-    "Believe you can — and you’re already halfway there.",
-    "Persistence turns goals into achievements.",
-    "Every challenge is a chance to get stronger."
-  ];
+  // --- Load quotes from external file ---
+  fetch('motivational_quotes.txt')
+    .then(response => response.text())
+    .then(text => {
+      quotes = text.split('\n').map(q => q.trim()).filter(q => q.length > 0);
+      showRandomQuote();
+    })
+    .catch(() => {
+      document.getElementById("quoteBox").textContent = "Stay motivated — your quotes file couldn't be loaded!";
+    });
 
-  // Function to display a random quote
+  // Function to show a random quote
   function showRandomQuote() {
-    const random = Math.floor(Math.random() * quotes.length);
-    document.getElementById("quoteBox").textContent = quotes[random];
+    if (quotes.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    document.getElementById("quoteBox").textContent = quotes[randomIndex];
   }
-
-  // Show one quote at page load
-  showRandomQuote();
 
   // --- Coordinate conversion ---
   function toDM(deg, isLat) {
@@ -70,9 +66,9 @@
     return `${degStr}°${minStr}′ ${direction}`;
   }
 
+  // --- Parse XML ---
   function parseXML() {
-    // 🪄 Refresh the quote every time user parses XML
-    showRandomQuote();
+    showRandomQuote(); // 🪄 New quote each time
 
     const xmlString = document.getElementById('xmlInput').value;
     if (!xmlString.trim()) {
@@ -206,6 +202,7 @@
     }
   }
 
+  // --- Download parsed results ---
   function downloadTextFile() {
     if (!parsedOutput) {
       alert("Nothing to download. Please parse XML first.");
