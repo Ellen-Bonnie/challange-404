@@ -19,66 +19,41 @@
 <div id="result"></div>
 
 <script>
-    function loadXML() {
-        // Fetch the XML file (replace the URL with your actual file path)
-        fetch('test.xml')
-            .then(response => {
-                // Check if the file is fetched successfully
-                if (!response.ok) {
-                    throw new Error('Failed to load XML file');
-                }
-                return response.text(); // Get the file content as text
-            })
-            .then(xmlString => {
-                // Parse the XML string into a DOM object
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+  function loadXML() {
+    fetch('test.xml')  // <-- Replace with actual XML filename or URL
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to load XML file');
+        }
+        return response.text();
+      })
+      .then(xmlText => {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, "application/xml");
 
-                let resultHTML = '';
+        const areas = xmlDoc.getElementsByTagName('area');
+        let output = '';
 
-                // Extract information from <lines>
-                const lines = xmlDoc.getElementsByTagName('line');
-                for (let i = 0; i < lines.length; i++) {
-                    const line = lines[i];
-                    const lineName = line.getAttribute('name');
-                    const lineType = line.querySelector('attribute')?.getAttribute('lineType');
-                    resultHTML += `<p><strong>Line:</strong> ${lineName} | Line Type: ${lineType}</p>`;
-                }
+        for (let i = 0; i < areas.length; i++) {
+          const area = areas[i];
+          const areaName = area.getAttribute('name') || '(No name)';
+          const vertices = area.getElementsByTagName('vertex');
 
-                // Extract information from <areas>
-                const areas = xmlDoc.getElementsByTagName('area');
-                for (let i = 0; i < areas.length; i++) {
-                    const area = areas[i];
-                    const areaName = area.getAttribute('name');
-                    const areaDescription = area.getAttribute('description');
-                    resultHTML += `<p><strong>Area:</strong> ${areaName} | Description: ${areaDescription}</p>`;
-                }
+          for (let j = 0; j < vertices.length; j++) {
+            const vertex = vertices[j];
+            const lat = vertex.getAttribute('latitude');
+            const lon = vertex.getAttribute('longitude');
 
-                // Extract information from <labels>
-                const labels = xmlDoc.getElementsByTagName('label');
-                for (let i = 0; i < labels.length; i++) {
-                    const label = labels[i];
-                    const labelName = label.getAttribute('name');
-                    const labelText = label.querySelector('attribute')?.getAttribute('labelText');
-                    resultHTML += `<p><strong>Label:</strong> ${labelName} | Label Text: ${labelText}</p>`;
-                }
+            output += `Area: ${areaName} | Latitude: ${lat} | Longitude: ${lon}\n`;
+          }
+        }
 
-                // Extract information from <circles>
-                const circles = xmlDoc.getElementsByTagName('circle');
-                for (let i = 0; i < circles.length; i++) {
-                    const circle = circles[i];
-                    const circleName = circle.getAttribute('name');
-                    const circleRange = circle.querySelector('attribute')?.getAttribute('range');
-                    resultHTML += `<p><strong>Circle:</strong> ${circleName} | Range: ${circleRange}</p>`;
-                }
-
-                // Display the results in the result div
-                document.getElementById('result').innerHTML = resultHTML;
-            })
-            .catch(error => {
-                document.getElementById('result').innerHTML = `<p>Error loading XML: ${error.message}</p>`;
-            });
-    }
+        document.getElementById('result').textContent = output || 'No area data found.';
+      })
+      .catch(error => {
+        document.getElementById('result').textContent = `Error: ${error.message}`;
+      });
+  }
 </script>
 
 </body>
