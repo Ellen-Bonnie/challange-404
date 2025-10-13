@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<h2>XML Coordinate Parser LOVE U (Areas, Lines, Circles, Coast Lines, Labels)</h2>
+<h2>XML Coordinate Parser <3 (Areas, Lines, Circles, Coast Lines, Labels)</h2>
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
 <br>
@@ -25,7 +25,7 @@
 <script>
   let parsedOutput = '';
 
-  // Convert decimal degrees → degrees + decimal minutes (DD° MM.mmm′ N/E/S/W)
+  // Convert decimal degrees → degrees + decimal minutes (DD° MM.mm′ N/E/S/W)
   function toDM(deg, isLat) {
     const absolute = Math.abs(deg);
     const degrees = Math.floor(absolute);
@@ -33,7 +33,7 @@
     const direction = deg >= 0
       ? (isLat ? "N" : "E")
       : (isLat ? "S" : "W");
-    return `${degrees}° ${minutes.toFixed(3)}′ ${direction}`;
+    return `${degrees}° ${minutes.toFixed(2)}′ ${direction}`;
   }
 
   function parseXML() {
