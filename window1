@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parse XML Areas (DMS Format)</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
+    button { padding: 10px 20px; margin-right: 10px; }
+    #result { white-space: pre-wrap; background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h2>Paste XML and Extract Area Coordinates (DMS Format)</h2>
+
+<textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
+<br>
+<button onclick="parseXML()">Parse XML</button>
+<button onclick="downloadTextFile()">Download .txt</button>
+
+<div id="result"></div>
+
+<script>
+  let parsedOutput = '';
+
+  // Helper to convert decimal degrees to DMS
+  function toDMS(deg, isLat) {
+    const absolute = Math.abs(deg);
+    const degrees = Math.floor(absolute);
+    const minutesNotTruncated = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesNotTruncated);
+    const seconds = ((minutesNotTruncated - minutes) * 60).toFixed(2);
+
+    const direction = deg >= 0
+      ? (isLat ? "N" : "E")
+      : (isLat ? "S" : "W");
+
+    return `${degrees}°${minutes}′${seconds}″ ${direction}`;
+  }
+
+  function parseXML() {
+    const xmlString = document.getElementById('xmlInput').value;
+
+    if (!xmlString.trim()) {
+      document.getElementById('result').textContent = 'Please paste XML data first.';
+      return;
+    }
+
+    try {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+
+      if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+        document.getElementById('result').textContent = 'Error parsing XML. Please check the format.';
+        return;
+      }
+
+      const areas = xmlDoc.getElementsByTagName('area');
+      let output = '';
+
+      for (let i = 0; i < areas.length; i++) {
+        const area = areas[i];
+        const areaName = area.getAttribute('name') || '(No name)';
+        output += `Area: ${areaName}\n`;
+
+        const vertices = area.getElementsByTagName('vertex');
+        for (let j = 0; j < vertices.length; j++) {
+          const vertex = vertices[j];
+          const lat = parseFloat(vertex.getAttribute('latitude'));
+          const lon = parseFloat(vertex.getAttribute('longitude'));
+
+          const latDMS = toDMS(lat, true);
+          const lonDMS = toDMS(lon, false);
+
+          output += `  Latitude: ${latDMS}, Longitude: ${lonDMS}\n`;
+        }
+
+        output += '\n'; // Space between areas
+      }
+
+      parsedOutput = output;
+      document.getElementById('result').textContent = output || 'No <area> elements found.';
+    } catch (error) {
+      document.getElementById('result').textContent = `Error: ${error.message}`;
+    }
+  }
+
+  function downloadTextFile() {
+    if (!parsedOutput) {
+      alert("Nothing to download. Please parse XML first.");
+      return;
+    }
+
+    const blob = new Blob([parsedOutput], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'areas_dms.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+
+</body>
+</html>
