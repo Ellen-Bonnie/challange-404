@@ -5,11 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parse XML with DMS Coordinates</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; display: flex; flex-direction: column; min-height: 100vh; }
-    textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
-    button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
-    #result { background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; white-space: pre-wrap; font-family: monospace; flex-grow: 1; }
-    #quoteBox { text-align: center; color: #666; font-style: italic; margin-top: 15px; margin-bottom: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+
+    /* ✨ Fancy Buttons — inspired by DFD style */
+    .fancy-button {
+      padding: 12px 28px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #5b7fff 0%, #2b2fff 100%);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+    .fancy-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+      background: linear-gradient(135deg, #6f85ff 0%, #484bff 100%);
+    }
+
+    #result {
+      background: #f9f9f9;
+      padding: 15px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      flex-grow: 1;
+    }
+
+    /* 💬 Motivational Quote */
+    #quoteBox {
+      text-align: center;
+      color: #2725ff;
+      font-size: 30px;
+      font-style: italic;
+      margin-top: 20px;
+      margin-bottom: 25px;
+      transition: opacity 0.5s ease;
+    }
+
     .bullet { font-weight: bold; margin-right: 6px; }
     .area { color: #e6b800; }
     .line { color: #007bff; }
@@ -25,8 +78,8 @@
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
 <br>
-<button onclick="parseXML()">Parse XML</button>
-<button onclick="downloadTextFile()">Download .txt</button>
+<button class="fancy-button" onclick="parseXML()">Parse XML</button>
+<button class="fancy-button" onclick="downloadTextFile()">Download .txt</button>
 
 <!-- ✨ Motivational quote -->
 <div id="quoteBox">Loading quote...</div>
@@ -48,11 +101,16 @@
       document.getElementById("quoteBox").textContent = "Stay motivated — your quotes file couldn't be loaded!";
     });
 
-  // Function to show a random quote
+  // Function to show a random quote with fade-in
   function showRandomQuote() {
+    const box = document.getElementById("quoteBox");
     if (quotes.length === 0) return;
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    document.getElementById("quoteBox").textContent = quotes[randomIndex];
+    box.style.opacity = 0;
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      box.textContent = quotes[randomIndex];
+      box.style.opacity = 1;
+    }, 300);
   }
 
   // --- Coordinate conversion ---
@@ -66,7 +124,6 @@
     return `${degStr}°${minStr}′ ${direction}`;
   }
 
-  // --- Parse XML ---
   function parseXML() {
     showRandomQuote(); // 🪄 New quote each time
 
@@ -87,7 +144,6 @@
       let htmlOutput = '';
       let textOutput = '';
 
-      // 🟧 UserCharts
       const usercharts = xmlDoc.getElementsByTagName('userchart');
       if (usercharts.length > 0) {
         for (let chart of usercharts) {
@@ -101,7 +157,6 @@
       }
 
       function processElements(root) {
-        // 🟡 Areas
         const areas = root.getElementsByTagName('area');
         for (let area of areas) {
           const name = area.getAttribute('name') || '(No name)';
@@ -118,7 +173,6 @@
           textOutput += '\n';
         }
 
-        // 🔵 Lines
         const lines = root.getElementsByTagName('line');
         for (let line of lines) {
           const name = line.getAttribute('name') || '(No name)';
@@ -137,7 +191,6 @@
           textOutput += '\n';
         }
 
-        // 🟢 Circles
         const circles = root.getElementsByTagName('circle');
         for (let circle of circles) {
           const name = circle.getAttribute('name') || '(No name)';
@@ -158,7 +211,6 @@
           textOutput += '\n';
         }
 
-        // 🟤 Coast Lines
         const coasts = root.getElementsByTagName('coastline');
         for (let coast of coasts) {
           const name = coast.getAttribute('name') || '(No name)';
@@ -175,7 +227,6 @@
           textOutput += '\n';
         }
 
-        // 🟣 Labels
         const labels = root.getElementsByTagName('label');
         for (let label of labels) {
           const name = label.getAttribute('name') || '(No name)';
@@ -202,7 +253,6 @@
     }
   }
 
-  // --- Download parsed results ---
   function downloadTextFile() {
     if (!parsedOutput) {
       alert("Nothing to download. Please parse XML first.");
