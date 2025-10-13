@@ -22,18 +22,14 @@
 		<? contents ?> 
 <?php echo "Hello world";
 
-$xml = <<<XML
-<Data>
-<Sample Value="5.64472e-011"/>
-<Sample Value="8.91325e-007"/>
-</Data>
-XML;
-
-$data = simplexml_load_string($xml);
+<?php
+$data = simplexml_load_file('/test.xml'); // path of XML file consists of data you shared above.
 foreach($data as $key => $node) {
-    echo $node->attributes(Sample)->Value . "\n"; // here Value is an attribute name.. you can get any attribute like this.
+    echo $node->attributes(sample)->Value . "\n";
 }
-?><?php contents ?> 
+?>
+
+<?php contents ?> 
 
 		<p>We are team of creatively diverse.  driven.  innovative individuals working in various locations from the world.</p>
 	</div>
