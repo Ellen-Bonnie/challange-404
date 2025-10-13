@@ -25,7 +25,7 @@
 <script>
   let parsedOutput = '';
 
-  // Convert decimal degrees → degrees + decimal minutes (DD° MM.mm′ N/E/S/W)
+  // Convert decimal degrees → degrees + decimal minutes (zero-padded, 3 decimals)
   function toDM(deg, isLat) {
     const absolute = Math.abs(deg);
     const degrees = Math.floor(absolute);
@@ -33,7 +33,12 @@
     const direction = deg >= 0
       ? (isLat ? "N" : "E")
       : (isLat ? "S" : "W");
-    return `${degrees}° ${minutes.toFixed(2)}′ ${direction}`;
+
+    // Zero-padding for degrees (<10) and minutes (<10)
+    const degStr = degrees < 10 ? "0" + degrees : degrees.toString();
+    const minStr = minutes < 10 ? "0" + minutes.toFixed(3) : minutes.toFixed(3);
+
+    return `${degStr}°${minStr}′ ${direction}`;
   }
 
   function parseXML() {
@@ -89,8 +94,10 @@
       for (let circle of circles) {
         const name = circle.getAttribute('name') || '(No name)';
         const attr = circle.querySelector('attribute');
-        const range = attr ? attr.getAttribute('range') : '(no range)';
+        let range = attr ? attr.getAttribute('range') : '(no range)';
+        if (!isNaN(range)) range = parseFloat(range).toFixed(2);
         output += `🔵 CIRCLE: ${name}\n  Range: ${range} NM\n`;
+
         const v = circle.querySelector('vertex');
         if (v) {
           const lat = parseFloat(v.getAttribute('latitude'));
