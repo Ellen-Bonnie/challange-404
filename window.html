@@ -13,6 +13,7 @@
       flex-direction: column;
       min-height: 100vh;
     }
+
     textarea {
       width: 100%;
       height: 300px;
@@ -20,25 +21,36 @@
       font-family: monospace;
     }
 
-    /* 🌸 Gradient Buttons - smaller size */
+    /* ✨ Button Container */
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* 🎨 Modern Gradient Buttons */
     .fancy-button {
-      padding: 8px 18px;
-      margin-right: 8px;
+      width: 25%;
       border: none;
-      border-radius: 30px;
+      border-radius: 43px;
       background: linear-gradient(to right, #fe606f, #feb174);
       color: white;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 800;
       text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      line-height: 60px;
+      letter-spacing: 0.5px;
       transition: all 0.3s ease;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
     }
+
     .fancy-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-      filter: brightness(1.05);
+      filter: brightness(1.08);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
     }
 
     #result {
@@ -76,11 +88,14 @@
 <h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels, UserChart)</h2>
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
-<br>
-<button class="fancy-button" onclick="parseXML()">Parse XML</button>
-<button class="fancy-button" onclick="downloadTextFile()">Download .txt</button>
 
-<!-- ✨ Motivational quote -->
+<!-- ✨ Buttons next to each other -->
+<div class="button-container">
+  <button class="fancy-button" onclick="parseXML()">Parse XML</button>
+  <button class="fancy-button" onclick="downloadTextFile()">Download .txt</button>
+</div>
+
+<!-- 💬 Motivational quote -->
 <div id="quoteBox">Loading quote...</div>
 
 <div id="result"></div>
@@ -124,7 +139,7 @@
   }
 
   function parseXML() {
-    showRandomQuote();
+    showRandomQuote(); // 🪄 New quote each time
 
     const xmlString = document.getElementById('xmlInput').value;
     if (!xmlString.trim()) {
