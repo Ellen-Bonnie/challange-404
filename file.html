@@ -18,7 +18,7 @@
 
 <script>
   function loadXML() {
-    fetch('test.xml')  // <-- Replace with actual XML filename or URL
+    fetch('test.xml') // ← Replace with your actual file name or path
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to load XML file');
@@ -35,15 +35,17 @@
         for (let i = 0; i < areas.length; i++) {
           const area = areas[i];
           const areaName = area.getAttribute('name') || '(No name)';
-          const vertices = area.getElementsByTagName('vertex');
+          output += `Area: ${areaName}\n`;
 
+          const vertices = area.getElementsByTagName('vertex');
           for (let j = 0; j < vertices.length; j++) {
             const vertex = vertices[j];
             const lat = vertex.getAttribute('latitude');
             const lon = vertex.getAttribute('longitude');
-
-            output += `Area: ${areaName} | Latitude: ${lat} | Longitude: ${lon}\n`;
+            output += `  Latitude: ${lat}, Longitude: ${lon}\n`;
           }
+
+          output += '\n'; // Add blank line after each area
         }
 
         document.getElementById('result').textContent = output || 'No area data found.';
