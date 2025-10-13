@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract XML Attributes</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h2>Extract XML Attribute Values</h2>
+
+<!-- The XML Data embedded in a hidden div -->
+<div id="xmlData" style="display:none;">
+    <!-- userchart node -->
+    <userchart name="v28 Huanghua to Singapore" description="" version="1.0">
+        <lines>
+            <line name="Cangzhou VTS" description="">
+                <position>
+                    <vertex id="1" latitude="38.396305" longitude="118.512588"/>
+                    <vertex id="2" latitude="38.421385" longitude="118.508053"/>
+                </position>
+                <attribute lineType="1"/>
+                <type checkDanger="0" displayRadar="0" hasNotes="0" rangeOfNotes="1.000000"/>
+            </line>
+            <line name="PI" description="PI = 11.954 NM">
+                <position>
+                    <vertex id="1" latitude="2.742884" longitude="105.379916"/>
+                    <vertex id="2" latitude="2.813870" longitude="105.191758"/>
+                </position>
+                <attribute lineType="4"/>
+                <type checkDanger="0" displayRadar="1" hasNotes="1" rangeOfNotes="1.000000"/>
+            </line>
+        </lines>
+        <areas>
+            <area name="No Go Area" description="">
+                <position>
+                    <vertex id="1" latitude="16.183292" longitude="114.305004"/>
+                </position>
+                <type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+            </area>
+        </areas>
+        <labels>
+            <label name="Cangzhou VTS" description="">
+                <position>
+                    <vertex id="1" latitude="38.628667" longitude="118.352350"/>
+                </position>
+                <attribute labelStyle="1" labelText="Call Cangzhou VTS on VHF ch 08, 16"/>
+            </label>
+        </labels>
+        <circles>
+            <circle name="No Go Area" description="">
+                <position>
+                    <vertex id="1" latitude="7.579221" longitude="108.870755"/>
+                </position>
+                <attribute range="1.000000"/>
+                <type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+            </circle>
+        </circles>
+    </userchart>
+</div>
+
+<button onclick="extractAttributes()">Extract Attributes</button>
+
+<div id="result"></div>
+
+<script>
+    function extractAttributes() {
+        const xmlString = document.getElementById('xmlData').innerHTML;
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+        let resultHTML = '';
+        
+        // Extract information from <lines>
+        const lines = xmlDoc.getElementsByTagName('line');
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const lineName = line.getAttribute('name');
+            const lineType = line.querySelector('attribute')?.getAttribute('lineType');
+            resultHTML += `<p><strong>Line:</strong> ${lineName} | Line Type: ${lineType}</p>`;
+        }
+
+        // Extract information from <areas>
+        const areas = xmlDoc.getElementsByTagName('area');
+        for (let i = 0; i < areas.length; i++) {
+            const area = areas[i];
+            const areaName = area.getAttribute('name');
+            const areaDescription = area.getAttribute('description');
+            resultHTML += `<p><strong>Area:</strong> ${areaName} | Description: ${areaDescription}</p>`;
+        }
+
+        // Extract information from <labels>
+        const labels = xmlDoc.getElementsByTagName('label');
+        for (let i = 0; i < labels.length; i++) {
+            const label = labels[i];
+            const labelName = label.getAttribute('name');
+            const labelText = label.querySelector('attribute')?.getAttribute('labelText');
+            resultHTML += `<p><strong>Label:</strong> ${labelName} | Label Text: ${labelText}</p>`;
+        }
+
+        // Extract information from <circles>
+        const circles = xmlDoc.getElementsByTagName('circle');
+        for (let i = 0; i < circles.length; i++) {
+            const circle = circles[i];
+            const circleName = circle.getAttribute('name');
+            const circleRange = circle.querySelector('attribute')?.getAttribute('range');
+            resultHTML += `<p><strong>Circle:</strong> ${circleName} | Range: ${circleRange}</p>`;
+        }
+
+        // Display the results
+        document.getElementById('result').innerHTML = resultHTML;
+    }
+</script>
+
+</body>
+</html>
