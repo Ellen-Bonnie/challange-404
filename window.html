@@ -8,12 +8,18 @@
     body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; }
     textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
     button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
-    #result { white-space: pre-wrap; background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; }
+    #result { background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; white-space: pre-wrap; font-family: monospace; }
+    .bullet { font-weight: bold; margin-right: 6px; }
+    .area { color: #e6b800; }       /* Yellow */
+    .line { color: #007bff; }       /* Blue */
+    .circle { color: #28a745; }     /* Green */
+    .coast { color: #8b4513; }      /* Brown */
+    .label { color: #9b59b6; }      /* Purple */
   </style>
 </head>
 <body>
 
-<h2> <3 XML Coordinate Parser <3 (Areas, Lines, Circles, Coast Lines, Labels)</h2>
+<h2> <3 XML Coordinate Parser ;) (Areas, Lines, Circles, Coast Lines, Labels)</h2>
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
 <br>
@@ -34,7 +40,6 @@
       ? (isLat ? "N" : "E")
       : (isLat ? "S" : "W");
 
-    // Zero-padding for degrees (<10) and minutes (<10)
     const degStr = degrees < 10 ? "0" + degrees : degrees.toString();
     const minStr = minutes < 10 ? "0" + minutes.toFixed(3) : minutes.toFixed(3);
 
@@ -57,87 +62,108 @@
         return;
       }
 
-      let output = '';
+      let htmlOutput = '';
+      let textOutput = '';
 
-      // 🟨 Areas
+      // 🟡 Areas
       const areas = xmlDoc.getElementsByTagName('area');
       for (let area of areas) {
         const name = area.getAttribute('name') || '(No name)';
-        output += `🟨 AREA: ${name}\n`;
+        htmlOutput += `<span class="bullet area">•</span>AREA: ${name}\n`;
+        textOutput += `AREA: ${name}\n`;
         const vertices = area.getElementsByTagName('vertex');
         for (let v of vertices) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
+          const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+          htmlOutput += `  ${coord}\n`;
+          textOutput += `  ${coord}\n`;
         }
-        output += '\n';
+        htmlOutput += '\n';
+        textOutput += '\n';
       }
 
-      // 🟦 Lines
+      // 🔵 Lines
       const lines = xmlDoc.getElementsByTagName('line');
       for (let line of lines) {
         const name = line.getAttribute('name') || '(No name)';
         const attr = line.querySelector('attribute');
         const type = attr ? attr.getAttribute('lineType') : '(no type)';
-        output += `🟦 LINE: ${name}\n  Type: ${type}\n`;
+        htmlOutput += `<span class="bullet line">•</span>LINE: ${name}\n  Type: ${type}\n`;
+        textOutput += `LINE: ${name}\n  Type: ${type}\n`;
         const vertices = line.getElementsByTagName('vertex');
         for (let v of vertices) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
+          const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+          htmlOutput += `  ${coord}\n`;
+          textOutput += `  ${coord}\n`;
         }
-        output += '\n';
+        htmlOutput += '\n';
+        textOutput += '\n';
       }
 
-      // 🔵 Circles
+      // 🟢 Circles
       const circles = xmlDoc.getElementsByTagName('circle');
       for (let circle of circles) {
         const name = circle.getAttribute('name') || '(No name)';
         const attr = circle.querySelector('attribute');
         let range = attr ? attr.getAttribute('range') : '(no range)';
         if (!isNaN(range)) range = parseFloat(range).toFixed(2);
-        output += `🔵 CIRCLE: ${name}\n  Range: ${range} NM\n`;
+        htmlOutput += `<span class="bullet circle">•</span>CIRCLE: ${name}\n  Range: ${range} NM\n`;
+        textOutput += `CIRCLE: ${name}\n  Range: ${range} NM\n`;
 
         const v = circle.querySelector('vertex');
         if (v) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  Center: ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
+          const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+          htmlOutput += `  Center: ${coord}\n`;
+          textOutput += `  Center: ${coord}\n`;
         }
-        output += '\n';
+        htmlOutput += '\n';
+        textOutput += '\n';
       }
 
-      // 🟫 Coast Lines
+      // 🟤 Coast Lines
       const coasts = xmlDoc.getElementsByTagName('coastline');
       for (let coast of coasts) {
         const name = coast.getAttribute('name') || '(No name)';
-        output += `🟫 COAST LINE: ${name}\n`;
+        htmlOutput += `<span class="bullet coast">•</span>COAST LINE: ${name}\n`;
+        textOutput += `COAST LINE: ${name}\n`;
         const vertices = coast.getElementsByTagName('vertex');
         for (let v of vertices) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
+          const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+          htmlOutput += `  ${coord}\n`;
+          textOutput += `  ${coord}\n`;
         }
-        output += '\n';
+        htmlOutput += '\n';
+        textOutput += '\n';
       }
 
-      // 🏷️ Labels
+      // 🟣 Labels
       const labels = xmlDoc.getElementsByTagName('label');
       for (let label of labels) {
         const name = label.getAttribute('name') || '(No name)';
         const text = label.textContent.trim() || '(no text)';
         const v = label.querySelector('vertex');
-        output += `🏷️ LABEL: ${name}\n  Text: ${text}\n`;
+        htmlOutput += `<span class="bullet label">•</span>LABEL: ${name}\n  Text: ${text}\n`;
+        textOutput += `LABEL: ${name}\n  Text: ${text}\n`;
         if (v) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
-          output += `  Position: ${toDM(lat, true)}, ${toDM(lon, false)}\n`;
+          const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+          htmlOutput += `  Position: ${coord}\n`;
+          textOutput += `  Position: ${coord}\n`;
         }
-        output += '\n';
+        htmlOutput += '\n';
+        textOutput += '\n';
       }
 
-      parsedOutput = output;
-      document.getElementById('result').textContent = output || 'No recognized elements found.';
+      parsedOutput = textOutput;
+      document.getElementById('result').innerHTML = htmlOutput || 'No recognized elements found.';
     } catch (error) {
       document.getElementById('result').textContent = `Error: ${error.message}`;
     }
