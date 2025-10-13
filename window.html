@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parse XML with DMS Coordinates</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; display: flex; flex-direction: column; min-height: 100vh; }
     textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
     button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
-    #result { background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; white-space: pre-wrap; font-family: monospace; }
+    #result { background: #f9f9f9; padding: 15px; border: 1px solid #ccc; margin-top: 20px; white-space: pre-wrap; font-family: monospace; flex-grow: 1; }
+    footer { text-align: center; color: #666; font-style: italic; margin-top: 30px; padding-top: 10px; border-top: 1px solid #ddd; }
     .bullet { font-weight: bold; margin-right: 6px; }
     .area { color: #e6b800; }       /* Yellow */
     .line { color: #007bff; }       /* Blue */
@@ -19,7 +20,7 @@
 </head>
 <body>
 
-<h2> <3 XML Coordinate Parser ;) (Areas, Lines, Circles, Coast Lines, Labels)</h2>
+<h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels)</h2>
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
 <br>
@@ -28,17 +29,32 @@
 
 <div id="result"></div>
 
+<footer id="footerText"></footer>
+
 <script>
   let parsedOutput = '';
 
-  // Convert decimal degrees → degrees + decimal minutes (zero-padded, 3 decimals)
+  // --- Random motivational footer ---
+  const quotes = [
+    "Keep pushing forward — progress is progress, no matter how small.",
+    "You’re capable of more than you think.",
+    "Every great achievement starts with one simple step.",
+    "Stay curious. Keep learning. Keep growing.",
+    "Success is built on consistency, not perfection.",
+    "Small daily improvements lead to stunning results.",
+    "Your effort today shapes your tomorrow.",
+    "Believe you can — and you’re already halfway there.",
+    "Persistence turns goals into achievements.",
+    "Every challenge is a chance to get stronger."
+  ];
+  document.getElementById("footerText").textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+  // --- Coordinate conversion ---
   function toDM(deg, isLat) {
     const absolute = Math.abs(deg);
     const degrees = Math.floor(absolute);
     const minutes = (absolute - degrees) * 60;
-    const direction = deg >= 0
-      ? (isLat ? "N" : "E")
-      : (isLat ? "S" : "W");
+    const direction = deg >= 0 ? (isLat ? "N" : "E") : (isLat ? "S" : "W");
 
     const degStr = degrees < 10 ? "0" + degrees : degrees.toString();
     const minStr = minutes < 10 ? "0" + minutes.toFixed(3) : minutes.toFixed(3);
@@ -56,7 +72,6 @@
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-
       if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
         document.getElementById('result').textContent = 'Error parsing XML. Please check the format.';
         return;
@@ -71,8 +86,7 @@
         const name = area.getAttribute('name') || '(No name)';
         htmlOutput += `<span class="bullet area">•</span>AREA: ${name}\n`;
         textOutput += `AREA: ${name}\n`;
-        const vertices = area.getElementsByTagName('vertex');
-        for (let v of vertices) {
+        for (let v of area.getElementsByTagName('vertex')) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
           const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
@@ -91,8 +105,7 @@
         const type = attr ? attr.getAttribute('lineType') : '(no type)';
         htmlOutput += `<span class="bullet line">•</span>LINE: ${name}\n  Type: ${type}\n`;
         textOutput += `LINE: ${name}\n  Type: ${type}\n`;
-        const vertices = line.getElementsByTagName('vertex');
-        for (let v of vertices) {
+        for (let v of line.getElementsByTagName('vertex')) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
           const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
@@ -112,7 +125,6 @@
         if (!isNaN(range)) range = parseFloat(range).toFixed(2);
         htmlOutput += `<span class="bullet circle">•</span>CIRCLE: ${name}\n  Range: ${range} NM\n`;
         textOutput += `CIRCLE: ${name}\n  Range: ${range} NM\n`;
-
         const v = circle.querySelector('vertex');
         if (v) {
           const lat = parseFloat(v.getAttribute('latitude'));
@@ -131,8 +143,7 @@
         const name = coast.getAttribute('name') || '(No name)';
         htmlOutput += `<span class="bullet coast">•</span>COAST LINE: ${name}\n`;
         textOutput += `COAST LINE: ${name}\n`;
-        const vertices = coast.getElementsByTagName('vertex');
-        for (let v of vertices) {
+        for (let v of coast.getElementsByTagName('vertex')) {
           const lat = parseFloat(v.getAttribute('latitude'));
           const lon = parseFloat(v.getAttribute('longitude'));
           const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
