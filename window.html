@@ -28,7 +28,7 @@
 <button onclick="parseXML()">Parse XML</button>
 <button onclick="downloadTextFile()">Download .txt</button>
 
-<!-- ✨ Motivational quote now appears here -->
+<!-- ✨ Motivational quote appears here -->
 <div id="quoteBox"></div>
 
 <div id="result"></div>
@@ -36,7 +36,7 @@
 <script>
   let parsedOutput = '';
 
-  // --- Random motivational quote (shown under buttons) ---
+  // --- Motivational quotes ---
   const quotes = [
     "Keep pushing forward — progress is progress, no matter how small.",
     "You’re capable of more than you think.",
@@ -49,7 +49,15 @@
     "Persistence turns goals into achievements.",
     "Every challenge is a chance to get stronger."
   ];
-  document.getElementById("quoteBox").textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+  // Function to display a random quote
+  function showRandomQuote() {
+    const random = Math.floor(Math.random() * quotes.length);
+    document.getElementById("quoteBox").textContent = quotes[random];
+  }
+
+  // Show one quote at page load
+  showRandomQuote();
 
   // --- Coordinate conversion ---
   function toDM(deg, isLat) {
@@ -63,6 +71,9 @@
   }
 
   function parseXML() {
+    // 🪄 Refresh the quote every time user parses XML
+    showRandomQuote();
+
     const xmlString = document.getElementById('xmlInput').value;
     if (!xmlString.trim()) {
       document.getElementById('result').textContent = 'Please paste XML data first.';
@@ -87,12 +98,9 @@
           const chartName = chart.getAttribute('name') || '(No name)';
           htmlOutput += `<span class="userchart">UserChart name: ${chartName}</span>\n`;
           textOutput += `UserChart name: ${chartName}\n`;
-
-          // Process elements inside each userchart
           processElements(chart);
         }
       } else {
-        // If no userchart, just parse the whole doc normally
         processElements(xmlDoc);
       }
 
@@ -155,4 +163,63 @@
         }
 
         // 🟤 Coast Lines
-        const coasts = root.get
+        const coasts = root.getElementsByTagName('coastline');
+        for (let coast of coasts) {
+          const name = coast.getAttribute('name') || '(No name)';
+          htmlOutput += `<span class="bullet coast">•</span>COAST LINE: ${name}\n`;
+          textOutput += `COAST LINE: ${name}\n`;
+          for (let v of coast.getElementsByTagName('vertex')) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+            htmlOutput += `  ${coord}\n`;
+            textOutput += `  ${coord}\n`;
+          }
+          htmlOutput += '\n';
+          textOutput += '\n';
+        }
+
+        // 🟣 Labels
+        const labels = root.getElementsByTagName('label');
+        for (let label of labels) {
+          const name = label.getAttribute('name') || '(No name)';
+          const text = label.textContent.trim() || '(no text)';
+          const v = label.querySelector('vertex');
+          htmlOutput += `<span class="bullet label">•</span>LABEL: ${name}\n  Text: ${text}\n`;
+          textOutput += `LABEL: ${name}\n  Text: ${text}\n`;
+          if (v) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+            htmlOutput += `  Position: ${coord}\n`;
+            textOutput += `  Position: ${coord}\n`;
+          }
+          htmlOutput += '\n';
+          textOutput += '\n';
+        }
+      }
+
+      parsedOutput = textOutput;
+      document.getElementById('result').innerHTML = htmlOutput || 'No recognized elements found.';
+    } catch (error) {
+      document.getElementById('result').textContent = `Error: ${error.message}`;
+    }
+  }
+
+  function downloadTextFile() {
+    if (!parsedOutput) {
+      alert("Nothing to download. Please parse XML first.");
+      return;
+    }
+    const blob = new Blob([parsedOutput], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'parsed_coordinates.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+
+</body>
+</html>
