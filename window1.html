@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Parse XML Areas (DMS Format)</title>
+  <title>Parse XML with DMS Coordinates</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     textarea { width: 100%; height: 300px; margin-bottom: 10px; font-family: monospace; }
@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<h2>Paste XML and Extract Area Coordinates (DMS Format)</h2>
+<h2>Paste XML and Extract Coordinates (Areas, Lines, Circles)</h2>
 
 <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
 <br>
@@ -25,7 +25,6 @@
 <script>
   let parsedOutput = '';
 
-  // Helper to convert decimal degrees to DMS
   function toDMS(deg, isLat) {
     const absolute = Math.abs(deg);
     const degrees = Math.floor(absolute);
@@ -57,31 +56,73 @@
         return;
       }
 
-      const areas = xmlDoc.getElementsByTagName('area');
       let output = '';
 
+      // 🔶 Parse Areas
+      const areas = xmlDoc.getElementsByTagName('area');
       for (let i = 0; i < areas.length; i++) {
         const area = areas[i];
         const areaName = area.getAttribute('name') || '(No name)';
-        output += `Area: ${areaName}\n`;
+        output += `🟨 Area: ${areaName}\n`;
 
         const vertices = area.getElementsByTagName('vertex');
         for (let j = 0; j < vertices.length; j++) {
-          const vertex = vertices[j];
-          const lat = parseFloat(vertex.getAttribute('latitude'));
-          const lon = parseFloat(vertex.getAttribute('longitude'));
-
+          const lat = parseFloat(vertices[j].getAttribute('latitude'));
+          const lon = parseFloat(vertices[j].getAttribute('longitude'));
           const latDMS = toDMS(lat, true);
           const lonDMS = toDMS(lon, false);
-
           output += `  Latitude: ${latDMS}, Longitude: ${lonDMS}\n`;
         }
+        output += '\n';
+      }
 
-        output += '\n'; // Space between areas
+      // 🟦 Parse Lines
+      const lines = xmlDoc.getElementsByTagName('line');
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const lineName = line.getAttribute('name') || '(No name)';
+        const lineTypeEl = line.querySelector('attribute');
+        const lineType = lineTypeEl ? lineTypeEl.getAttribute('lineType') : '(no type)';
+
+        output += `🟦 Line: ${lineName}\n`;
+        output += `  Type: ${lineType}\n`;
+
+        const vertices = line.getElementsByTagName('vertex');
+        for (let j = 0; j < vertices.length; j++) {
+          const lat = parseFloat(vertices[j].getAttribute('latitude'));
+          const lon = parseFloat(vertices[j].getAttribute('longitude'));
+          const latDMS = toDMS(lat, true);
+          const lonDMS = toDMS(lon, false);
+          output += `  Latitude: ${latDMS}, Longitude: ${lonDMS}\n`;
+        }
+        output += '\n';
+      }
+
+      // 🔵 Parse Circles
+      const circles = xmlDoc.getElementsByTagName('circle');
+      for (let i = 0; i < circles.length; i++) {
+        const circle = circles[i];
+        const circleName = circle.getAttribute('name') || '(No name)';
+        const attribute = circle.querySelector('attribute');
+        const range = attribute ? attribute.getAttribute('range') : '(no range)';
+
+        output += `🔵 Circle: ${circleName}\n`;
+        output += `  Range: ${range} NM\n`;
+
+        const vertex = circle.querySelector('vertex');
+        if (vertex) {
+          const lat = parseFloat(vertex.getAttribute('latitude'));
+          const lon = parseFloat(vertex.getAttribute('longitude'));
+          const latDMS = toDMS(lat, true);
+          const lonDMS = toDMS(lon, false);
+          output += `  Center Latitude: ${latDMS}, Longitude: ${lonDMS}\n`;
+        }
+
+        output += '\n';
       }
 
       parsedOutput = output;
-      document.getElementById('result').textContent = output || 'No <area> elements found.';
+      document.getElementById('result').textContent = output || 'No elements found.';
     } catch (error) {
       document.getElementById('result').textContent = `Error: ${error.message}`;
     }
@@ -96,7 +137,7 @@
     const blob = new Blob([parsedOutput], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'areas_dms.txt';
+    link.download = 'parsed_coordinates.txt';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
