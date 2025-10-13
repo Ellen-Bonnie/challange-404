@@ -8,5 +8,5 @@ XML;
 
 $data = simplexml_load_string($xml);
 foreach($data as $key => $node) {
-    echo $node->attributes()->Value . "\n"; // here Value is an attribute name.. you can get any attribute like this.
+    echo $node->attributes(Sample)->Value . "\n"; // here Value is an attribute name.. you can get any attribute like this.
 }
