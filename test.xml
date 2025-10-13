@@ -1,0 +1,307 @@
+<!-- userchart node -->
+<userchart name="v28 Huanghua to Singapore" description="" version="1.0">
+<!-- userchart line -->
+<lines>
+<line name="Cangzhou VTS" description="">
+<position>
+<vertex id="1" latitude="38.396305" longitude="118.512588"/>
+<vertex id="2" latitude="38.421385" longitude="118.508053"/>
+<vertex id="3" latitude="38.455929" longitude="118.498076"/>
+<vertex id="4" latitude="38.491420" longitude="118.485378"/>
+<vertex id="5" latitude="38.519812" longitude="118.473284"/>
+<vertex id="6" latitude="38.533724" longitude="118.465152"/>
+<vertex id="7" latitude="38.560450" longitude="118.448412"/>
+<vertex id="8" latitude="38.583176" longitude="118.431906"/>
+<vertex id="9" latitude="38.605903" longitude="118.413074"/>
+<vertex id="10" latitude="38.636811" longitude="118.382049"/>
+<vertex id="11" latitude="38.663900" longitude="118.351086"/>
+<vertex id="12" latitude="38.686808" longitude="118.321287"/>
+<vertex id="13" latitude="38.714080" longitude="118.280439"/>
+<vertex id="14" latitude="38.733897" longitude="118.242925"/>
+<vertex id="15" latitude="38.753351" longitude="118.199353"/>
+</position>
+<attribute lineType="1"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" rangeOfNotes="1.000000"/>
+</line>
+<line name="PI" description="PI = 11.954 NM">
+<position>
+<vertex id="1" latitude="2.742884" longitude="105.379916"/>
+<vertex id="2" latitude="2.813870" longitude="105.191758"/>
+</position>
+<attribute lineType="4"/>
+<type checkDanger="0" displayRadar="1" hasNotes="1" rangeOfNotes="1.000000"/>
+</line>
+<line name="Abort line" description="Abort line">
+<position>
+<vertex id="1" latitude="1.457977" longitude="104.470302"/>
+<vertex id="2" latitude="1.431597" longitude="104.496052"/>
+</position>
+<attribute lineType="4"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" rangeOfNotes="1.000000"/>
+</line>
+<line name="" description="Echo sounder switch OFF">
+<position>
+<vertex id="1" latitude="38.573366" longitude="120.889739"/>
+<vertex id="2" latitude="38.535983" longitude="120.872216"/>
+</position>
+<attribute lineType="1"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" rangeOfNotes="1.000000"/>
+</line>
+<line name="1 hr to ER" description="">
+<position>
+<vertex id="1" latitude="2.338677" longitude="104.979509"/>
+<vertex id="2" latitude="2.328316" longitude="105.018434"/>
+</position>
+<attribute lineType="4"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" rangeOfNotes="1.000000"/>
+</line>
+<line name="ES switch ON" description="">
+<position>
+<vertex id="1" latitude="1.554049" longitude="104.595730"/>
+<vertex id="2" latitude="1.517565" longitude="104.619588"/>
+</position>
+<attribute lineType="4"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" rangeOfNotes="1.000000"/>
+</line>
+</lines>
+<!-- userchart clearingLine -->
+<clearingLines>
+<clearingLine name="" description="">
+<position>
+<vertex id="1" latitude="4.359038" longitude="106.023361"/>
+<vertex id="2" latitude="4.410269" longitude="105.966763"/>
+</position>
+<attribute lineType="2"/>
+<type isDanger="0"/>
+</clearingLine>
+<clearingLine name="" description="">
+<position>
+<vertex id="1" latitude="4.359302" longitude="106.023166"/>
+<vertex id="2" latitude="4.323752" longitude="106.087847"/>
+</position>
+<attribute lineType="1"/>
+<type isDanger="0"/>
+</clearingLine>
+<clearingLine name="" description="">
+<position>
+<vertex id="1" latitude="6.977046" longitude="108.103794"/>
+<vertex id="2" latitude="7.331999" longitude="108.297027"/>
+</position>
+<attribute lineType="2"/>
+<type isDanger="0"/>
+</clearingLine>
+<clearingLine name="" description="">
+<position>
+<vertex id="1" latitude="7.935459" longitude="109.070207"/>
+<vertex id="2" latitude="8.040461" longitude="108.928333"/>
+</position>
+<attribute lineType="2"/>
+<type isDanger="0"/>
+</clearingLine>
+</clearingLines>
+<!-- userchart area -->
+<areas>
+<area name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="16.183292" longitude="114.305004"/>
+<vertex id="2" latitude="16.249042" longitude="114.505505"/>
+<vertex id="3" latitude="16.278929" longitude="114.751480"/>
+<vertex id="4" latitude="16.257012" longitude="114.902373"/>
+<vertex id="5" latitude="16.119534" longitude="114.968518"/>
+<vertex id="6" latitude="15.988033" longitude="114.982987"/>
+<vertex id="7" latitude="15.651310" longitude="114.710140"/>
+<vertex id="8" latitude="15.404247" longitude="114.269864"/>
+<vertex id="9" latitude="15.388308" longitude="113.963945"/>
+<vertex id="10" latitude="15.456051" longitude="113.740707"/>
+<vertex id="11" latitude="15.669242" longitude="113.610484"/>
+<vertex id="12" latitude="16.131488" longitude="114.141709"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Fire Practices fr 30.09.25 to 03.10.25 0800lt-1700lt" description="PA16 ">
+<position>
+<vertex id="1" latitude="22.566667" longitude="118.916667"/>
+<vertex id="2" latitude="22.983333" longitude="119.650000"/>
+<vertex id="3" latitude="22.266667" longitude="119.616667"/>
+<vertex id="4" latitude="22.350000" longitude="118.916667"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Fire Practices fr 30.09.25 to 03.10.25 0800lt-1700lt" description="PA17">
+<position>
+<vertex id="1" latitude="23.218349" longitude="119.626488"/>
+<vertex id="2" latitude="23.218349" longitude="119.959821"/>
+<vertex id="3" latitude="22.885016" longitude="119.959821"/>
+<vertex id="4" latitude="22.885016" longitude="119.626488"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Fire Practices fr 30.09.25 to 03.10.25 0800lt - 1830lt" description="PA17">
+<position>
+<vertex id="1" latitude="24.800000" longitude="119.833333"/>
+<vertex id="2" latitude="24.800000" longitude="120.333333"/>
+<vertex id="3" latitude="23.916667" longitude="119.450000"/>
+<vertex id="4" latitude="24.166667" longitude="119.133333"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Drone Practice 29.09.2025 - 03.10.2025" description="PA66">
+<position>
+<vertex id="1" latitude="23.141000" longitude="120.116600"/>
+<vertex id="2" latitude="23.141000" longitude="119.894833"/>
+<vertex id="3" latitude="23.211683" longitude="119.894133"/>
+<vertex id="4" latitude="23.214050" longitude="120.114717"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Fire Practices fr 30.09.25 to 03.10.25 0800lt-1800lt" description="PA63">
+<position>
+<vertex id="1" latitude="25.800000" longitude="120.800000"/>
+<vertex id="2" latitude="25.800000" longitude="121.333333"/>
+<vertex id="3" latitude="24.866667" longitude="120.383333"/>
+<vertex id="4" latitude="24.866667" longitude="119.916667"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Military Exercises fr 30.09.25 to 02.10.25 0800lt-1700lt" description="">
+<position>
+<vertex id="1" latitude="22.816667" longitude="119.916667"/>
+<vertex id="2" latitude="22.902000" longitude="120.021667"/>
+<vertex id="3" latitude="22.666667" longitude="120.250000"/>
+<vertex id="4" latitude="22.666667" longitude="119.916667"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Fire Practices 30.09.25 1200lt-1800lt" description="PA22">
+<position>
+<vertex id="1" latitude="22.433333" longitude="119.900000"/>
+<vertex id="2" latitude="21.933333" longitude="120.266667"/>
+<vertex id="3" latitude="21.816667" longitude="119.916667"/>
+<vertex id="4" latitude="22.316667" longitude="119.500000"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+<area name="Contingency anchorage" description="Contingency anchorage">
+<position>
+<vertex id="1" latitude="1.320690" longitude="104.108127"/>
+<vertex id="2" latitude="1.327153" longitude="104.119039"/>
+<vertex id="3" latitude="1.321251" longitude="104.133388"/>
+<vertex id="4" latitude="1.319495" longitude="104.141684"/>
+<vertex id="5" latitude="1.305074" longitude="104.153642"/>
+<vertex id="6" latitude="1.297192" longitude="104.124719"/>
+</position>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</area>
+</areas>
+<!-- userchart label -->
+<labels>
+<label name="Cangzhou VTS" description="">
+<position>
+<vertex id="1" latitude="38.628667" longitude="118.352350"/>
+</position>
+<attribute labelStyle="1" labelText="Call Cangzhou VTS on VHF ch 08, 16"/>
+<type checkDanger="0" displayRadar="0"/>
+</label>
+<label name="PI" description="">
+<position>
+<vertex id="1" latitude="2.785627" longitude="105.287802"/>
+</position>
+<attribute labelStyle="1" labelText="PI = 11.954 NM"/>
+<type checkDanger="0" displayRadar="1"/>
+</label>
+<label name="Abort line" description="">
+<position>
+<vertex id="1" latitude="1.446908" longitude="104.483890"/>
+</position>
+<attribute labelStyle="1" labelText="Abort line"/>
+<type checkDanger="0" displayRadar="0"/>
+</label>
+<label name="ES switch OFF" description="">
+<position>
+<vertex id="1" latitude="38.582731" longitude="120.882582"/>
+</position>
+<attribute labelStyle="1" labelText="Echo sounder switch OFF"/>
+<type checkDanger="0" displayRadar="0"/>
+</label>
+<label name="" description="">
+<position>
+<vertex id="1" latitude="2.339479" longitude="104.969549"/>
+</position>
+<attribute labelStyle="1" labelText="1 hour notice to E/R"/>
+<type checkDanger="0" displayRadar="0"/>
+</label>
+<label name="" description="">
+<position>
+<vertex id="1" latitude="1.556178" longitude="104.594736"/>
+</position>
+<attribute labelStyle="1" labelText="Echo sounder switch ON"/>
+<type checkDanger="0" displayRadar="0"/>
+</label>
+</labels>
+<!-- userchart circle -->
+<circles>
+<circle name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="7.579221" longitude="108.870755"/>
+</position>
+<attribute range="1.000000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="Fire Practices fr 30.09.25 to 03.10.25 0700lt-1800lt" description="">
+<position>
+<vertex id="1" latitude="23.498333" longitude="120.131667"/>
+</position>
+<attribute range="5.000000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="38.513993" longitude="120.954249"/>
+</position>
+<attribute range="0.100000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="24.034491" longitude="119.964070"/>
+</position>
+<attribute range="0.200000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="23.901073" longitude="119.905969"/>
+</position>
+<attribute range="0.100000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="22.796645" longitude="119.610063"/>
+</position>
+<attribute range="0.100000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="22.250577" longitude="119.249621"/>
+</position>
+<attribute range="0.100000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="No Go Area" description="">
+<position>
+<vertex id="1" latitude="22.180306" longitude="119.205398"/>
+</position>
+<attribute range="0.100000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+<circle name="KEEP SHARP LOOKOUT FOR FISHING VSL BD 97258 TS" description="HAIPHONG LES 230 # 495430">
+<position>
+<vertex id="1" latitude="13.066667" longitude="111.683333"/>
+</position>
+<attribute range="50.000000"/>
+<type checkDanger="0" displayRadar="0" hasNotes="0" notesType="0"/>
+</circle>
+</circles>
+</userchart>
