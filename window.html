@@ -278,13 +278,21 @@
           if (!isNaN(r)) r = parseFloat(r).toFixed(2);
           return `  Range: ${r} NM\n`;
         });
-        processTag('tidal', 'tidal', 'TIDAL', el => {
+       processTag('tidal', 'tidal', 'TIDAL', el => {
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
           const o = attr ? attr.getAttribute('orientation') : '(no orientation)';
-          const t = attr ? attr.getAttribute('type') : '(no type)';
+          let t = attr ? attr.getAttribute('type') : '(no type)';
           const s = attr ? attr.getAttribute('strength') : '(no strength)';
           const time = attr ? attr.getAttribute('time') : '(no time)';
+        
+          // Replace numeric type with descriptive label
+          const typeMap = {
+            '1': 'Current',
+            '2': 'Predicted'
+          };
+          t = typeMap[t] || `(unknown: ${t})`;
+        
           return `  Description: ${d}\n  Orientation: ${o}\n  Type: ${t}\n  Strength: ${s}\n  Time: ${time}\n`;
         });
         processTag('label', 'label', 'LABEL', el => {
