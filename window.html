@@ -159,7 +159,6 @@
       document.getElementById("quoteBox").textContent = "Stay motivated — your quotes file couldn't be loaded!";
     });
 
-  // Function to show a random quote with fade-in
   function showRandomQuote() {
     const box = document.getElementById("quoteBox");
     if (quotes.length === 0) return;
@@ -171,7 +170,6 @@
     }, 300);
   }
 
-  // --- Coordinate conversion ---
   function toDM(deg, isLat) {
     const absolute = Math.abs(deg);
     const degrees = Math.floor(absolute);
@@ -183,7 +181,7 @@
   }
 
   function parseXML() {
-    showRandomQuote(); // 🪄 New quote each time
+    showRandomQuote();
 
     const xmlString = document.getElementById('xmlInput').value;
     if (!xmlString.trim()) {
@@ -215,6 +213,7 @@
       }
 
       function processElements(root) {
+        // === AREA ===
         const areas = root.getElementsByTagName('area');
         for (let area of areas) {
           const name = area.getAttribute('name') || '(No name)';
@@ -231,6 +230,7 @@
           textOutput += '\n';
         }
 
+        // === LINE ===
         const lines = root.getElementsByTagName('line');
         for (let line of lines) {
           const name = line.getAttribute('name') || '(No name)';
@@ -249,6 +249,31 @@
           textOutput += '\n';
         }
 
+        // === CLEARING LINE ===
+        const clearings = root.getElementsByTagName('clearingLine');
+        for (let cl of clearings) {
+          const name = cl.getAttribute('name') || '(No name)';
+          const desc = cl.getAttribute('description') || '';
+          const attr = cl.querySelector('attribute');
+          const lineType = attr ? attr.getAttribute('lineType') : '(no lineType)';
+          const typeTag = cl.querySelector('type');
+          const isDanger = typeTag ? typeTag.getAttribute('isDanger') : '(no isDanger)';
+
+          htmlOutput += `<span class="bullet clearing">•</span>CLEARING LINE: ${name}\n  Description: ${desc}\n  LineType: ${lineType}\n  IsDanger: ${isDanger}\n`;
+          textOutput += `CLEARING LINE: ${name}\n  Description: ${desc}\n  LineType: ${lineType}\n  IsDanger: ${isDanger}\n`;
+
+          for (let v of cl.getElementsByTagName('vertex')) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+            htmlOutput += `  ${coord}\n`;
+            textOutput += `  ${coord}\n`;
+          }
+          htmlOutput += '\n';
+          textOutput += '\n';
+        }
+
+        // === CIRCLE ===
         const circles = root.getElementsByTagName('circle');
         for (let circle of circles) {
           const name = circle.getAttribute('name') || '(No name)';
@@ -269,22 +294,33 @@
           textOutput += '\n';
         }
 
-        const coasts = root.getElementsByTagName('coastline');
-        for (let coast of coasts) {
-          const name = coast.getAttribute('name') || '(No name)';
-          htmlOutput += `<span class="bullet coast">•</span>COAST LINE: ${name}\n`;
-          textOutput += `COAST LINE: ${name}\n`;
-          for (let v of coast.getElementsByTagName('vertex')) {
+        // === TIDAL ===
+        const tidals = root.getElementsByTagName('tidal');
+        for (let tidal of tidals) {
+          const name = tidal.getAttribute('name') || '(No name)';
+          const desc = tidal.getAttribute('description') || '';
+          const attr = tidal.querySelector('attribute');
+          const orientation = attr ? attr.getAttribute('orientation') : '(no orientation)';
+          const typeVal = attr ? attr.getAttribute('type') : '(no type)';
+          const strength = attr ? attr.getAttribute('strength') : '(no strength)';
+          const time = attr ? attr.getAttribute('time') : '(no time)';
+
+          htmlOutput += `<span class="bullet tidal">•</span>TIDAL: ${name}\n  Description: ${desc}\n  Orientation: ${orientation}\n  Type: ${typeVal}\n  Strength: ${strength}\n  Time: ${time}\n`;
+          textOutput += `TIDAL: ${name}\n  Description: ${desc}\n  Orientation: ${orientation}\n  Type: ${typeVal}\n  Strength: ${strength}\n  Time: ${time}\n`;
+
+          const v = tidal.querySelector('vertex');
+          if (v) {
             const lat = parseFloat(v.getAttribute('latitude'));
             const lon = parseFloat(v.getAttribute('longitude'));
             const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-            htmlOutput += `  ${coord}\n`;
-            textOutput += `  ${coord}\n`;
+            htmlOutput += `  Position: ${coord}\n`;
+            textOutput += `  Position: ${coord}\n`;
           }
           htmlOutput += '\n';
           textOutput += '\n';
         }
 
+        // === LABEL ===
         const labels = root.getElementsByTagName('label');
         for (let label of labels) {
           const name = label.getAttribute('name') || '(No name)';
@@ -325,6 +361,7 @@
     document.body.removeChild(link);
   }
 </script>
+
 
 </body>
 </html>
