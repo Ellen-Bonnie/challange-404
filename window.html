@@ -14,74 +14,103 @@
       min-height: 100vh;
     }
 
+    h2 {
+      text-align: center;
+    }
+
+    /* Основна зона з textarea та QR */
+    .main-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 30px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    /* QR контейнер зліва */
+    .donate-container {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .donate-image {
+      width: 220px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Drop zone */
+    #dropZone {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      border: 2px dashed #ccc;
+      border-radius: 14px;
+      padding: 12px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    #dropZone.dragover {
+      border-color: #007bff;
+      background: #eef7ff;
+    }
+
+    #dropText {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 123, 255, 0.9);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #dropZone.dragover #dropText {
+      opacity: 1;
+    }
+
     textarea {
       width: 100%;
       height: 300px;
-      margin-bottom: 10px;
       font-family: monospace;
+      resize: vertical;
     }
 
-    /* ✨ Button Container */
+    /* Кнопки в один ряд */
     .button-container {
       display: flex;
       justify-content: center;
       gap: 20px;
       margin-bottom: 40px;
+      flex-wrap: wrap;
     }
 
-    .donate-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.donate-image {
-  width: 250px; /* adjust size if needed */
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-    .input-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-/* textarea трохи менше, щоб QR не зсунув макет */
-#xmlInput {
-  flex: 1;
-  height: 357px;
-  font-family: monospace;
-  resize: vertical;
-}
-
-/* адаптація для мобільних */
-@media (max-width: 800px) {
-  .input-container {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-
-    
-    /* 🎨 Modern Gradient Buttons */
     .fancy-button {
-      width: 25%;
       border: none;
-      margin-right: 20px;
-      border-radius: 43px;
+      border-radius: 30px;
       background: linear-gradient(to right, #fe606f, #feb174);
       color: white;
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 16px;
+      font-weight: 700;
       text-transform: uppercase;
       cursor: pointer;
       text-align: center;
-      line-height: 60px;
+      padding: 14px 32px;
       letter-spacing: 0.5px;
       transition: all 0.3s ease;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      min-width: 180px;
     }
 
     .fancy-button:hover {
@@ -89,7 +118,7 @@
       filter: brightness(1.08);
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
     }
-    
+
     #result {
       background: #f9f9f9;
       padding: 15px;
@@ -100,14 +129,11 @@
       flex-grow: 1;
     }
 
-    /* 💬 Motivational Quote */
     #quoteBox {
       text-align: center;
       color: #12007a;
-      font-size: 30px;
+      font-size: 26px;
       font-style: italic;
-      margin-top: 20px;
-      margin-bottom: 25px;
       transition: opacity 0.5s ease;
     }
 
@@ -118,44 +144,45 @@
     .coast { color: #8b4513; }
     .label { color: #9b59b6; }
     .userchart { color: #ff6600; font-weight: bold; }
-    .clearing { color: #00bcd4; }  /* бірюзовий для clearing lines */
-    .tidal { color: #ff1493; }     /* рожево-фіолетовий для tidal */
-    
+    .clearing { color: #00bcd4; }
+    .tidal { color: #ff1493; }
   </style>
 </head>
 <body>
 
-<h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels, UserChart, ClearingLine, Tidal)</h2>
- <!-- ☕ Buy Me a Coffee Image -->
-<div class="input-container">
-  <textarea id="xmlInput" placeholder="Paste your XML here..."></textarea>
+<h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels, Clearing Lines, Tidals, UserChart)</h2>
 
+<!-- QR-код ліворуч, dropZone праворуч -->
+<div class="main-container">
   <div class="donate-container">
     <img src="photo_5440463335184268274_y.jpg" alt="Buy me a coffee QR" class="donate-image">
   </div>
+
+  <div id="dropZone">
+    <div id="dropText">💡 Drop your XML file here!</div>
+    <textarea id="xmlInput" placeholder="Paste your XML here or drop XML file..."></textarea>
+    <input type="file" id="fileInput" accept=".xml" hidden />
+  </div>
 </div>
 
-
-<!-- ✨ Buttons next to each other -->
+<!-- Тільки дві кнопки -->
 <div class="button-container">
-  <button class="fancy-button" onclick="parseXML()">Parse XML</button>
+  <button class="fancy-button" onclick="document.getElementById('fileInput').click()">Upload XML File</button>
   <button class="fancy-button" onclick="downloadTextFile()">Download .txt</button>
 </div>
 
-<!-- 💬 Motivational quote -->
 <div id="quoteBox">Loading quote...</div>
-
 <div id="result"></div>
 
 <script>
   let parsedOutput = '';
   let quotes = [];
 
-  // --- Load quotes from external file ---
+  // Load quotes
   fetch('motivational_quotes.txt')
-    .then(response => response.text())
-    .then(text => {
-      quotes = text.split('\n').map(q => q.trim()).filter(q => q.length > 0);
+    .then(r => r.text())
+    .then(t => {
+      quotes = t.split('\n').map(q => q.trim()).filter(q => q.length > 0);
       showRandomQuote();
     })
     .catch(() => {
@@ -167,41 +194,32 @@
     if (quotes.length === 0) return;
     box.style.opacity = 0;
     setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      box.textContent = quotes[randomIndex];
+      const i = Math.floor(Math.random() * quotes.length);
+      box.textContent = quotes[i];
       box.style.opacity = 1;
     }, 300);
   }
 
   function toDM(deg, isLat) {
-    const absolute = Math.abs(deg);
-    const degrees = Math.floor(absolute);
-    const minutes = (absolute - degrees) * 60;
-    const direction = deg >= 0 ? (isLat ? "N" : "E") : (isLat ? "S" : "W");
-    const degStr = degrees < 10 ? "0" + degrees : degrees.toString();
-    const minStr = minutes < 10 ? "0" + minutes.toFixed(3) : minutes.toFixed(3);
-    return `${degStr}°${minStr}′ ${direction}`;
+    const abs = Math.abs(deg);
+    const d = Math.floor(abs);
+    const m = (abs - d) * 60;
+    const dir = deg >= 0 ? (isLat ? "N" : "E") : (isLat ? "S" : "W");
+    return `${d < 10 ? "0" + d : d}°${m.toFixed(3)}′ ${dir}`;
   }
 
   function parseXML() {
     showRandomQuote();
-
-    const xmlString = document.getElementById('xmlInput').value;
-    if (!xmlString.trim()) {
-      document.getElementById('result').textContent = 'Please paste XML data first.';
-      return;
-    }
+    const xmlString = document.getElementById('xmlInput').value.trim();
+    if (!xmlString) return alert('Please paste or load XML first.');
 
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-      if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
-        document.getElementById('result').textContent = 'Error parsing XML. Please check the format.';
-        return;
-      }
+      if (xmlDoc.getElementsByTagName("parsererror").length > 0)
+        return alert('Error parsing XML.');
 
-      let htmlOutput = '';
-      let textOutput = '';
+      let htmlOutput = '', textOutput = '';
 
       const usercharts = xmlDoc.getElementsByTagName('userchart');
       if (usercharts.length > 0) {
@@ -211,150 +229,70 @@
           textOutput += `UserChart name: ${chartName}\n`;
           processElements(chart);
         }
-      } else {
-        processElements(xmlDoc);
-      }
+      } else processElements(xmlDoc);
 
       function processElements(root) {
-        // === AREA ===
-        const areas = root.getElementsByTagName('area');
-        for (let area of areas) {
-          const name = area.getAttribute('name') || '(No name)';
-          htmlOutput += `<span class="bullet area">•</span>AREA: ${name}\n`;
-          textOutput += `AREA: ${name}\n`;
-          for (let v of area.getElementsByTagName('vertex')) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-            htmlOutput += `  ${coord}\n`;
-            textOutput += `  ${coord}\n`;
+        const processTag = (tag, cls, label, extra = () => '') => {
+          const list = root.getElementsByTagName(tag);
+          for (let el of list) {
+            const name = el.getAttribute('name') || '(No name)';
+            htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extra(el)}`;
+            textOutput += `${label}: ${name}\n${extra(el, true)}`;
+            for (let v of el.getElementsByTagName('vertex')) {
+              const lat = parseFloat(v.getAttribute('latitude'));
+              const lon = parseFloat(v.getAttribute('longitude'));
+              const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
+              htmlOutput += `  ${coord}\n`;
+              textOutput += `  ${coord}\n`;
+            }
+            htmlOutput += '\n';
+            textOutput += '\n';
           }
-          htmlOutput += '\n';
-          textOutput += '\n';
-        }
-
-        // === LINE ===
-        const lines = root.getElementsByTagName('line');
-        for (let line of lines) {
-          const name = line.getAttribute('name') || '(No name)';
-          const attr = line.querySelector('attribute');
+        };
+        processTag('area', 'area', 'AREA');
+        processTag('line', 'line', 'LINE', el => {
+          const attr = el.querySelector('attribute');
           const type = attr ? attr.getAttribute('lineType') : '(no type)';
-          htmlOutput += `<span class="bullet line">•</span>LINE: ${name}\n  Type: ${type}\n`;
-          textOutput += `LINE: ${name}\n  Type: ${type}\n`;
-          for (let v of line.getElementsByTagName('vertex')) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-            htmlOutput += `  ${coord}\n`;
-            textOutput += `  ${coord}\n`;
-          }
-          htmlOutput += '\n';
-          textOutput += '\n';
-        }
-
-        // === CLEARING LINE ===
-        const clearings = root.getElementsByTagName('clearingLine');
-        for (let cl of clearings) {
-          const name = cl.getAttribute('name') || '(No name)';
-          const desc = cl.getAttribute('description') || '';
-          const attr = cl.querySelector('attribute');
+          return `  Type: ${type}\n`;
+        });
+        processTag('clearingLine', 'clearing', 'CLEARING LINE', el => {
+          const d = el.getAttribute('description') || '';
+          const attr = el.querySelector('attribute');
           const lineType = attr ? attr.getAttribute('lineType') : '(no lineType)';
-          const typeTag = cl.querySelector('type');
-          const isDanger = typeTag ? typeTag.getAttribute('isDanger') : '(no isDanger)';
-
-          htmlOutput += `<span class="bullet clearing">•</span>CLEARING LINE: ${name}\n  Description: ${desc}\n  LineType: ${lineType}\n  IsDanger: ${isDanger}\n`;
-          textOutput += `CLEARING LINE: ${name}\n  Description: ${desc}\n  LineType: ${lineType}\n  IsDanger: ${isDanger}\n`;
-
-          for (let v of cl.getElementsByTagName('vertex')) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-            htmlOutput += `  ${coord}\n`;
-            textOutput += `  ${coord}\n`;
-          }
-          htmlOutput += '\n';
-          textOutput += '\n';
-        }
-
-        // === CIRCLE ===
-        const circles = root.getElementsByTagName('circle');
-        for (let circle of circles) {
-          const name = circle.getAttribute('name') || '(No name)';
-          const attr = circle.querySelector('attribute');
-          let range = attr ? attr.getAttribute('range') : '(no range)';
-          if (!isNaN(range)) range = parseFloat(range).toFixed(2);
-          htmlOutput += `<span class="bullet circle">•</span>CIRCLE: ${name}\n  Range: ${range} NM\n`;
-          textOutput += `CIRCLE: ${name}\n  Range: ${range} NM\n`;
-          const v = circle.querySelector('vertex');
-          if (v) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-            htmlOutput += `  Center: ${coord}\n`;
-            textOutput += `  Center: ${coord}\n`;
-          }
-          htmlOutput += '\n';
-          textOutput += '\n';
-        }
-
-        // === TIDAL ===
-        const tidals = root.getElementsByTagName('tidal');
-        for (let tidal of tidals) {
-          const name = tidal.getAttribute('name') || '(No name)';
-          const desc = tidal.getAttribute('description') || '';
-          const attr = tidal.querySelector('attribute');
-          const orientation = attr ? attr.getAttribute('orientation') : '(no orientation)';
-          const typeVal = attr ? attr.getAttribute('type') : '(no type)';
-          const strength = attr ? attr.getAttribute('strength') : '(no strength)';
+          const t = el.querySelector('type');
+          const danger = t ? t.getAttribute('isDanger') : '(no isDanger)';
+          return `  Description: ${d}\n  LineType: ${lineType}\n  IsDanger: ${danger}\n`;
+        });
+        processTag('circle', 'circle', 'CIRCLE', el => {
+          const attr = el.querySelector('attribute');
+          let r = attr ? attr.getAttribute('range') : '(no range)';
+          if (!isNaN(r)) r = parseFloat(r).toFixed(2);
+          return `  Range: ${r} NM\n`;
+        });
+        processTag('tidal', 'tidal', 'TIDAL', el => {
+          const d = el.getAttribute('description') || '';
+          const attr = el.querySelector('attribute');
+          const o = attr ? attr.getAttribute('orientation') : '(no orientation)';
+          const t = attr ? attr.getAttribute('type') : '(no type)';
+          const s = attr ? attr.getAttribute('strength') : '(no strength)';
           const time = attr ? attr.getAttribute('time') : '(no time)';
-
-          htmlOutput += `<span class="bullet tidal">•</span>TIDAL: ${name}\n  Description: ${desc}\n  Orientation: ${orientation}\n  Type: ${typeVal}\n  Strength: ${strength}\n  Time: ${time}\n`;
-          textOutput += `TIDAL: ${name}\n  Description: ${desc}\n  Orientation: ${orientation}\n  Type: ${typeVal}\n  Strength: ${strength}\n  Time: ${time}\n`;
-
-          const v = tidal.querySelector('vertex');
-          if (v) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-            htmlOutput += `  Position: ${coord}\n`;
-            textOutput += `  Position: ${coord}\n`;
-          }
-          htmlOutput += '\n';
-          textOutput += '\n';
-        }
-
-        // === LABEL ===
-        const labels = root.getElementsByTagName('label');
-        for (let label of labels) {
-          const name = label.getAttribute('name') || '(No name)';
-          const text = label.textContent.trim() || '(no text)';
-          const v = label.querySelector('vertex');
-          htmlOutput += `<span class="bullet label">•</span>LABEL: ${name}\n  Text: ${text}\n`;
-          textOutput += `LABEL: ${name}\n  Text: ${text}\n`;
-          if (v) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-            htmlOutput += `  Position: ${coord}\n`;
-            textOutput += `  Position: ${coord}\n`;
-          }
-          htmlOutput += '\n';
-          textOutput += '\n';
-        }
+          return `  Description: ${d}\n  Orientation: ${o}\n  Type: ${t}\n  Strength: ${s}\n  Time: ${time}\n`;
+        });
+        processTag('label', 'label', 'LABEL', el => {
+          const text = el.textContent.trim() || '(no text)';
+          return `  Text: ${text}\n`;
+        });
       }
 
       parsedOutput = textOutput;
       document.getElementById('result').innerHTML = htmlOutput || 'No recognized elements found.';
-    } catch (error) {
-      document.getElementById('result').textContent = `Error: ${error.message}`;
+    } catch (err) {
+      alert('Error: ' + err.message);
     }
   }
 
   function downloadTextFile() {
-    if (!parsedOutput) {
-      alert("Nothing to download. Please parse XML first.");
-      return;
-    }
+    if (!parsedOutput) return alert('Nothing to download. Please load and parse XML first.');
     const blob = new Blob([parsedOutput], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -363,8 +301,39 @@
     link.click();
     document.body.removeChild(link);
   }
-</script>
 
+  // === Drag & Drop ===
+  const fileInput = document.getElementById('fileInput');
+  const dropZone = document.getElementById('dropZone');
+  const xmlInput = document.getElementById('xmlInput');
+
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) readXMLFile(file);
+  });
+
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.endsWith('.xml')) readXMLFile(file);
+    else alert('Please drop a valid .xml file');
+  });
+
+  function readXMLFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      xmlInput.value = e.target.result;
+      parseXML(); // автоматичний парсинг
+    };
+    reader.readAsText(file);
+  }
+</script>
 
 </body>
 </html>
