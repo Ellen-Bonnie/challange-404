@@ -254,7 +254,14 @@
         processTag('area', 'area', 'AREA');
         processTag('line', 'line', 'LINE', el => {
           const attr = el.querySelector('attribute');
-          const type = attr ? attr.getAttribute('lineType') : '(no type)';
+          let type = attr ? attr.getAttribute('lineType') : '(no type)';
+          const typeMap = {
+            '1': 'Coast line',
+            '2': 'Nav line',
+            '3': 'Route line',
+            '4': 'Depth line'
+          };
+          type = typeMap[type] || `(unknown: ${type})`;
           return `  Type: ${type}\n`;
         });
         processTag('clearingLine', 'clearing', 'CLEARING LINE', el => {
