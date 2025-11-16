@@ -144,38 +144,41 @@ function parseXML(){
                 return extra;
             });
 
-            // CLEARING LINE
-            const clList=root.getElementsByTagName('clearingLine');
-            if(clList.length>0) textOutput+="Clearing Lines\n";
-            let clIndex=1;
-            for(let el of clList){
-                const name=el.getAttribute("name")||"(No name)";
-                const desc=el.getAttribute("description")||"";
-                const attr=el.querySelector("attribute");
-                const typeAttr=attr?attr.getAttribute("lineType"):"0";
-                const type=(typeAttr==="1")?"NMT":(typeAttr==="2")?"NLT":"(unknown)";
-                const tNode=el.querySelector("type");
-                const danger=tNode?.getAttribute("isDanger")==="1"?"Danger":"";
-                const radar=tNode?.getAttribute("displayRadar")==="1"?"On Radar":"";
-                const vertices=[...el.getElementsByTagName("vertex")];
-                let dir=0;
-                if(vertices.length>=2){
-                    const lat1=parseFloat(vertices[0].getAttribute("latitude"));
-                    const lon1=parseFloat(vertices[0].getAttribute("longitude"));
-                    const lat2=parseFloat(vertices[1].getAttribute("latitude"));
-                    const lon2=parseFloat(vertices[1].getAttribute("longitude"));
-                    dir=bearing(lat1,lon1,lat2,lon2);
-                }
-                textOutput+=`${clIndex} "${name}"\n`;
-                textOutput+=`${type} ${dir}° ${radar} ${danger}`.trim()+"\n";
-                for(let v of vertices){
-                    const lat=parseFloat(v.getAttribute("latitude"));
-                    const lon=parseFloat(v.getAttribute("longitude"));
-                    textOutput+=`${toDM(lat,true)}, ${toDM(lon,false)}\n`;
-                }
-                textOutput+="\n";
-                clIndex++;
-            }
+           // CLEARING LINE
+const clList = root.getElementsByTagName('clearingLine');
+if(clList.length > 0) textOutput += "Clearing Lines\n";
+
+for(let el of clList){
+    const name = el.getAttribute("name") || "(No name)";
+    const attr = el.querySelector("attribute");
+    const typeAttr = attr ? attr.getAttribute("lineType") : "0";
+    const type = (typeAttr === "1") ? "NMT" : (typeAttr === "2") ? "NLT" : "(unknown)";
+    
+    const tNode = el.querySelector("type");
+    const danger = tNode?.getAttribute("isDanger") === "1" ? "Danger" : "";
+    const radar = tNode?.getAttribute("displayRadar") === "1" ? "On Radar" : "";
+
+    const vertices = [...el.getElementsByTagName("vertex")];
+    let dir = 0;
+    if(vertices.length >= 2){
+        const lat1 = parseFloat(vertices[0].getAttribute("latitude"));
+        const lon1 = parseFloat(vertices[0].getAttribute("longitude"));
+        const lat2 = parseFloat(vertices[1].getAttribute("latitude"));
+        const lon2 = parseFloat(vertices[1].getAttribute("longitude"));
+        dir = bearing(lat1, lon1, lat2, lon2);
+    }
+
+    // Вивід з "CLEARING LINE:" замість номера
+    textOutput += `CLEARING LINE: ${type} ${name}\n`;
+    textOutput += `${type} ${dir}° ${radar} ${danger}`.trim() + "\n";
+
+    for(let v of vertices){
+        const lat = parseFloat(v.getAttribute("latitude"));
+        const lon = parseFloat(v.getAttribute("longitude"));
+        textOutput += `${toDM(lat,true)}, ${toDM(lon,false)}\n`;
+    }
+    textOutput += "\n";
+}
 
             // CIRCLE
             processTag('circle','circle','CIRCLE',el=>{
