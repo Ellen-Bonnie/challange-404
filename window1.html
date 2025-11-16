@@ -58,8 +58,25 @@ fetch('motivational_quotes.txt').then(r=>r.text()).then(t=>{
 function showRandomQuote(){ const box=document.getElementById("quoteBox"); if(quotes.length===0)return; box.style.opacity=0; setTimeout(()=>{box.textContent=quotes[Math.floor(Math.random()*quotes.length)]; box.style.opacity=1;},300); }
 
 function pad(num){return num<10?'0'+num:num;}
-function toDM(deg,isLat){ const abs=Math.abs(deg); const d=Math.floor(abs); const m=(abs-d)*60; return pad(d)+'°'+m.toFixed(3)+'′ '+(deg>=0?(isLat?'N':'E'):(isLat?'S':'W')); }
-function bearing(lat1,lon1,lat2,lon2){ let dLon=(lon2-lon1)*Math.PI/180; lat1*=Math.PI/180; lat2*=Math.PI/180; let y=Math.sin(dLon)*Math.cos(lat2); let x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon); return Math.round((Math.atan2(y,x)*180/Math.PI+360)%360); }
+function toDM(deg,isLat){
+    const abs=Math.abs(deg);
+    const d=Math.floor(abs);
+    const m=(abs-d)*60;
+    const dStr=pad(d);
+    const mInt=Math.floor(m);
+    const mFrac=m-mInt;
+    const mStr=(mInt<10? "0"+mInt : mInt)+mFrac.toFixed(3).slice(1);
+    const dir=deg>=0?(isLat?'N':'E'):(isLat?'S':'W');
+    return `${dStr}°${mStr}′ ${dir}`;
+}
+
+function bearing(lat1,lon1,lat2,lon2){ 
+    let dLon=(lon2-lon1)*Math.PI/180; 
+    lat1*=Math.PI/180; lat2*=Math.PI/180; 
+    let y=Math.sin(dLon)*Math.cos(lat2); 
+    let x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon); 
+    return Math.round((Math.atan2(y,x)*180/Math.PI+360)%360); 
+}
 
 function parseXML(){
     showRandomQuote();
@@ -165,6 +182,8 @@ function parseXML(){
                 let extra='';
                 const attr=el.querySelector('attribute');
                 if(attr) extra+=`  Range: ${parseFloat(attr.getAttribute('range')||0).toFixed(2)} NM\n`;
+                if(el.getAttribute('checkDanger')==='1') extra+='  Danger\n';
+                if(el.getAttribute('displayRadar')==='1') extra+='  On Radar\n';
                 return extra;
             });
 
