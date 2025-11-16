@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Parse XML with DMS Coordinates</title>
+<title>XML Coordinate Parser</title>
 <style>
-  body { font-family: Arial, sans-serif; padding: 20px; background: #fafafa; display: flex; flex-direction: column; min-height: 100vh; }
-  h2 { text-align: center; font-size: 1.2em; color: #12007a; }
-  .main-container { display: flex; align-items: flex-start; gap: 30px; margin-bottom: 25px; flex-wrap: wrap; }
-  .donate-container { flex-shrink: 0; display: flex; justify-content: center; align-items: flex-start; }
-  .donate-image { width: 220px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
-  #dropZone { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px; border: 2px dashed #ccc; border-radius: 14px; padding: 12px; transition: background 0.3s, border-color 0.3s; }
-  #dropZone.dragover { border-color: #007bff; background: #eef7ff; }
-  #dropText { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,123,255,0.9); color:white; padding:12px 28px; border-radius:8px; font-size:20px; font-weight:bold; opacity:0; pointer-events:none; transition: opacity 0.3s ease; }
-  #dropZone.dragover #dropText { opacity:1; }
-  textarea { width:100%; height:300px; font-family:monospace; resize: vertical; }
-  .button-container { display:flex; justify-content:center; gap:20px; margin-bottom:40px; flex-wrap: wrap; }
-  .fancy-button { border:none; border-radius:30px; background:linear-gradient(to right,#fe606f,#feb174); color:white; font-size:16px; font-weight:700; text-transform:uppercase; cursor:pointer; text-align:center; padding:14px 32px; letter-spacing:0.5px; transition:all 0.3s ease; box-shadow:0 4px 10px rgba(0,0,0,0.15); min-width:180px; }
-  .fancy-button:hover { transform:translateY(-2px); filter:brightness(1.08); box-shadow:0 8px 18px rgba(0,0,0,0.25); }
-  #result { background:#f9f9f9; padding:15px; border:1px solid #ccc; margin-top:20px; white-space:pre-wrap; font-family:monospace; flex-grow:1; }
-  #quoteBox { text-align:center; color:#12007a; font-size:26px; font-style:italic; transition:opacity 0.5s ease; }
-  .bullet { font-weight:bold; margin-right:6px; }
-  .area { color:#e6b800; } .line { color:#007bff; } .circle { color:#28a745; } .coast { color:#8b4513; } .label { color:#9b59b6; } .userchart { color:#ff6600; font-weight:bold; } .clearing { color:#00bcd4; } .tidal { color:#ff1493; }
+body{font-family:Arial,sans-serif;padding:20px;background:#fafafa;display:flex;flex-direction:column;min-height:100vh;}
+h2{text-align:center;font-size:1.2em;color:#12007a;}
+.main-container{display:flex;align-items:flex-start;gap:30px;margin-bottom:25px;flex-wrap:wrap;}
+.donate-container{flex-shrink:0;display:flex;justify-content:center;align-items:flex-start;}
+.donate-image{width:220px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+#dropZone{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;border:2px dashed #ccc;border-radius:14px;padding:12px;transition: background 0.3s, border-color 0.3s;}
+#dropZone.dragover{border-color:#007bff;background:#eef7ff;}
+#dropText{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,123,255,0.9);color:white;padding:12px 28px;border-radius:8px;font-size:20px;font-weight:bold;opacity:0;pointer-events:none;transition:opacity 0.3s ease;}
+#dropZone.dragover #dropText{opacity:1;}
+textarea{width:100%;height:300px;font-family:monospace;resize:vertical;}
+.button-container{display:flex;justify-content:center;gap:20px;margin-bottom:40px;flex-wrap:wrap;}
+.fancy-button{border:none;border-radius:30px;background:linear-gradient(to right,#fe606f,#feb174);color:white;font-size:16px;font-weight:700;text-transform:uppercase;cursor:pointer;text-align:center;padding:14px 32px;letter-spacing:0.5px;transition:all 0.3s ease;box-shadow:0 4px 10px rgba(0,0,0,0.15);min-width:180px;}
+.fancy-button:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 8px 18px rgba(0,0,0,0.25);}
+#result{background:#f9f9f9;padding:15px;border:1px solid #ccc;margin-top:20px;white-space:pre-wrap;font-family:monospace;flex-grow:1;}
+#quoteBox{text-align:center;color:#12007a;font-size:26px;font-style:italic;transition:opacity 0.5s ease;}
+.bullet{font-weight:bold;margin-right:6px;}
+.area{color:#e6b800;} .line{color:#007bff;} .circle{color:#28a745;} .coast{color:#8b4513;} .label{color:#9b59b6;} .userchart{color:#ff6600;font-weight:bold;} .clearing{color:#00bcd4;} .tidal{color:#ff1493;}
 </style>
 </head>
 <body>
@@ -48,164 +48,163 @@
 <div id="result"></div>
 
 <script>
-let parsedOutput='';
-let quotes=[];
+let parsedOutput='', quotes=[];
 
-fetch('motivational_quotes.txt')
-.then(r=>r.text())
-.then(t=>{quotes=t.split('\n').map(q=>q.trim()).filter(q=>q.length>0); showRandomQuote();})
-.catch(()=>{document.getElementById("quoteBox").textContent="Stay motivated — your quotes file couldn't be loaded!";});
+// Load motivational quotes
+fetch('motivational_quotes.txt').then(r=>r.text()).then(t=>{
+    quotes=t.split('\n').map(q=>q.trim()).filter(q=>q.length>0); showRandomQuote();
+}).catch(()=>{document.getElementById("quoteBox").textContent="Stay motivated — your quotes file couldn't be loaded!";});
 
-function showRandomQuote(){
-  const box=document.getElementById("quoteBox");
-  if(quotes.length===0) return;
-  box.style.opacity=0;
-  setTimeout(()=>{ box.textContent=quotes[Math.floor(Math.random()*quotes.length)]; box.style.opacity=1; },300);
-}
+function showRandomQuote(){ const box=document.getElementById("quoteBox"); if(quotes.length===0)return; box.style.opacity=0; setTimeout(()=>{box.textContent=quotes[Math.floor(Math.random()*quotes.length)]; box.style.opacity=1;},300); }
 
-function pad(num){ return num<10?"0"+num:num; }
-function toDM(deg,isLat){ const abs=Math.abs(deg); const d=Math.floor(abs); const m=(abs-d)*60; return `${pad(d)}°${m.toFixed(3)}′ ${deg>=0?(isLat?"N":"E"):(isLat?"S":"W")}`; }
-function bearing(lat1,lon1,lat2,lon2){ let dLon=(lon2-lon1)*Math.PI/180; lat1*=Math.PI/180; lat2*=Math.PI/180; let y=Math.sin(dLon)*Math.cos(lat2); let x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon); return (Math.round((Math.atan2(y,x)*180/Math.PI+360)%360)); }
+function pad(num){return num<10?'0'+num:num;}
+function toDM(deg,isLat){ const abs=Math.abs(deg); const d=Math.floor(abs); const m=(abs-d)*60; return pad(d)+'°'+m.toFixed(3)+'′ '+(deg>=0?(isLat?'N':'E'):(isLat?'S':'W')); }
+function bearing(lat1,lon1,lat2,lon2){ let dLon=(lon2-lon1)*Math.PI/180; lat1*=Math.PI/180; lat2*=Math.PI/180; let y=Math.sin(dLon)*Math.cos(lat2); let x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon); return Math.round((Math.atan2(y,x)*180/Math.PI+360)%360); }
 
 function parseXML(){
-  showRandomQuote();
-  const xmlString=document.getElementById('xmlInput').value.trim();
-  if(!xmlString) return alert('Please paste or load XML first.');
-  try{
-    const parser=new DOMParser();
-    const xmlDoc=parser.parseFromString(xmlString,"application/xml");
-    if(xmlDoc.getElementsByTagName("parsererror").length>0) return alert('Error parsing XML.');
+    showRandomQuote();
+    const xmlString=document.getElementById('xmlInput').value.trim();
+    if(!xmlString) return alert('Please paste or load XML first.');
+    try{
+        const parser=new DOMParser();
+        const xmlDoc=parser.parseFromString(xmlString,"application/xml");
+        if(xmlDoc.getElementsByTagName("parsererror").length>0) return alert('Error parsing XML.');
 
-    let htmlOutput='', textOutput='';
+        let htmlOutput='', textOutput='';
 
-    const usercharts=xmlDoc.getElementsByTagName('userchart');
-    if(usercharts.length>0){
-      for(let chart of usercharts){
-        const chartName=chart.getAttribute('name')||'(No name)';
-        htmlOutput+=`<span class="userchart">UserChart name: ${chartName}</span>\n`;
-        textOutput+=`UserChart name: ${chartName}\n`;
-        processElements(chart);
-      }
-    } else processElements(xmlDoc);
+        const usercharts=xmlDoc.getElementsByTagName('userchart');
+        if(usercharts.length>0){
+            for(let chart of usercharts){
+                const chartName=chart.getAttribute('name')||'(No name)';
+                const chartDesc=chart.getAttribute('description')||'(No description)';
+                const chartVer=chart.getAttribute('version')||'(No version)';
+                htmlOutput+=`<span class="userchart">UserChart name: ${chartName}, Description: ${chartDesc}, Version: ${chartVer}</span>\n`;
+                textOutput+=`UserChart name: ${chartName}\nDescription: ${chartDesc}\nVersion: ${chartVer}\n`;
+                processElements(chart);
+            }
+        } else processElements(xmlDoc);
 
-    function processElements(root){
-      const processTag=(tag,cls,label,extra=()=>{})=>{
-        const list=root.getElementsByTagName(tag);
-        for(let el of list){
-          const name=el.getAttribute('name')||'(No name)';
-          htmlOutput+=`<span class="bullet ${cls}">•</span>${label}: ${name}\n${extra(el)}`;
-          textOutput+=`${label}: ${name}\n${extra(el,true)}`;
-          for(let v of el.getElementsByTagName('vertex')){
-            const lat=parseFloat(v.getAttribute('latitude'));
-            const lon=parseFloat(v.getAttribute('longitude'));
-            const coord=`${toDM(lat,true)}, ${toDM(lon,false)}`;
-            htmlOutput+=`  ${coord}\n`;
-            textOutput+=`  ${coord}\n`;
-          }
-          htmlOutput+='\n'; textOutput+='\n';
+        function processElements(root){
+            const processTag=(tag,cls,label,extra=()=>{})=>{
+                const list=root.getElementsByTagName(tag);
+                for(let el of list){
+                    const name=el.getAttribute('name')||'(No name)';
+                    htmlOutput+=`<span class="bullet ${cls}">•</span>${label}: ${name}\n${extra(el)}`;
+                    textOutput+=`${label}: ${name}\n${extra(el,true)}`;
+                    for(let v of el.getElementsByTagName('vertex')){
+                        const lat=parseFloat(v.getAttribute('latitude'));
+                        const lon=parseFloat(v.getAttribute('longitude'));
+                        const coord=`${toDM(lat,true)}, ${toDM(lon,false)}`;
+                        htmlOutput+=`  ${coord}\n`;
+                        textOutput+=`  ${coord}\n`;
+                    }
+                    htmlOutput+='\n'; textOutput+='\n';
+                }
+            };
+
+            // AREA
+            processTag('area','area','AREA',el=>{
+                let extra='';
+                extra+=`  Description: ${el.getAttribute('description')||''}\n`;
+                extra+=`  Type: ${el.getAttribute('type')||''}\n`;
+                if(el.getAttribute('checkDanger')==='1') extra+='  Danger\n';
+                if(el.getAttribute('displayRadar')==='1') extra+='  On Radar\n';
+                return extra;
+            });
+
+            // LINE
+            processTag('line','line','LINE',el=>{
+                const attr=el.querySelector('attribute');
+                let type=attr?attr.getAttribute('lineType'):'';
+                const typeMap={'1':'Coast line','2':'Nav line','3':'Route line','4':'Depth line'};
+                type=typeMap[type]||type;
+                let extra=`  Type: ${type}\n`;
+                const t=el.querySelector('type');
+                if(t){
+                    if(t.getAttribute('checkDanger')==='1') extra+='  Danger\n';
+                    if(t.getAttribute('displayRadar')==='1') extra+='  On Radar\n';
+                }
+                return extra;
+            });
+
+            // CLEARING LINE
+            const clList=root.getElementsByTagName('clearingLine');
+            if(clList.length>0) textOutput+="Clearing Lines\n";
+            let clIndex=1;
+            for(let el of clList){
+                const name=el.getAttribute("name")||"(No name)";
+                const desc=el.getAttribute("description")||"";
+                const attr=el.querySelector("attribute");
+                const typeAttr=attr?attr.getAttribute("lineType"):"0";
+                const type=(typeAttr==="1")?"NMT":(typeAttr==="2")?"NLT":"(unknown)";
+                const tNode=el.querySelector("type");
+                const danger=tNode?.getAttribute("isDanger")==="1"?"Danger":"";
+                const radar=tNode?.getAttribute("displayRadar")==="1"?"On Radar":"";
+                const vertices=[...el.getElementsByTagName("vertex")];
+                let dir=0;
+                if(vertices.length>=2){
+                    const lat1=parseFloat(vertices[0].getAttribute("latitude"));
+                    const lon1=parseFloat(vertices[0].getAttribute("longitude"));
+                    const lat2=parseFloat(vertices[1].getAttribute("latitude"));
+                    const lon2=parseFloat(vertices[1].getAttribute("longitude"));
+                    dir=bearing(lat1,lon1,lat2,lon2);
+                }
+                textOutput+=`${clIndex} "${name}"\n`;
+                textOutput+=`${type} ${dir}° ${radar} ${danger}`.trim()+"\n";
+                for(let v of vertices){
+                    const lat=parseFloat(v.getAttribute("latitude"));
+                    const lon=parseFloat(v.getAttribute("longitude"));
+                    textOutput+=`${toDM(lat,true)}, ${toDM(lon,false)}\n`;
+                }
+                textOutput+="\n";
+                clIndex++;
+            }
+
+            // CIRCLE
+            processTag('circle','circle','CIRCLE',el=>{
+                let extra='';
+                const attr=el.querySelector('attribute');
+                if(attr) extra+=`  Range: ${parseFloat(attr.getAttribute('range')||0).toFixed(2)} NM\n`;
+                return extra;
+            });
+
+            // TIDAL
+            processTag('tidal','tidal','TIDAL',el=>{
+                const attr=el.querySelector('attribute');
+                let orientation=parseFloat(attr?.getAttribute('orientation')||0).toFixed(2);
+                let strength=parseFloat(attr?.getAttribute('strength')||0).toFixed(2);
+                let t=attr?.getAttribute('type')||"0";
+                const typeMap={"1":"Current","2":"Predicted"};
+                const type=typeMap[t]||t;
+                const time=t==="1"?"12:00":t==="2"?"22:00":"00:00";
+                const desc=el.getAttribute('description')||'';
+                return `  Description: ${desc}\n  Orientation: ${orientation}\n  Type: ${type}\n  Strength: ${strength}\n  Time: ${time}\n`;
+            });
+
+            // LABEL
+            processTag('label','label','LABEL',el=>{
+                let text=el.textContent.trim();
+                if(!text || text.toLowerCase()==="no text") text="TEXT ON CHART";
+                const style=el.querySelector('attribute')?.getAttribute('labelStyle')||"TEXT ON CHART";
+                return `  Text: ${text}\n  Style: ${style}\n`;
+            });
         }
-      };
 
-      processTag('area','area','AREA',el=>{
-        let extra='';
-        const desc=el.getAttribute('description')||'';
-        extra+=`  Description: ${desc}\n`;
-        const type=el.getAttribute('type')||'';
-        if(type) extra+=`  Type: ${type}\n`;
-        const cd=el.getAttribute('checkDanger')==='1'?'  Danger\n':'';
-        const dr=el.getAttribute('displayRadar')==='1'?'  On Radar\n':'';
-        return extra+cd+dr;
-      });
+        parsedOutput=textOutput;
+        document.getElementById('result').innerHTML=htmlOutput||'No recognized elements found.';
 
-      processTag('line','line','LINE',el=>{
-        let extra='';
-        const attr=el.querySelector('attribute');
-        let type=attr?attr.getAttribute('lineType'):'';
-        const typeMap={'1':'Coast line','2':'Nav line','3':'Route line','4':'Depth line'};
-        type=typeMap[type]||type;
-        extra+=`  Type: ${type}\n`;
-        const t=el.querySelector('type');
-        if(t){
-          if(t.getAttribute('checkDanger')==='1') extra+='  Danger\n';
-          if(t.getAttribute('displayRadar')==='1') extra+='  On Radar\n';
-        }
-        return extra;
-      });
-
-      // Clearing Lines
-      const clList=root.getElementsByTagName("clearingLine");
-      if(clList.length>0) textOutput+="Clearing Lines\n";
-      let clIndex=1;
-      for(let el of clList){
-        const name=el.getAttribute("name")||"(No name)";
-        const attr=el.querySelector("attribute");
-        const t=attr?attr.getAttribute("lineType"):"0";
-        const type=(t==="1")?"NMT":(t==="2")?"NLT":"(unknown)";
-        const typeNode=el.querySelector("type");
-        const danger=typeNode?.getAttribute("isDanger")==="1"?"Danger":"";
-        const radar=typeNode?.getAttribute("displayRadar")==="1"?"On Radar":"";
-        const vertices=[...el.getElementsByTagName("vertex")];
-        if(vertices.length>=2){
-          const lat1=parseFloat(vertices[0].getAttribute("latitude"));
-          const lon1=parseFloat(vertices[0].getAttribute("longitude"));
-          const lat2=parseFloat(vertices[1].getAttribute("latitude"));
-          const lon2=parseFloat(vertices[1].getAttribute("longitude"));
-          const dir=bearing(lat1,lon1,lat2,lon2);
-          textOutput+=`${clIndex} "${name}"\n`;
-          textOutput+=`${type} ${dir}° ${radar} ${danger}`.trim()+"\n";
-          for(let v of vertices){
-            const lat=parseFloat(v.getAttribute("latitude"));
-            const lon=parseFloat(v.getAttribute("longitude"));
-            textOutput+=`${toDM(lat,true)}, ${toDM(lon,false)}\n`;
-          }
-          textOutput+="\n";
-          clIndex++;
-        }
-      }
-
-      processTag('circle','circle','CIRCLE',el=>{
-        let extra='';
-        const attr=el.querySelector('attribute');
-        if(attr) extra+=`  Range: ${parseFloat(attr.getAttribute('range')||0).toFixed(2)} NM\n`;
-        return extra;
-      });
-
-      processTag('tidal','tidal','TIDAL',el=>{
-        const attr=el.querySelector('attribute');
-        let orientation=parseFloat(attr?.getAttribute('orientation')||0).toFixed(2);
-        let strength=parseFloat(attr?.getAttribute('strength')||0).toFixed(2);
-        let t=attr?.getAttribute('type')||"0";
-        const typeMap={"1":"Current","2":"Predicted"};
-        const type=typeMap[t]||t;
-        const time=t==="1"?"12:00":t==="2"?"22:00":"00:00";
-        const desc=el.getAttribute('description')||'';
-        return `  Description: ${desc}\n  Orientation: ${orientation}\n  Type: ${type}\n  Strength: ${strength}\n  Time: ${time}\n`;
-      });
-
-      processTag('label','label','LABEL',el=>{
-        const text=el.textContent.trim()||"TEXT ON CHART";
-        const style=el.querySelector('attribute')?.getAttribute('labelStyle')||"TEXT ON CHART";
-        return `  Text: ${text}\n  Style: ${style}\n`;
-      });
-
-      // userchart attributes can be extended here similarly if needed
-    }
-
-    parsedOutput=textOutput;
-    document.getElementById('result').innerHTML=htmlOutput||'No recognized elements found.';
-
-  } catch(err){ alert('Error: '+err.message);}
+    }catch(err){ alert('Error: '+err.message);}
 }
 
 function downloadTextFile(){
-  if(!parsedOutput) return alert('Nothing to download. Please load and parse XML first.');
-  const blob=new Blob([parsedOutput],{type:'text/plain'});
-  const link=document.createElement('a');
-  link.href=URL.createObjectURL(blob);
-  link.download='parsed_coordinates.txt';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    if(!parsedOutput) return alert('Nothing to download. Please load and parse XML first.');
+    const blob=new Blob([parsedOutput],{type:'text/plain'});
+    const link=document.createElement('a');
+    link.href=URL.createObjectURL(blob);
+    link.download='parsed_coordinates.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // Drag & Drop
@@ -219,10 +218,11 @@ dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('dragover'))
 dropZone.addEventListener('drop',e=>{ e.preventDefault(); dropZone.classList.remove('dragover'); const file=e.dataTransfer.files[0]; if(file&&file.name.endsWith('.xml')) readXMLFile(file); else alert('Please drop a valid .xml file'); });
 
 function readXMLFile(file){
-  const reader=new FileReader();
-  reader.onload=e=>{ xmlInput.value=e.target.result; parseXML(); };
-  reader.readAsText(file);
+    const reader=new FileReader();
+    reader.onload=e=>{ xmlInput.value=e.target.result; parseXML(); };
+    reader.readAsText(file);
 }
 </script>
+
 </body>
 </html>
