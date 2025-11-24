@@ -197,7 +197,7 @@
     }, 300);
   }
 
-  // D°MM.mmm + leading zero for minutes (04.114)
+  // D°MM.mmm with leading zero for minutes (04.114)
   function toDM(deg, isLat) {
     const abs = Math.abs(deg);
     const d = Math.floor(abs);
@@ -212,6 +212,25 @@
     const mStr = `${mInt}.${mDec}`;
 
     return `${dStr}°${mStr}′ ${dir}`;
+  }
+
+  // Bearing in degrees 0–359 from (lat1, lon1) to (lat2, lon2)
+  function bearingDegrees(lat1, lon1, lat2, lon2) {
+    const toRad = x => x * Math.PI / 180;
+    const φ1 = toRad(lat1);
+    const φ2 = toRad(lat2);
+    const Δλ = toRad(lon2 - lon1);
+
+    const y = Math.sin(Δλ) * Math.cos(φ2);
+    const x = Math.cos(φ1) * Math.sin(φ2) -
+              Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+
+    let θ = Math.atan2(y, x);       // radians
+    let deg = θ * 180 / Math.PI;    // to degrees
+    deg = (deg + 360) % 360;        // normalize 0–360
+    deg = Math.round(deg);          // nearest whole degree
+    if (deg === 360) deg = 0;
+    return deg;
   }
 
   function parseXML() {
@@ -251,7 +270,7 @@
           for (let el of list) {
             const name = el.getAttribute('name') || '(No name)';
             const extraHtml = extra(el);
-            const extraText = extra(el, true);
+            const extraText = extra(el, true); // другий аргумент можна ігнорувати
 
             htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extraHtml}`;
             textOutput += `${label}: ${name}\n${extraText}`;
@@ -283,7 +302,7 @@
           return `  Type: ${type}\n`;
         });
 
-        // CLEARING LINES: lineType 1 -> NMT, 2 -> NLT
+        // CLEARING LINES: lineType 1 -> NMT, 2 -> NLT + Direction in degrees
         processTag('clearingLine', 'clearing', 'CLEARING LINE', el => {
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
@@ -297,7 +316,29 @@
           const t = el.querySelector('type');
           const danger = t ? t.getAttribute('isDanger') : '(no isDanger)';
 
-          return `  Description: ${d}\n  LineType: ${lineTypeLabel}\n  IsDanger: ${danger}\n`;
+          // Direction from first to last vertex
+          let directionStr = '(no direction)';
+          const vertices = el.getElementsByTagName('vertex');
+          if (vertices.length >= 2) {
+            const v1 = vertices[0];
+            const v2 = vertices[vertices.length - 1];
+            const lat1 = parseFloat(v1.getAttribute('latitude'));
+            const lon1 = parseFloat(v1.getAttribute('longitude'));
+            const lat2 = parseFloat(v2.getAttribute('latitude'));
+            const lon2 = parseFloat(v2.getAttribute('longitude'));
+
+            if (![lat1, lon1, lat2, lon2].some(v => isNaN(v))) {
+              const brg = bearingDegrees(lat1, lon1, lat2, lon2);
+              directionStr = `${brg}°`;
+            }
+          }
+
+          return (
+            `  Description: ${d}\n` +
+            `  LineType: ${lineTypeLabel}\n` +
+            `  IsDanger: ${danger}\n` +
+            `  Direction: ${directionStr}\n`
+          );
         });
 
         processTag('circle', 'circle', 'CIRCLE', el => {
