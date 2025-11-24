@@ -494,4 +494,72 @@
       return;
     }
 
-    if (navigator.clipboard && n
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert('Parsed text copied to clipboard.');
+        })
+        .catch(() => {
+          fallbackCopy(text);
+        });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      alert('Parsed text copied to clipboard.');
+    } catch (e) {
+      alert('Unable to copy to clipboard.');
+    }
+    document.body.removeChild(ta);
+  }
+
+  // === Drag & Drop ===
+  const fileInput = document.getElementById('fileInput');
+  const dropZone = document.getElementById('dropZone');
+  const xmlInput = document.getElementById('xmlInput');
+
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) readXMLFile(file);
+  });
+
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.endsWith('.xml')) {
+      readXMLFile(file);
+    } else {
+      alert('Please drop a valid .xml file');
+    }
+  });
+
+  function readXMLFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      xmlInput.value = e.target.result;
+      parseXML();
+    };
+    reader.readAsText(file);
+  }
+</script>
+
+</body>
+</html>
