@@ -133,15 +133,6 @@
       font-style: italic;
       transition: opacity 0.5s ease;
     }
-
-    .bullet { font-weight: bold; margin-right: 6px; }
-    .area { color: #e6b800; }
-    .line { color: #007bff; }
-    .circle { color: #28a745; }
-    .label { color: #9b59b6; }
-    .userchart { color: #ff6600; font-weight: bold; }
-    .clearing { color: #00bcd4; }
-    .tidal { color: #ff1493; }
   </style>
 </head>
 <body>
@@ -172,7 +163,7 @@
 <script>
   let parsedOutput = '';
 
-  // === Quotes ===
+  // === Load quotes ===
   fetch('motivational_quotes.txt')
     .then(r => r.text())
     .then(t => {
@@ -195,8 +186,10 @@
     const abs = Math.abs(deg);
     const d = Math.floor(abs);
     const m = (abs - d) * 60;
+
     const dir = deg >= 0 ? (isLat ? 'N' : 'E') : (isLat ? 'S' : 'W');
     const dStr = d < 10 ? '0' + d : String(d);
+
     let [mInt, mDec] = m.toFixed(3).split('.');
     mInt = mInt.padStart(2, '0');
     return `${dStr}°${mInt}.${mDec}′ ${dir}`;
@@ -227,7 +220,7 @@
     return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
   }
 
-  // === Main parsing ===
+  // === Parse XML ===
   function parseXML() {
     const xmlString = document.getElementById('xmlInput').value.trim();
     if (!xmlString) {
@@ -243,79 +236,70 @@
         return;
       }
 
-      let htmlOutput = '';
-      let textOutput = '';
+      let out = '';
 
-      const usercharts = xmlDoc.getElementsByTagName('userchart');
-      if (usercharts.length > 0) {
-        for (const chart of usercharts) {
-          const chartName = chart.getAttribute('name') || '(No name)';
-          htmlOutput += `<span class="userchart">UserChart name: ${chartName}</span>\n`;
-          textOutput += `UserChart name: ${chartName}\n`;
-          processElements(chart);
+      const chart = xmlDoc.getElementsByTagName('userchart')[0] || xmlDoc;
+
+      // === LINES (Coast / Nav / Route / Depth) ===
+      const lines = chart.getElementsByTagName('line');
+      let lineIndex = 0;
+
+      const lineTypeMap = {
+        '1': 'Coast line',
+        '2': 'Nav line',
+        '3': 'Route line',
+        '4': 'Depth line'
+      };
+
+      for (const el of lines) {
+        lineIndex++;
+        const name = el.getAttribute('name') || '(No name)';
+
+        // header: 3 "ROUTE LINE NAME"
+        out += `${lineIndex} "${name}"\n`;
+
+        const attr = el.querySelector('attribute');
+        const typeNode = el.querySelector('type');
+
+        const typeCode = attr ? attr.getAttribute('lineType') : '';
+        const typeLabel = lineTypeMap[typeCode] || '(no type)';
+
+        const parts = [typeLabel];
+
+        if (typeNode) {
+          if (typeNode.getAttribute('displayRadar') === '1') {
+            parts.push('On Radar');
+          }
+          if (typeNode.getAttribute('checkDanger') === '1') {
+            parts.push('Danger');
+          }
         }
-      } else {
-        processElements(xmlDoc);
+
+        // Route line  On Radar  Danger
+        out += '  ' + parts.join('  ') + '\n';
+
+        const vertices = el.getElementsByTagName('vertex');
+        for (const v of vertices) {
+          const lat = parseFloat(v.getAttribute('latitude'));
+          const lon = parseFloat(v.getAttribute('longitude'));
+          if (isNaN(lat) || isNaN(lon)) continue;
+          out += `  ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+        }
+
+        out += '\n';
       }
 
-      function processElements(root) {
-        const processTag = (tag, cls, label, extraFn) => {
-          const list = root.getElementsByTagName(tag);
-          for (const el of list) {
-            const name = el.getAttribute('name') || '(No name)';
-            const extra = extraFn ? extraFn(el) : '';
+      // === CLEARING LINES ===
+      const clearing = chart.getElementsByTagName('clearingLine');
+      if (clearing.length > 0) {
+        out += 'Clearing Lines\n\n';
+        let clIndex = 0;
 
-            htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extra}`;
-            textOutput += `${label}: ${name}\n${extra}`;
+        for (const el of clearing) {
+          clIndex++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${clIndex} "${name}"\n`;
 
-            const vertices = el.getElementsByTagName('vertex');
-            for (const v of vertices) {
-              const lat = parseFloat(v.getAttribute('latitude'));
-              const lon = parseFloat(v.getAttribute('longitude'));
-              if (isNaN(lat) || isNaN(lon)) continue;
-              const coord = `${toDM(lat, true)}, ${toDM(lon, false)}`;
-              htmlOutput += `  ${coord}\n`;
-              textOutput += `  ${coord}\n`;
-            }
-
-            htmlOutput += '\n';
-            textOutput += '\n';
-          }
-        };
-
-        // AREAS
-        processTag('area', 'area', 'AREA', () => '');
-
-        // LINES (Route / Coast / Depth / Route)
-        processTag('line', 'line', 'LINE', el => {
-          const attr = el.querySelector('attribute');
-          const typeNode = el.querySelector('type');
-
-          const typeMap = {
-            '1': 'Coast line',
-            '2': 'Nav line',
-            '3': 'Route line',
-            '4': 'Depth line'
-          };
-          const typeCode = attr ? attr.getAttribute('lineType') : '';
-          const typeLabel = typeMap[typeCode] || '(no type)';
-
-          const parts = [`  ${typeLabel}`];
-
-          if (typeNode) {
-            if (typeNode.getAttribute('displayRadar') === '1') {
-              parts.push('On Radar');
-            }
-            if (typeNode.getAttribute('checkDanger') === '1') {
-              parts.push('Danger');
-            }
-          }
-
-          return parts.join('  ') + '\n';
-        });
-
-        // CLEARING LINES: NMT / NLT  DIR°  On Radar  Danger
-        processTag('clearingLine', 'clearing', 'CLEARING LINE', el => {
           const attr = el.querySelector('attribute');
           const typeNode = el.querySelector('type');
 
@@ -340,7 +324,7 @@
             }
           }
 
-          const parts = [`  ${lineTypeLabel}`];
+          const parts = [lineTypeLabel];
           if (dirStr) parts.push(dirStr);
 
           if (typeNode) {
@@ -355,11 +339,30 @@
             }
           }
 
-          return parts.join('  ') + '\n';
-        });
+          // NMT   355°   On Radar   Danger
+          out += '    ' + parts.join('   ') + '\n';
 
-        // CIRCLES
-        processTag('circle', 'circle', 'CIRCLE', el => {
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
+      }
+
+      // === CIRCLES ===
+      const circles = chart.getElementsByTagName('circle');
+      if (circles.length > 0) {
+        out += 'Circles\n\n';
+        let cIdx = 0;
+        for (const el of circles) {
+          cIdx++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${cIdx} "${name}"\n`;
+
           const attr = el.querySelector('attribute');
           let r = attr ? attr.getAttribute('range') : null;
           if (r !== null && r !== '' && !isNaN(r)) {
@@ -367,11 +370,30 @@
           } else {
             r = '(no range)';
           }
-          return `  Range: ${r} NM\n`;
-        });
+          out += `    Range: ${r} NM\n`;
 
-        // TIDALS
-        processTag('tidal', 'tidal', 'TIDAL', el => {
+          const vertices = el.getElementsByTagName('vertex');
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
+      }
+
+      // === TIDALS ===
+      const tidals = chart.getElementsByTagName('tidal');
+      if (tidals.length > 0) {
+        out += 'Tidals\n\n';
+        let tIdx = 0;
+        for (const el of tidals) {
+          tIdx++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${tIdx} "${name}"\n`;
+
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
 
@@ -396,24 +418,39 @@
           const timeRaw = attr ? attr.getAttribute('time') : null;
           const timeStr = timeRaw != null ? minutesToHHMM(timeRaw) : '(no time)';
 
-          return (
-            `  Description: ${d}\n` +
-            `  Orientation: ${orient}°\n` +
-            `  Type: ${t}\n` +
-            `  Strength: ${strength}\n` +
-            `  Time: ${timeStr}\n`
-          );
-        });
+          out += `    ${d}\n`;
+          out += `    Orientation: ${orient}°\n`;
+          out += `    Type: ${t}\n`;
+          out += `    Strength: ${strength}\n`;
+          out += `    Time: ${timeStr}\n`;
 
-        // LABELS
-        processTag('label', 'label', 'LABEL', el => {
+          const vertices = el.getElementsByTagName('vertex');
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
+      }
+
+      // === LABELS ===
+      const labels = chart.getElementsByTagName('label');
+      if (labels.length > 0) {
+        out += 'Labels\n\n';
+        let lIdx = 0;
+        for (const el of labels) {
+          lIdx++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${lIdx} "${name}"\n`;
+
           const attr = el.querySelector('attribute');
           const typeNode = el.querySelector('type');
 
           const text = attr ? (attr.getAttribute('labelText') || '').trim() : '';
           const style = attr ? attr.getAttribute('labelStyle') : '';
-
-          let out = '';
 
           if (text) {
             let line;
@@ -424,7 +461,7 @@
             } else {
               line = `"${text}"`;
             }
-            out += `  ${line}\n`;
+            out += `    ${line}\n`;
           }
 
           const flags = [];
@@ -436,24 +473,30 @@
               flags.push('On Radar');
             }
           }
-
           if (flags.length) {
-            out += `  ${flags.join('  ')}\n`;
+            out += `    ${flags.join('  ')}\n`;
           }
 
-          return out;
-        });
+          const vertices = el.getElementsByTagName('vertex');
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
       }
 
-      parsedOutput = textOutput;
-      document.getElementById('result').innerHTML =
-        htmlOutput || 'No recognized elements found.';
+      parsedOutput = out;
+      document.getElementById('result').textContent =
+        out || 'No recognized elements found.';
     } catch (err) {
       alert('Error: ' + err.message);
     }
   }
 
-  // === Download & Copy ===
   function ensureParsedOrAbort(msg) {
     if (parsedOutput) return true;
     const xml = document.getElementById('xmlInput').value.trim();
@@ -503,7 +546,7 @@
     document.body.removeChild(ta);
   }
 
-  // === Drag & Drop ===
+  // === Drag & Drop / File ===
   const fileInput = document.getElementById('fileInput');
   const dropZone = document.getElementById('dropZone');
   const xmlInput = document.getElementById('xmlInput');
