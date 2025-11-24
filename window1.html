@@ -233,6 +233,17 @@
     return deg;
   }
 
+  // Convert minutes (e.g. 720) to "HH:MM"
+  function minutesToHHMM(minutes) {
+    const m = parseInt(minutes, 10);
+    if (isNaN(m)) return '(no time)';
+    const hh = Math.floor(m / 60);
+    const mm = m % 60;
+    const hhStr = hh.toString().padStart(2, '0');
+    const mmStr = mm.toString().padStart(2, '0');
+    return `${hhStr}:${mmStr}`;
+  }
+
   function parseXML() {
     showRandomQuote();
     const xmlString = document.getElementById('xmlInput').value.trim();
@@ -270,7 +281,7 @@
           for (let el of list) {
             const name = el.getAttribute('name') || '(No name)';
             const extraHtml = extra(el);
-            const extraText = extra(el, true); // другий аргумент можна ігнорувати
+            const extraText = extra(el, true);
 
             htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extraHtml}`;
             textOutput += `${label}: ${name}\n${extraText}`;
@@ -354,13 +365,28 @@
           return `  Range: ${r} NM\n`;
         });
 
+        // TIDALS: time HH:MM, orientation & strength with 2 decimals
         processTag('tidal', 'tidal', 'TIDAL', el => {
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
-          const o = attr ? attr.getAttribute('orientation') : '(no orientation)';
+
+          let o = attr ? attr.getAttribute('orientation') : null;
+          if (o !== null && o !== '' && !isNaN(o)) {
+            o = parseFloat(o).toFixed(2);
+          } else {
+            o = '(no orientation)';
+          }
+
           let t = attr ? attr.getAttribute('type') : '(no type)';
-          const s = attr ? attr.getAttribute('strength') : '(no strength)';
-          const time = attr ? attr.getAttribute('time') : '(no time)';
+          let s = attr ? attr.getAttribute('strength') : null;
+          if (s !== null && s !== '' && !isNaN(s)) {
+            s = parseFloat(s).toFixed(2);
+          } else {
+            s = '(no strength)';
+          }
+
+          const timeRaw = attr ? attr.getAttribute('time') : null;
+          const timeStr = timeRaw != null ? minutesToHHMM(timeRaw) : '(no time)';
 
           const typeMap = {
             '1': 'Current',
@@ -368,12 +394,52 @@
           };
           t = typeMap[t] || `(unknown: ${t})`;
 
-          return `  Description: ${d}\n  Orientation: ${o}\n  Type: ${t}\n  Strength: ${s}\n  Time: ${time}\n`;
+          return (
+            `  Description: ${d}\n` +
+            `  Orientation: ${o}°\n` +
+            `  Type: ${t}\n` +
+            `  Strength: ${s}\n` +
+            `  Time: ${timeStr}\n`
+          );
         });
 
+        // LABELS: LABEL / POINT + Danger / On Radar
         processTag('label', 'label', 'LABEL', el => {
-          const text = el.textContent.trim() || '(no text)';
-          return `  Text: ${text}\n`;
+          const attr = el.querySelector('attribute');
+          const typeNode = el.querySelector('type');
+
+          let labelLine = '';
+          if (attr) {
+            const style = attr.getAttribute('labelStyle');
+            const text = attr.getAttribute('labelText') || '';
+            if (style === '1') {
+              labelLine = `LABEL "${text}"`;
+            } else if (style === '2') {
+              labelLine = `POINT "${text}"`;
+            } else {
+              labelLine = `"${text}"`;
+            }
+          }
+
+          const flags = [];
+          if (typeNode) {
+            if (typeNode.getAttribute('checkDanger') === '1') {
+              flags.push('Danger');
+            }
+            if (typeNode.getAttribute('displayRadar') === '1') {
+              flags.push('On Radar');
+            }
+          }
+
+          let out = '';
+          if (labelLine) {
+            out += `  ${labelLine}\n`;
+          }
+          if (flags.length) {
+            out += `  ${flags.join(', ')}\n`;
+          }
+
+          return out;
         });
       }
 
@@ -428,72 +494,4 @@
       return;
     }
 
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          alert('Parsed text copied to clipboard.');
-        })
-        .catch(() => {
-          fallbackCopy(text);
-        });
-    } else {
-      fallbackCopy(text);
-    }
-  }
-
-  function fallbackCopy(text) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand('copy');
-      alert('Parsed text copied to clipboard.');
-    } catch (e) {
-      alert('Unable to copy to clipboard.');
-    }
-    document.body.removeChild(ta);
-  }
-
-  // === Drag & Drop ===
-  const fileInput = document.getElementById('fileInput');
-  const dropZone = document.getElementById('dropZone');
-  const xmlInput = document.getElementById('xmlInput');
-
-  fileInput.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (file) readXMLFile(file);
-  });
-
-  dropZone.addEventListener('dragover', e => {
-    e.preventDefault();
-    dropZone.classList.add('dragover');
-  });
-
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-
-  dropZone.addEventListener('drop', e => {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file && file.name.endsWith('.xml')) {
-      readXMLFile(file);
-    } else {
-      alert('Please drop a valid .xml file');
-    }
-  });
-
-  function readXMLFile(file) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      xmlInput.value = e.target.result;
-      parseXML();
-    };
-    reader.readAsText(file);
-  }
-</script>
-
-</body>
-</html>
+    if (navigator.clipboard && n
