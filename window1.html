@@ -165,6 +165,7 @@
 <div class="button-container">
   <button class="fancy-button" onclick="document.getElementById('fileInput').click()">Upload XML File</button>
   <button class="fancy-button" onclick="downloadTextFile()">Download .txt</button>
+  <button class="fancy-button" onclick="copyParsed()">Copy to Clipboard</button>
 </div>
 
 <div id="quoteBox">Loading quote...</div>
@@ -174,6 +175,7 @@
   let parsedOutput = '';
   let quotes = [];
 
+  // Load quotes
   fetch('motivational_quotes.txt')
     .then(r => r.text())
     .then(t => {
@@ -195,7 +197,7 @@
     }, 300);
   }
 
-  /* === FIXED FUNCTION === */
+  // D°MM.mmm + leading zero for minutes (04.114)
   function toDM(deg, isLat) {
     const abs = Math.abs(deg);
     const d = Math.floor(abs);
@@ -215,15 +217,21 @@
   function parseXML() {
     showRandomQuote();
     const xmlString = document.getElementById('xmlInput').value.trim();
-    if (!xmlString) return alert('Please paste or load XML first.');
+    if (!xmlString) {
+      alert('Please paste or load XML first.');
+      return;
+    }
 
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-      if (xmlDoc.getElementsByTagName("parsererror").length > 0)
-        return alert('Error parsing XML.');
+      if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+        alert('Error parsing XML.');
+        return;
+      }
 
-      let htmlOutput = '', textOutput = '';
+      let htmlOutput = '';
+      let textOutput = '';
 
       const usercharts = xmlDoc.getElementsByTagName('userchart');
       if (usercharts.length > 0) {
@@ -233,15 +241,21 @@
           textOutput += `UserChart name: ${chartName}\n`;
           processElements(chart);
         }
-      } else processElements(xmlDoc);
+      } else {
+        processElements(xmlDoc);
+      }
 
       function processElements(root) {
         const processTag = (tag, cls, label, extra = () => '') => {
           const list = root.getElementsByTagName(tag);
           for (let el of list) {
             const name = el.getAttribute('name') || '(No name)';
-            htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extra(el)}`;
-            textOutput += `${label}: ${name}\n${extra(el, true)}`;
+            const extraHtml = extra(el);
+            const extraText = extra(el, true);
+
+            htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extraHtml}`;
+            textOutput += `${label}: ${name}\n${extraText}`;
+
             for (let v of el.getElementsByTagName('vertex')) {
               const lat = parseFloat(v.getAttribute('latitude'));
               const lon = parseFloat(v.getAttribute('longitude'));
@@ -255,28 +269,50 @@
         };
 
         processTag('area', 'area', 'AREA');
+
         processTag('line', 'line', 'LINE', el => {
           const attr = el.querySelector('attribute');
           let type = attr ? attr.getAttribute('lineType') : '(no type)';
-          const typeMap = { '1': 'Coast line', '2': 'Nav line', '3': 'Route line', '4': 'Depth line' };
+          const typeMap = {
+            '1': 'Coast line',
+            '2': 'Nav line',
+            '3': 'Route line',
+            '4': 'Depth line'
+          };
           type = typeMap[type] || `(unknown: ${type})`;
           return `  Type: ${type}\n`;
         });
+
+        // CLEARING LINES: lineType 1 -> NMT, 2 -> NLT
         processTag('clearingLine', 'clearing', 'CLEARING LINE', el => {
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
-          const lineType = attr ? attr.getAttribute('lineType') : '(no lineType)';
+          const lineTypeRaw = attr ? attr.getAttribute('lineType') : null;
+          let lineTypeLabel;
+
+          if (lineTypeRaw === '1') lineTypeLabel = 'NMT';
+          else if (lineTypeRaw === '2') lineTypeLabel = 'NLT';
+          else lineTypeLabel = lineTypeRaw || '(no lineType)';
+
           const t = el.querySelector('type');
           const danger = t ? t.getAttribute('isDanger') : '(no isDanger)';
-          return `  Description: ${d}\n  LineType: ${lineType}\n  IsDanger: ${danger}\n`;
+
+          return `  Description: ${d}\n  LineType: ${lineTypeLabel}\n  IsDanger: ${danger}\n`;
         });
+
         processTag('circle', 'circle', 'CIRCLE', el => {
           const attr = el.querySelector('attribute');
           let r = attr ? attr.getAttribute('range') : null;
-          if (r !== null && r !== '' && !isNaN(r)) r = parseFloat(r).toFixed(2);
-          else r = '(no range)';
+
+          if (r !== null && r !== '' && !isNaN(r)) {
+            r = parseFloat(r).toFixed(2);
+          } else {
+            r = '(no range)';
+          }
+
           return `  Range: ${r} NM\n`;
         });
+
         processTag('tidal', 'tidal', 'TIDAL', el => {
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
@@ -284,10 +320,16 @@
           let t = attr ? attr.getAttribute('type') : '(no type)';
           const s = attr ? attr.getAttribute('strength') : '(no strength)';
           const time = attr ? attr.getAttribute('time') : '(no time)';
-          const typeMap = { '1': 'Current', '2': 'Predicted' };
+
+          const typeMap = {
+            '1': 'Current',
+            '2': 'Predicted'
+          };
           t = typeMap[t] || `(unknown: ${t})`;
+
           return `  Description: ${d}\n  Orientation: ${o}\n  Type: ${t}\n  Strength: ${s}\n  Time: ${time}\n`;
         });
+
         processTag('label', 'label', 'LABEL', el => {
           const text = el.textContent.trim() || '(no text)';
           return `  Text: ${text}\n`;
@@ -302,12 +344,20 @@
   }
 
   function downloadTextFile() {
+    const xmlInputEl = document.getElementById('xmlInput');
+
     if (!parsedOutput) {
-      const text = document.getElementById('xmlInput').value.trim();
-      if (!text) return alert('Nothing to download. Please paste or load XML first.');
+      const xmlText = xmlInputEl.value.trim();
+      if (!xmlText) {
+        alert('Nothing to download. Please paste or load XML first.');
+        return;
+      }
       parseXML();
-      if (!parsedOutput) return;
+      if (!parsedOutput) {
+        return;
+      }
     }
+
     const blob = new Blob([parsedOutput], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -317,6 +367,56 @@
     document.body.removeChild(link);
   }
 
+  // Copy to clipboard
+  function copyParsed() {
+    if (!parsedOutput) {
+      const xmlText = document.getElementById('xmlInput').value.trim();
+      if (!xmlText) {
+        alert('Nothing to copy. Please paste or load XML first.');
+        return;
+      }
+      parseXML();
+      if (!parsedOutput) return;
+    }
+    copyToClipboard(parsedOutput);
+  }
+
+  function copyToClipboard(text) {
+    if (!text) {
+      alert('Nothing to copy.');
+      return;
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert('Parsed text copied to clipboard.');
+        })
+        .catch(() => {
+          fallbackCopy(text);
+        });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      alert('Parsed text copied to clipboard.');
+    } catch (e) {
+      alert('Unable to copy to clipboard.');
+    }
+    document.body.removeChild(ta);
+  }
+
+  // === Drag & Drop ===
   const fileInput = document.getElementById('fileInput');
   const dropZone = document.getElementById('dropZone');
   const xmlInput = document.getElementById('xmlInput');
@@ -337,8 +437,11 @@
     e.preventDefault();
     dropZone.classList.remove('dragover');
     const file = e.dataTransfer.files[0];
-    if (file && file.name.endsWith('.xml')) readXMLFile(file);
-    else alert('Please drop a valid .xml file');
+    if (file && file.name.endsWith('.xml')) {
+      readXMLFile(file);
+    } else {
+      alert('Please drop a valid .xml file');
+    }
   });
 
   function readXMLFile(file) {
