@@ -20,7 +20,6 @@
       color: #12007a;
     }
 
-    /* Основна зона з textarea та QR */
     .main-container {
       display: flex;
       align-items: flex-start;
@@ -29,7 +28,6 @@
       flex-wrap: wrap;
     }
 
-    /* QR контейнер зліва */
     .donate-container {
       flex-shrink: 0;
       display: flex;
@@ -43,7 +41,6 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    /* Drop zone */
     #dropZone {
       flex: 1;
       position: relative;
@@ -89,7 +86,6 @@
       resize: vertical;
     }
 
-    /* Кнопки в один ряд */
     .button-container {
       display: flex;
       justify-content: center;
@@ -154,7 +150,6 @@
 
 <h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels, Clearing Lines, Tidals, UserChart)</h2>
 
-<!-- QR-код ліворуч, dropZone праворуч -->
 <div class="main-container">
   <div class="donate-container">
     <img src="photo_5440463335184268274_y.jpg" alt="Buy me a coffee QR" class="donate-image">
@@ -167,7 +162,6 @@
   </div>
 </div>
 
-<!-- Тільки дві кнопки -->
 <div class="button-container">
   <button class="fancy-button" onclick="document.getElementById('fileInput').click()">Upload XML File</button>
   <button class="fancy-button" onclick="downloadTextFile()">Download .txt</button>
@@ -180,7 +174,6 @@
   let parsedOutput = '';
   let quotes = [];
 
-  // Load quotes
   fetch('motivational_quotes.txt')
     .then(r => r.text())
     .then(t => {
@@ -202,32 +195,35 @@
     }, 300);
   }
 
+  /* === FIXED FUNCTION === */
   function toDM(deg, isLat) {
     const abs = Math.abs(deg);
     const d = Math.floor(abs);
     const m = (abs - d) * 60;
+
     const dir = deg >= 0 ? (isLat ? "N" : "E") : (isLat ? "S" : "W");
-    return `${d < 10 ? "0" + d : d}°${m.toFixed(3)}′ ${dir}`;
+
+    const dStr = d < 10 ? "0" + d : String(d);
+
+    let [mInt, mDec] = m.toFixed(3).split('.');
+    mInt = mInt.padStart(2, '0');
+    const mStr = `${mInt}.${mDec}`;
+
+    return `${dStr}°${mStr}′ ${dir}`;
   }
 
   function parseXML() {
     showRandomQuote();
     const xmlString = document.getElementById('xmlInput').value.trim();
-    if (!xmlString) {
-      alert('Please paste or load XML first.');
-      return;
-    }
+    if (!xmlString) return alert('Please paste or load XML first.');
 
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-      if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
-        alert('Error parsing XML.');
-        return;
-      }
+      if (xmlDoc.getElementsByTagName("parsererror").length > 0)
+        return alert('Error parsing XML.');
 
-      let htmlOutput = '';
-      let textOutput = '';
+      let htmlOutput = '', textOutput = '';
 
       const usercharts = xmlDoc.getElementsByTagName('userchart');
       if (usercharts.length > 0) {
@@ -237,21 +233,15 @@
           textOutput += `UserChart name: ${chartName}\n`;
           processElements(chart);
         }
-      } else {
-        processElements(xmlDoc);
-      }
+      } else processElements(xmlDoc);
 
       function processElements(root) {
         const processTag = (tag, cls, label, extra = () => '') => {
           const list = root.getElementsByTagName(tag);
           for (let el of list) {
             const name = el.getAttribute('name') || '(No name)';
-            const extraHtml = extra(el);
-            const extraText = extra(el, true);
-
-            htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extraHtml}`;
-            textOutput += `${label}: ${name}\n${extraText}`;
-
+            htmlOutput += `<span class="bullet ${cls}">•</span>${label}: ${name}\n${extra(el)}`;
+            textOutput += `${label}: ${name}\n${extra(el, true)}`;
             for (let v of el.getElementsByTagName('vertex')) {
               const lat = parseFloat(v.getAttribute('latitude'));
               const lon = parseFloat(v.getAttribute('longitude'));
@@ -265,20 +255,13 @@
         };
 
         processTag('area', 'area', 'AREA');
-
         processTag('line', 'line', 'LINE', el => {
           const attr = el.querySelector('attribute');
           let type = attr ? attr.getAttribute('lineType') : '(no type)';
-          const typeMap = {
-            '1': 'Coast line',
-            '2': 'Nav line',
-            '3': 'Route line',
-            '4': 'Depth line'
-          };
+          const typeMap = { '1': 'Coast line', '2': 'Nav line', '3': 'Route line', '4': 'Depth line' };
           type = typeMap[type] || `(unknown: ${type})`;
           return `  Type: ${type}\n`;
         });
-
         processTag('clearingLine', 'clearing', 'CLEARING LINE', el => {
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
@@ -287,20 +270,13 @@
           const danger = t ? t.getAttribute('isDanger') : '(no isDanger)';
           return `  Description: ${d}\n  LineType: ${lineType}\n  IsDanger: ${danger}\n`;
         });
-
         processTag('circle', 'circle', 'CIRCLE', el => {
           const attr = el.querySelector('attribute');
           let r = attr ? attr.getAttribute('range') : null;
-
-          if (r !== null && r !== '' && !isNaN(r)) {
-            r = parseFloat(r).toFixed(2);
-          } else {
-            r = '(no range)';
-          }
-
+          if (r !== null && r !== '' && !isNaN(r)) r = parseFloat(r).toFixed(2);
+          else r = '(no range)';
           return `  Range: ${r} NM\n`;
         });
-
         processTag('tidal', 'tidal', 'TIDAL', el => {
           const d = el.getAttribute('description') || '';
           const attr = el.querySelector('attribute');
@@ -308,16 +284,10 @@
           let t = attr ? attr.getAttribute('type') : '(no type)';
           const s = attr ? attr.getAttribute('strength') : '(no strength)';
           const time = attr ? attr.getAttribute('time') : '(no time)';
-
-          const typeMap = {
-            '1': 'Current',
-            '2': 'Predicted'
-          };
+          const typeMap = { '1': 'Current', '2': 'Predicted' };
           t = typeMap[t] || `(unknown: ${t})`;
-
           return `  Description: ${d}\n  Orientation: ${o}\n  Type: ${t}\n  Strength: ${s}\n  Time: ${time}\n`;
         });
-
         processTag('label', 'label', 'LABEL', el => {
           const text = el.textContent.trim() || '(no text)';
           return `  Text: ${text}\n`;
@@ -332,22 +302,12 @@
   }
 
   function downloadTextFile() {
-    const xmlInputEl = document.getElementById('xmlInput');
-
-    // Якщо ще не парсили, але XML є — спочатку парсимо
     if (!parsedOutput) {
-      const xmlText = xmlInputEl.value.trim();
-      if (!xmlText) {
-        alert('Nothing to download. Please paste or load XML first.');
-        return;
-      }
+      const text = document.getElementById('xmlInput').value.trim();
+      if (!text) return alert('Nothing to download. Please paste or load XML first.');
       parseXML();
-      if (!parsedOutput) {
-        // Якщо парсинг не вдався — не качаємо порожній файл
-        return;
-      }
+      if (!parsedOutput) return;
     }
-
     const blob = new Blob([parsedOutput], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -357,7 +317,6 @@
     document.body.removeChild(link);
   }
 
-  // === Drag & Drop ===
   const fileInput = document.getElementById('fileInput');
   const dropZone = document.getElementById('dropZone');
   const xmlInput = document.getElementById('xmlInput');
@@ -378,18 +337,15 @@
     e.preventDefault();
     dropZone.classList.remove('dragover');
     const file = e.dataTransfer.files[0];
-    if (file && file.name.endsWith('.xml')) {
-      readXMLFile(file);
-    } else {
-      alert('Please drop a valid .xml file');
-    }
+    if (file && file.name.endsWith('.xml')) readXMLFile(file);
+    else alert('Please drop a valid .xml file');
   });
 
   function readXMLFile(file) {
     const reader = new FileReader();
     reader.onload = e => {
       xmlInput.value = e.target.result;
-      parseXML(); // автоматичний парсинг
+      parseXML();
     };
     reader.readAsText(file);
   }
