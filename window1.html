@@ -20,7 +20,6 @@
       color: #12007a;
     }
 
-    /* Основна зона з textarea та QR */
     .main-container {
       display: flex;
       align-items: flex-start;
@@ -33,7 +32,6 @@
       flex-shrink: 0;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
     }
 
     .donate-image {
@@ -42,7 +40,6 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    /* Drop zone */
     #dropZone {
       flex: 1;
       position: relative;
@@ -140,13 +137,11 @@
 </head>
 <body>
 
-<h2>XML Coordinate Parser (Areas, Lines, Circles, Clearing Lines, Tidals, UserChart)</h2>
+<h2>XML Coordinate Parser (Areas, Lines, Circles, Coast Lines, Labels, Clearing Lines, Tidals, UserChart)</h2>
 
 <div class="main-container">
   <div class="donate-container">
-    <img src="photo_5440463335184268274_y.jpg"
-         alt="Buy me a coffee QR"
-         class="donate-image">
+    <img src="photo_5440463335184268274_y.jpg" alt="Buy me a coffee QR" class="donate-image">
   </div>
 
   <div id="dropZone">
@@ -157,8 +152,7 @@
 </div>
 
 <div class="button-container">
-  <button class="fancy-button"
-          onclick="document.getElementById('fileInput').click()">Upload XML File</button>
+  <button class="fancy-button" onclick="document.getElementById('fileInput').click()">Upload XML File</button>
   <button class="fancy-button" onclick="downloadTextFile()">Download .txt</button>
   <button class="fancy-button" onclick="copyParsed()">Copy to Clipboard</button>
 </div>
@@ -192,185 +186,330 @@
     const abs = Math.abs(deg);
     const d = Math.floor(abs);
     const m = (abs - d) * 60;
+
     const dir = deg >= 0 ? (isLat ? 'N' : 'E') : (isLat ? 'S' : 'W');
-    const dStr = (d < 10 ? '0' : '') + d;
-    let [mi, md] = m.toFixed(3).split('.');
-    mi = mi.padStart(2, '0');
-    return `${dStr}°${mi}.${md}′ ${dir}`;
+    const dStr = d < 10 ? '0' + d : String(d);
+
+    let [mInt, mDec] = m.toFixed(3).split('.');
+    mInt = mInt.padStart(2, '0');
+    return `${dStr}°${mInt}.${mDec}′ ${dir}`;
   }
 
   function bearingDegrees(lat1, lon1, lat2, lon2) {
-    const R = x => x * Math.PI / 180;
-    const a = R(lat1), b = R(lat2), d = R(lon2 - lon1);
-    const y = Math.sin(d) * Math.cos(b);
-    const x = Math.cos(a) * Math.sin(b) -
-              Math.sin(a) * Math.cos(b) * Math.cos(d);
-    return Math.round((Math.atan2(y, x) * 180 / Math.PI + 360) % 360);
+    const toRad = x => x * Math.PI / 180;
+    const φ1 = toRad(lat1);
+    const φ2 = toRad(lat2);
+    const dλ = toRad(lon2 - lon1);
+
+    const y = Math.sin(dλ) * Math.cos(φ2);
+    const x = Math.cos(φ1) * Math.sin(φ2) -
+              Math.sin(φ1) * Math.cos(φ2) * Math.cos(dλ);
+
+    let deg = Math.atan2(y, x) * 180 / Math.PI;
+    deg = (deg + 360) % 360;
+    deg = Math.round(deg);
+    if (deg === 360) deg = 0;
+    return deg;
   }
 
-  function minutesToHHMM(m) {
-    m = parseInt(m);
-    if (isNaN(m)) return '';
+  function minutesToHHMM(minutes) {
+    const m = parseInt(minutes, 10);
+    if (isNaN(m)) return '(no time)';
     const hh = Math.floor(m / 60);
     const mm = m % 60;
-    return String(hh).padStart(2, '0') + ':' +
-           String(mm).padStart(2, '0');
+    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
   }
 
-  // === Main parser (з тим самим форматом, який тобі сподобався) ===
+  // === Parse XML ===
   function parseXML() {
+    const xmlString = document.getElementById('xmlInput').value.trim();
+    if (!xmlString) {
+      alert('Please paste or load XML first.');
+      return;
+    }
+
+    try {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
+      if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
+        alert('Error parsing XML.');
+        return;
+      }
+
+      let out = '';
+
+      const chart = xmlDoc.getElementsByTagName('userchart')[0] || xmlDoc;
+
+      // === LINES (Coast / Nav / Route / Depth) ===
+      const lines = chart.getElementsByTagName('line');
+      let lineIndex = 0;
+
+      const lineTypeMap = {
+        '1': 'Coast line',
+        '2': 'Nav line',
+        '3': 'Route line',
+        '4': 'Depth line'
+      };
+
+      for (const el of lines) {
+        lineIndex++;
+        const name = el.getAttribute('name') || '(No name)';
+
+        // header: 3 "ROUTE LINE NAME"
+        out += `${lineIndex} "${name}"\n`;
+
+        const attr = el.querySelector('attribute');
+        const typeNode = el.querySelector('type');
+
+        const typeCode = attr ? attr.getAttribute('lineType') : '';
+        const typeLabel = lineTypeMap[typeCode] || '(no type)';
+
+        const parts = [typeLabel];
+
+        if (typeNode) {
+          if (typeNode.getAttribute('displayRadar') === '1') {
+            parts.push('On Radar');
+          }
+          if (typeNode.getAttribute('checkDanger') === '1') {
+            parts.push('Danger');
+          }
+        }
+
+        // Route line  On Radar  Danger
+        out += '  ' + parts.join('  ') + '\n';
+
+        const vertices = el.getElementsByTagName('vertex');
+        for (const v of vertices) {
+          const lat = parseFloat(v.getAttribute('latitude'));
+          const lon = parseFloat(v.getAttribute('longitude'));
+          if (isNaN(lat) || isNaN(lon)) continue;
+          out += `  ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+        }
+
+        out += '\n';
+      }
+
+      // === CLEARING LINES ===
+      const clearing = chart.getElementsByTagName('clearingLine');
+      if (clearing.length > 0) {
+        out += 'Clearing Lines\n\n';
+        let clIndex = 0;
+
+        for (const el of clearing) {
+          clIndex++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${clIndex} "${name}"\n`;
+
+          const attr = el.querySelector('attribute');
+          const typeNode = el.querySelector('type');
+
+          const typeCode = attr ? attr.getAttribute('lineType') : '';
+          let lineTypeLabel;
+          if (typeCode === '1') lineTypeLabel = 'NMT';
+          else if (typeCode === '2') lineTypeLabel = 'NLT';
+          else lineTypeLabel = typeCode || '(no lineType)';
+
+          // direction from first to last vertex
+          const vertices = el.getElementsByTagName('vertex');
+          let dirStr = '';
+          if (vertices.length >= 2) {
+            const v1 = vertices[0];
+            const v2 = vertices[vertices.length - 1];
+            const lat1 = parseFloat(v1.getAttribute('latitude'));
+            const lon1 = parseFloat(v1.getAttribute('longitude'));
+            const lat2 = parseFloat(v2.getAttribute('latitude'));
+            const lon2 = parseFloat(v2.getAttribute('longitude'));
+            if (![lat1, lon1, lat2, lon2].some(isNaN)) {
+              dirStr = bearingDegrees(lat1, lon1, lat2, lon2) + '°';
+            }
+          }
+
+          const parts = [lineTypeLabel];
+          if (dirStr) parts.push(dirStr);
+
+          if (typeNode) {
+            if (typeNode.getAttribute('displayRadar') === '1') {
+              parts.push('On Radar');
+            }
+            if (
+              typeNode.getAttribute('isDanger') === '1' ||
+              typeNode.getAttribute('checkDanger') === '1'
+            ) {
+              parts.push('Danger');
+            }
+          }
+
+          // NMT   355°   On Radar   Danger
+          out += '    ' + parts.join('   ') + '\n';
+
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
+      }
+
+      // === CIRCLES ===
+      const circles = chart.getElementsByTagName('circle');
+      if (circles.length > 0) {
+        out += 'Circles\n\n';
+        let cIdx = 0;
+        for (const el of circles) {
+          cIdx++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${cIdx} "${name}"\n`;
+
+          const attr = el.querySelector('attribute');
+          let r = attr ? attr.getAttribute('range') : null;
+          if (r !== null && r !== '' && !isNaN(r)) {
+            r = parseFloat(r).toFixed(2);
+          } else {
+            r = '(no range)';
+          }
+          out += `    Range: ${r} NM\n`;
+
+          const vertices = el.getElementsByTagName('vertex');
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
+      }
+
+      // === TIDALS ===
+      const tidals = chart.getElementsByTagName('tidal');
+      if (tidals.length > 0) {
+        out += 'Tidals\n\n';
+        let tIdx = 0;
+        for (const el of tidals) {
+          tIdx++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${tIdx} "${name}"\n`;
+
+          const d = el.getAttribute('description') || '';
+          const attr = el.querySelector('attribute');
+
+          let orient = attr ? attr.getAttribute('orientation') : null;
+          if (orient !== null && orient !== '' && !isNaN(orient)) {
+            orient = parseFloat(orient).toFixed(2);
+          } else {
+            orient = '(no orientation)';
+          }
+
+          let strength = attr ? attr.getAttribute('strength') : null;
+          if (strength !== null && strength !== '' && !isNaN(strength)) {
+            strength = parseFloat(strength).toFixed(2);
+          } else {
+            strength = '(no strength)';
+          }
+
+          let t = attr ? attr.getAttribute('type') : '(no type)';
+          const typeMap = { '1': 'Current', '2': 'Predicted' };
+          t = typeMap[t] || `(unknown: ${t})`;
+
+          const timeRaw = attr ? attr.getAttribute('time') : null;
+          const timeStr = timeRaw != null ? minutesToHHMM(timeRaw) : '(no time)';
+
+          out += `    ${d}\n`;
+          out += `    Orientation: ${orient}°\n`;
+          out += `    Type: ${t}\n`;
+          out += `    Strength: ${strength}\n`;
+          out += `    Time: ${timeStr}\n`;
+
+          const vertices = el.getElementsByTagName('vertex');
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
+      }
+
+      // === LABELS ===
+      const labels = chart.getElementsByTagName('label');
+      if (labels.length > 0) {
+        out += 'Labels\n\n';
+        let lIdx = 0;
+        for (const el of labels) {
+          lIdx++;
+          const name = el.getAttribute('name') || '(No name)';
+          out += `  ${lIdx} "${name}"\n`;
+
+          const attr = el.querySelector('attribute');
+          const typeNode = el.querySelector('type');
+
+          const text = attr ? (attr.getAttribute('labelText') || '').trim() : '';
+          const style = attr ? attr.getAttribute('labelStyle') : '';
+
+          if (text) {
+            let line;
+            if (style === '1') {
+              line = `LABEL "${text}"`;
+            } else if (style === '2') {
+              line = `POINT "${text}"`;
+            } else {
+              line = `"${text}"`;
+            }
+            out += `    ${line}\n`;
+          }
+
+          const flags = [];
+          if (typeNode) {
+            if (typeNode.getAttribute('checkDanger') === '1') {
+              flags.push('Danger');
+            }
+            if (typeNode.getAttribute('displayRadar') === '1') {
+              flags.push('On Radar');
+            }
+          }
+          if (flags.length) {
+            out += `    ${flags.join('  ')}\n`;
+          }
+
+          const vertices = el.getElementsByTagName('vertex');
+          for (const v of vertices) {
+            const lat = parseFloat(v.getAttribute('latitude'));
+            const lon = parseFloat(v.getAttribute('longitude'));
+            if (isNaN(lat) || isNaN(lon)) continue;
+            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
+          }
+
+          out += '\n';
+        }
+      }
+
+      parsedOutput = out;
+      document.getElementById('result').textContent =
+        out || 'No recognized elements found.';
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  function ensureParsedOrAbort(msg) {
+    if (parsedOutput) return true;
     const xml = document.getElementById('xmlInput').value.trim();
     if (!xml) {
-      alert('Please paste XML or load a file first.');
-      return;
+      alert(msg);
+      return false;
     }
-
-    let doc;
-    try {
-      doc = new DOMParser().parseFromString(xml, 'application/xml');
-    } catch (e) {
-      alert('Invalid XML.');
-      return;
-    }
-    if (doc.getElementsByTagName('parsererror').length) {
-      alert('XML Parse Error.');
-      return;
-    }
-
-    let out = '';
-    const root = doc.getElementsByTagName('userchart')[0] || doc;
-
-    // ----- LINES -----
-    const lineMap = {
-      1: 'Coast line',
-      2: 'Nav line',
-      3: 'Route line',
-      4: 'Depth line'
-    };
-    const lines = root.getElementsByTagName('line');
-    let n = 0;
-    for (const el of lines) {
-      n++;
-      const name = el.getAttribute('name') || '(No name)';
-      out += `${n} "${name}"\n`;
-
-      const a = el.querySelector('attribute');
-      const t = a ? a.getAttribute('lineType') : '';
-      let line = lineMap[t] || '';
-
-      const typeNode = el.querySelector('type');
-      if (typeNode) {
-        if (typeNode.getAttribute('displayRadar') === '1')
-          line += '   On Radar';
-        if (typeNode.getAttribute('checkDanger') === '1')
-          line += '   Danger';
-      }
-      out += `    ${line.trim()}\n`;
-
-      for (const v of el.getElementsByTagName('vertex')) {
-        const lat = parseFloat(v.getAttribute('latitude'));
-        const lon = parseFloat(v.getAttribute('longitude'));
-        if (!isNaN(lat) && !isNaN(lon))
-          out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-      }
-      out += '\n';
-    }
-
-    // ----- CLEARING LINES -----
-    const clr = root.getElementsByTagName('clearingLine');
-    if (clr.length) {
-      out += 'Clearing Lines\n\n';
-      let i = 0;
-      for (const el of clr) {
-        i++;
-        const name = el.getAttribute('name') || '(No name)';
-        out += `  ${i} "${name}"\n`;
-
-        const a = el.querySelector('attribute');
-        let t = a ? a.getAttribute('lineType') : '';
-        t = t === '1' ? 'NMT' : t === '2' ? 'NLT' : t;
-
-        const verts = el.getElementsByTagName('vertex');
-        let dir = '';
-        if (verts.length >= 2) {
-          let v1 = verts[0], v2 = verts[verts.length - 1];
-          dir = bearingDegrees(
-            +v1.getAttribute('latitude'),
-            +v1.getAttribute('longitude'),
-            +v2.getAttribute('latitude'),
-            +v2.getAttribute('longitude')
-          ) + '°';
-        }
-
-        let line = `${t}`;
-        if (dir) line += `   ${dir}`;
-
-        const tNode = el.querySelector('type');
-        if (tNode) {
-          if (tNode.getAttribute('displayRadar') === '1')
-            line += '   On Radar';
-          if (tNode.getAttribute('isDanger') === '1')
-            line += '   Danger';
-        }
-        out += `    ${line}\n`;
-
-        for (const v of verts) {
-          const lat = parseFloat(v.getAttribute('latitude'));
-          const lon = parseFloat(v.getAttribute('longitude'));
-          if (!isNaN(lat) && !isNaN(lon))
-            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-        }
-        out += '\n';
-      }
-    }
-
-    // ----- TIDALS -----
-    const tidals = root.getElementsByTagName('tidal');
-    if (tidals.length) {
-      out += 'Tidals\n\n';
-      let i = 0;
-      for (const el of tidals) {
-        i++;
-        const name = el.getAttribute('name') || '(No name)';
-        out += `  ${i} "${name}"\n`;
-
-        const a = el.querySelector('attribute');
-        let time = a ? minutesToHHMM(a.getAttribute('time')) : '';
-        let o = a ? a.getAttribute('orientation') : '';
-        o = o ? parseFloat(o).toFixed(2) + '°' : '';
-        let s = a ? a.getAttribute('strength') : '';
-        s = s ? parseFloat(s).toFixed(2) : '';
-        let t = a ? a.getAttribute('type') : '';
-        t = t === '1' ? 'Current' : t === '2' ? 'Predicted' : '';
-
-        let line = 'TIDAL';
-        if (time) line += `   ${time}`;
-        if (o)    line += `   ${o}`;
-        if (s)    line += `   ${s}`;
-        if (t)    line += `   ${t}`;
-
-        out += `    ${line}\n`;
-
-        for (const v of el.getElementsByTagName('vertex')) {
-          const lat = parseFloat(v.getAttribute('latitude'));
-          const lon = parseFloat(v.getAttribute('longitude'));
-          if (!isNaN(lat) && !isNaN(lon))
-            out += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-        }
-        out += '\n';
-      }
-    }
-
-    parsedOutput = out;
-    document.getElementById('result').textContent = out || 'No recognized elements found.';
+    parseXML();
+    return !!parsedOutput;
   }
 
-  // === Download / Copy ===
   function downloadTextFile() {
-    if (!parsedOutput) {
-      alert('Nothing to download. Please parse XML first.');
-      return;
-    }
+    if (!ensureParsedOrAbort('Nothing to download. Please paste or load XML first.')) return;
     const blob = new Blob([parsedOutput], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -381,10 +520,7 @@
   }
 
   function copyParsed() {
-    if (!parsedOutput) {
-      alert('Nothing to copy. Please parse XML first.');
-      return;
-    }
+    if (!ensureParsedOrAbort('Nothing to copy. Please paste or load XML first.')) return;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(parsedOutput)
         .then(() => alert('Parsed text copied to clipboard.'))
@@ -425,9 +561,7 @@
     dropZone.classList.add('dragover');
   });
 
-  dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('dragover');
-  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
 
   dropZone.addEventListener('drop', e => {
     e.preventDefault();
@@ -444,7 +578,7 @@
     const reader = new FileReader();
     reader.onload = e => {
       xmlInput.value = e.target.result;
-      parseXML(); // авто-парс після завантаження
+      parseXML();
     };
     reader.readAsText(file);
   }
