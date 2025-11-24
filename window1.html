@@ -220,6 +220,44 @@
            String(mm).padStart(2, '0');
   }
 
+  // flags/notes from <type>, only if != 0
+  function buildFlags(typeNode) {
+    if (!typeNode) return '';
+    const parts = [];
+
+    // radar / danger
+    if (typeNode.getAttribute('displayRadar') === '1') {
+      parts.push('On Radar');
+    }
+    if (
+      typeNode.getAttribute('checkDanger') === '1' ||
+      typeNode.getAttribute('isDanger') === '1'
+    ) {
+      parts.push('Danger');
+    }
+
+    // notes-related, only if ≠ 0
+    const hasNotes = typeNode.getAttribute('hasNotes');
+    if (hasNotes && hasNotes !== '0') {
+      parts.push('Has Notes');
+    }
+
+    const rangeOfNotes = typeNode.getAttribute('rangeOfNotes');
+    if (rangeOfNotes && rangeOfNotes !== '0') {
+      const v = parseFloat(rangeOfNotes);
+      if (!isNaN(v)) {
+        parts.push('Range Notes: ' + v.toFixed(2) + ' NM');
+      }
+    }
+
+    const notesType = typeNode.getAttribute('notesType');
+    if (notesType && notesType !== '0') {
+      parts.push('Notes Type: ' + notesType);
+    }
+
+    return parts.length ? '   ' + parts.join('   ') : '';
+  }
+
   // ===== MAIN PARSE =====
   function parseXML() {
     showRandomQuote();
@@ -255,7 +293,8 @@
           i++;
           const name = el.getAttribute('name') || '(No name)';
           res += `  ${i} "${name}"\n`;
-          res += `    AREA\n`;
+          const typeNode = el.querySelector('type');
+          res += `    AREA${buildFlags(typeNode)}\n`;
           const verts = el.getElementsByTagName('vertex');
           for (const v of verts) {
             const lat = parseFloat(v.getAttribute('latitude'));
@@ -289,12 +328,8 @@
           let line = lineMap[t] || '';
 
           const typeNode = el.querySelector('type');
-          if (typeNode) {
-            if (typeNode.getAttribute('displayRadar') === '1')
-              line += '   On Radar';
-            if (typeNode.getAttribute('checkDanger') === '1')
-              line += '   Danger';
-          }
+          line += buildFlags(typeNode);
+
           res += `    ${line.trim()}\n`;
 
           for (const v of el.getElementsByTagName('vertex')) {
@@ -337,15 +372,8 @@
           if (dir) line += `   ${dir}`;
 
           const tNode = el.querySelector('type');
-          if (tNode) {
-            if (tNode.getAttribute('displayRadar') === '1')
-              line += '   On Radar';
-            if (
-              tNode.getAttribute('isDanger') === '1' ||
-              tNode.getAttribute('checkDanger') === '1'
-            )
-              line += '   Danger';
-          }
+          line += buildFlags(tNode);
+
           res += `    ${line}\n`;
 
           for (const v of verts) {
@@ -371,7 +399,15 @@
           const a = el.querySelector('attribute');
           let r = a ? a.getAttribute('range') : '';
           if (r && !isNaN(r)) r = parseFloat(r).toFixed(2);
-          res += `    CIRCLE   Range: ${r || '(no range)'} NM\n`;
+          else r = '(no range)';
+
+          const typeNode = el.querySelector('type');
+
+          // CIRCLE   Range: X NM   [On Radar]   [Danger]   [Has Notes] ...
+          let line = `CIRCLE   Range: ${r} NM`;
+          line += buildFlags(typeNode);
+
+          res += `    ${line}\n`;
 
           const verts = el.getElementsByTagName('vertex');
           for (const v of verts) {
@@ -441,18 +477,15 @@
             if (style === '1') line = `LABEL "${text}"`;
             else if (style === '2') line = `POINT "${text}"`;
             else line = `"${text}"`;
-            res += `    ${line}\n`;
-          }
 
-          const flags = [];
-          if (typeNode) {
-            if (typeNode.getAttribute('checkDanger') === '1')
-              flags.push('Danger');
-            if (typeNode.getAttribute('displayRadar') === '1')
-              flags.push('On Radar');
-          }
-          if (flags.length) {
-            res += `    ${flags.join('   ')}\n`;
+            line += buildFlags(typeNode);
+            res += `    ${line}\n`;
+          } else {
+            // навіть без тексту може бути Danger/On Radar/Notes
+            const flags = buildFlags(typeNode);
+            if (flags) {
+              res += `    ${flags.trim()}\n`;
+            }
           }
 
           const verts = el.getElementsByTagName('vertex');
