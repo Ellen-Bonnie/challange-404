@@ -202,6 +202,23 @@
     return `${dStr}°${mi}.${md}′ ${dir}`;
   }
 
+  function formatNumber(value, digits = 2) {
+    const num = Number(value);
+    return Number.isFinite(num) ? num.toFixed(digits) : '';
+  }
+
+  function formatVertices(vertices) {
+    const lines = [];
+    for (const v of vertices) {
+      const lat = parseFloat(v.getAttribute('latitude'));
+      const lon = parseFloat(v.getAttribute('longitude'));
+      if (!isNaN(lat) && !isNaN(lon)) {
+        lines.push(`    ${toDM(lat, true)} ${toDM(lon, false)}`);
+      }
+    }
+    return lines.join('\n');
+  }
+
   function bearingDegrees(lat1, lon1, lat2, lon2) {
     const R = x => x * Math.PI / 180;
     const a = R(lat1), b = R(lat2), d = R(lon2 - lon1);
@@ -216,8 +233,7 @@
     if (isNaN(m)) return '';
     const hh = Math.floor(m / 60);
     const mm = m % 60;
-    return String(hh).padStart(2, '0') + ':' +
-           String(mm).padStart(2, '0');
+    return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
   }
 
   // flags/notes from <type>, only if != 0
@@ -282,76 +298,70 @@
     let out = '';
 
     function processChart(root) {
-      let res = '';
+      const sections = [];
 
-      // ----- AREAS -----
-      const areas = root.getElementsByTagName('area');
-      if (areas.length) {
-        res += 'Areas\n\n';
+      const appendSection = (title, content) => {
+        if (content) sections.push(`${title}\n\n${content}`);
+      };
+
+      const areaText = (() => {
+        const areas = root.getElementsByTagName('area');
+        if (!areas.length) return '';
+        const rows = [];
         let i = 0;
         for (const el of areas) {
           i++;
           const name = el.getAttribute('name') || '(No name)';
-          res += `  ${i} "${name}"\n`;
           const typeNode = el.querySelector('type');
-          res += `    AREA${buildFlags(typeNode)}\n`;
-          const verts = el.getElementsByTagName('vertex');
-          for (const v of verts) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            if (!isNaN(lat) && !isNaN(lon)) {
-              res += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-            }
-          }
-          res += '\n';
+          const coords = formatVertices(el.getElementsByTagName('vertex'));
+          rows.push(
+            `  ${i} "${name}"\n` +
+            `    AREA${buildFlags(typeNode)}\n` +
+            (coords ? `${coords}\n` : '')
+          );
         }
-      }
+        return rows.join('\n');
+      })();
+      appendSection('Areas', areaText);
 
-      // ----- LINES -----
-      const lineMap = {
-        1: 'Coast line',
-        2: 'Nav line',
-        3: 'Route line',
-        4: 'Depth line'
-      };
-      const lines = root.getElementsByTagName('line');
-      if (lines.length) {
-        res += 'Lines\n\n';
+      const lineText = (() => {
+        const lineMap = {
+          1: 'Coast line',
+          2: 'Nav line',
+          3: 'Route line',
+          4: 'Depth line'
+        };
+        const lines = root.getElementsByTagName('line');
+        if (!lines.length) return '';
+        const rows = [];
         let n = 0;
         for (const el of lines) {
           n++;
           const name = el.getAttribute('name') || '(No name)';
-          res += `  ${n} "${name}"\n`;
-
           const a = el.querySelector('attribute');
           const t = a ? a.getAttribute('lineType') : '';
-          let line = lineMap[t] || '';
-
           const typeNode = el.querySelector('type');
-          line += buildFlags(typeNode);
+          const coords = formatVertices(el.getElementsByTagName('vertex'));
+          const lineLabel = `${lineMap[t] || ''}${buildFlags(typeNode)}`.trim();
 
-          res += `    ${line.trim()}\n`;
-
-          for (const v of el.getElementsByTagName('vertex')) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            if (!isNaN(lat) && !isNaN(lon))
-              res += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-          }
-          res += '\n';
+          rows.push(
+            `  ${n} "${name}"\n` +
+            `    ${lineLabel}\n` +
+            (coords ? `${coords}\n` : '')
+          );
         }
-      }
+        return rows.join('\n');
+      })();
+      appendSection('Lines', lineText);
 
-      // ----- CLEARING LINES -----
-      const clr = root.getElementsByTagName('clearingLine');
-      if (clr.length) {
-        res += 'Clearing Lines\n\n';
+      const clearingText = (() => {
+        const clr = root.getElementsByTagName('clearingLine');
+        if (!clr.length) return '';
+        const rows = [];
         let i = 0;
         for (const el of clr) {
           i++;
           const name = el.getAttribute('name') || '(No name)';
-          res += `  ${i} "${name}"\n`;
-
           const a = el.querySelector('attribute');
           let t = a ? a.getAttribute('lineType') : '';
           t = t === '1' ? 'NMT' : t === '2' ? 'NLT' : t;
@@ -374,132 +384,112 @@
           const tNode = el.querySelector('type');
           line += buildFlags(tNode);
 
-          res += `    ${line}\n`;
-
-          for (const v of verts) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            if (!isNaN(lat) && !isNaN(lon))
-              res += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-          }
-          res += '\n';
+          const coords = formatVertices(verts);
+          rows.push(
+            `  ${i} "${name}"\n` +
+            `    ${line}\n` +
+            (coords ? `${coords}\n` : '')
+          );
         }
-      }
+        return rows.join('\n');
+      })();
+      appendSection('Clearing Lines', clearingText);
 
-      // ----- CIRCLES -----
-      const circles = root.getElementsByTagName('circle');
-      if (circles.length) {
-        res += 'Circles\n\n';
+      const circleText = (() => {
+        const circles = root.getElementsByTagName('circle');
+        if (!circles.length) return '';
+        const rows = [];
         let i = 0;
         for (const el of circles) {
           i++;
           const name = el.getAttribute('name') || '(No name)';
-          res += `  ${i} "${name}"\n`;
-
           const a = el.querySelector('attribute');
-          let r = a ? a.getAttribute('range') : '';
-          if (r && !isNaN(r)) r = parseFloat(r).toFixed(2);
-          else r = '(no range)';
+          const range = a ? formatNumber(a.getAttribute('range')) : '';
+          const rangeText = range ? `${range} NM` : '(no range)';
 
           const typeNode = el.querySelector('type');
+          const coords = formatVertices(el.getElementsByTagName('vertex'));
 
-          // CIRCLE   Range: X NM   [On Radar]   [Danger]   [Has Notes] ...
-          let line = `CIRCLE   Range: ${r} NM`;
+          let line = `CIRCLE   Range: ${rangeText}`;
           line += buildFlags(typeNode);
 
-          res += `    ${line}\n`;
-
-          const verts = el.getElementsByTagName('vertex');
-          for (const v of verts) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            if (!isNaN(lat) && !isNaN(lon))
-              res += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-          }
-          res += '\n';
+          rows.push(
+            `  ${i} "${name}"\n` +
+            `    ${line}\n` +
+            (coords ? `${coords}\n` : '')
+          );
         }
-      }
+        return rows.join('\n');
+      })();
+      appendSection('Circles', circleText);
 
-      // ----- TIDALS -----
-      const tidals = root.getElementsByTagName('tidal');
-      if (tidals.length) {
-        res += 'Tidals\n\n';
+      const tidalText = (() => {
+        const tidals = root.getElementsByTagName('tidal');
+        if (!tidals.length) return '';
+        const rows = [];
         let i = 0;
         for (const el of tidals) {
           i++;
           const name = el.getAttribute('name') || '(No name)';
-          res += `  ${i} "${name}"\n`;
-
           const a = el.querySelector('attribute');
-          let time = a ? minutesToHHMM(a.getAttribute('time')) : '';
-          let o = a ? a.getAttribute('orientation') : '';
-          o = o ? parseFloat(o).toFixed(2) + '°' : '';
-          let s = a ? a.getAttribute('strength') : '';
-          s = s ? parseFloat(s).toFixed(2) : '';
+          const time = a ? minutesToHHMM(a.getAttribute('time')) : '';
+          const orientation = formatNumber(a?.getAttribute('orientation')); // degrees
+          const strength = formatNumber(a?.getAttribute('strength'));
           let t = a ? a.getAttribute('type') : '';
           t = t === '1' ? 'Current' : t === '2' ? 'Predicted' : '';
 
-          let line = 'TIDAL';
-          if (time) line += `   ${time}`;
-          if (o)    line += `   ${o}`;
-          if (s)    line += `   ${s}`;
-          if (t)    line += `   ${t}`;
+          const parts = ['TIDAL'];
+          if (time) parts.push(time);
+          if (orientation) parts.push(`${orientation}°`);
+          if (strength) parts.push(strength);
+          if (t) parts.push(t);
 
-          res += `    ${line}\n`;
-
-          for (const v of el.getElementsByTagName('vertex')) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            if (!isNaN(lat) && !isNaN(lon))
-              res += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-          }
-          res += '\n';
+          const coords = formatVertices(el.getElementsByTagName('vertex'));
+          rows.push(
+            `  ${i} "${name}"\n` +
+            `    ${parts.join('   ')}\n` +
+            (coords ? `${coords}\n` : '')
+          );
         }
-      }
+        return rows.join('\n');
+      })();
+      appendSection('Tidals', tidalText);
 
-      // ----- LABELS -----
-      const labels = root.getElementsByTagName('label');
-      if (labels.length) {
-        res += 'Labels\n\n';
+      const labelText = (() => {
+        const labels = root.getElementsByTagName('label');
+        if (!labels.length) return '';
+        const rows = [];
         let i = 0;
         for (const el of labels) {
           i++;
           const name = el.getAttribute('name') || '(No name)';
-          res += `  ${i} "${name}"\n`;
-
           const a = el.querySelector('attribute');
           const typeNode = el.querySelector('type');
           const text = a ? (a.getAttribute('labelText') || '').trim() : '';
           const style = a ? a.getAttribute('labelStyle') : '';
 
+          let line = '';
           if (text) {
-            let line;
             if (style === '1') line = `LABEL "${text}"`;
             else if (style === '2') line = `POINT "${text}"`;
             else line = `"${text}"`;
-
             line += buildFlags(typeNode);
-            res += `    ${line}\n`;
           } else {
-            // навіть без тексту може бути Danger/On Radar/Notes
-            const flags = buildFlags(typeNode);
-            if (flags) {
-              res += `    ${flags.trim()}\n`;
-            }
+            line = buildFlags(typeNode).trim();
           }
 
-          const verts = el.getElementsByTagName('vertex');
-          for (const v of verts) {
-            const lat = parseFloat(v.getAttribute('latitude'));
-            const lon = parseFloat(v.getAttribute('longitude'));
-            if (!isNaN(lat) && !isNaN(lon))
-              res += `    ${toDM(lat, true)} ${toDM(lon, false)}\n`;
-          }
-          res += '\n';
+          const coords = formatVertices(el.getElementsByTagName('vertex'));
+          rows.push(
+            `  ${i} "${name}"\n` +
+            (line ? `    ${line}\n` : '') +
+            (coords ? `${coords}\n` : '')
+          );
         }
-      }
+        return rows.join('\n');
+      })();
+      appendSection('Labels', labelText);
 
-      return res;
+      return sections.join('\n\n');
     }
 
     const charts = doc.getElementsByTagName('userchart');
@@ -508,15 +498,15 @@
         const name = chart.getAttribute('name') || '(No name)';
         out += `UserChart "${name}"\n\n`;
         out += processChart(chart);
-        out += '\n';
+        out += '\n\n';
       }
     } else {
       out += processChart(doc);
     }
 
-    parsedOutput = out;
+    parsedOutput = out.trim();
     document.getElementById('result').textContent =
-      out || 'No recognized elements found.';
+      parsedOutput || 'No recognized elements found.';
   }
 
   // === Download / Copy ===
