@@ -207,7 +207,9 @@
     const d = Math.floor(abs);
     const m = (abs - d) * 60;
     const dir = deg >= 0 ? (isLat ? "N" : "E") : (isLat ? "S" : "W");
-    return `${d < 10 ? "0" + d : d}°${m.toFixed(3)}′ ${dir}`;
+    const degreeDigits = isLat ? 2 : 3;
+    const dStr = String(d).padStart(degreeDigits, "0");
+    return `${dStr}°${m.toFixed(3)}′ ${dir}`;
   }
 
   function parseXML() {
