@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Migraine Year Tracker</title>
+<style>body{font-family:Arial;margin:20px}.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.day{height:60px;border:1px solid #ccc;padding:4px;cursor:pointer}.head{text-align:center;font-weight:bold}.legend span{padding:5px;margin:3px;display:inline-block;border-radius:5px}</style></head>
+<body>
+<h2>Migraine Year Tracker</h2>
+<button onclick="changeMonth(-1)">◀</button><span id="title"></span><button onclick="changeMonth(1)">▶</button>
+<button onclick="exportICS()">Export Apple/Google Calendar</button>
+<div class="legend">⬜ none <span style="background:#fff200">🟨 headache 1</span><span style="background:#ff5555">🟥 migraine 2</span><span style="background:#8fd3ff">🩵 light headache</span><span style="background:#800080;color:white">🟪 note</span></div>
+<label><input type=checkbox id=med> Medication</label>
+<div id=cal class=grid></div><h3>Year summary</h3><pre id=stats></pre>
+<script>
+let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', data=JSON.parse(localStorage.migraine||'{}');
+function pick(c){color=c}
+document.querySelectorAll('.legend span')[0].onclick=()=>pick('#fff200');
+document.querySelectorAll('.legend span')[1].onclick=()=>pick('#ff5555');
+document.querySelectorAll('.legend span')[2].onclick=()=>pick('#8fd3ff');
+document.querySelectorAll('.legend span')[3].onclick=()=>pick('#800080');
+function draw(){title.innerText=new Date(year,month).toLocaleString('default',{month:'long',year:'numeric'});cal.innerHTML='';
+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(x=>{let e=document.createElement('div');e.className='head';e.textContent=x;cal.appendChild(e)});
+let first=(new Date(year,month,1).getDay()+6)%7, days=new Date(year,month+1,0).getDate();
+for(let i=0;i<first;i++)cal.appendChild(document.createElement('div'));
+for(let i=1;i<=days;i++){let e=document.createElement('div');e.className='day';e.textContent=i;let k=`${year}-${month+1}-${i}`;if(data[k])e.style.background=data[k].c;
+e.onclick=()=>{if(color=='#800080'){data[k]={c:color,n:prompt('Note',data[k]?.n||'')||''}}else data[k]={c:color,med:document.getElementById('med').checked,n:data[k]?.n||''};save();draw()};cal.appendChild(e)}stats.innerText=summary()}
+function save(){localStorage.migraine=JSON.stringify(data)}
+function changeMonth(x){month+=x;if(month<0){month=11;year--}if(month>11){month=0;year++}draw()}
+function summary(){let a={};Object.values(data).forEach(v=>{let m=v?._;let c=v.c;if(c){a[c]=(a[c]||0)+1}});return JSON.stringify(a,null,2)}
+function exportICS(){let s='BEGIN:VCALENDAR\nVERSION:2.0\n';Object.entries(data).forEach(([k,v])=>{if(v.c){let date=k.replaceAll('-','');s+=`BEGIN:VEVENT\nDTSTART:${date}\nSUMMARY:${v.c=='#ff5555'?'Migraine':v.c=='#fff200'?'Headache':'Light headache'}\nDESCRIPTION:${v.n||''}${v.med?' Medication taken':''}\nEND:VEVENT\n`}});s+='END:VCALENDAR';let b=new Blob([s],{type:'text/calendar'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='migraine-calendar.ics';a.click()}
+draw();
+</script></body></html>
