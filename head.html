@@ -14,7 +14,7 @@
 <label><input type=checkbox id=med> Medication</label>
 <div id=cal class=grid></div><h3>Year summary</h3><pre id=stats></pre><h3>Monthly trend</h3><svg id="lineGraph" class="line-graph" viewBox="0 0 640 240" role="img" aria-label="Monthly migraine and headache trend"></svg>
 <script>
-let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', mode='color', data=JSON.parse(localStorage.migraine||'{}');
+let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', mode='color', data=JSON.parse(localStorage.migraine||'{}');Object.values(data).forEach(entry=>{if(entry.c==='#800080')delete entry.c});
 function selectButton(selectedButton){document.querySelectorAll('.color-button').forEach(button=>{let active=button===selectedButton;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',active)})}
 function pick(c,button){mode='color';color=c;selectButton(button)}
 function pickNote(button){mode='note';color='';selectButton(button)}
