@@ -730,6 +730,28 @@ body:has(#cal) > button {
 	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111;
 }
 .note-button { background: #f1f1f1 !important; }
+.note-editor {
+	max-width: 640px;
+	margin: 16px 0;
+}
+.note-editor label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: bold;
+}
+.note-editor textarea {
+	display: block;
+	width: 100%;
+	resize: vertical;
+	padding: 8px;
+	font: inherit;
+}
+.note-editor button {
+	display: inline-block;
+	height: auto;
+	margin: 8px 0 0;
+	padding: 8px 12px;
+}
 .day-note {
 	display: block;
 	margin-top: 3px;
