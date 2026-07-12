@@ -672,3 +672,477 @@ body #footer .copyright span{
 	margin-left: 0;
 	transform: none;
 }}
+
+/* calendar */
+body:has(#cal) {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+}
+body:has(#cal) > button {
+	display: inline-block;
+	height: auto;
+	margin: 0 4px 16px 0;
+	padding: 8px 12px;
+}
+#title {
+	display: inline-block;
+	min-width: 180px;
+	text-align: center;
+	font-weight: bold;
+}
+.grid {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	gap: 4px;
+	max-width: 720px;
+}
+.day {
+	height: 60px;
+	padding: 4px;
+	border: 1px solid #ccc;
+	cursor: pointer;
+}
+.head {
+	text-align: center;
+	font-weight: bold;
+}
+.legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 12px 0;
+}
+.legend .color-button {
+	display: inline-block;
+	height: auto;
+	margin: 0;
+	padding: 8px 12px;
+	border: 2px solid transparent;
+	border-radius: 5px;
+	color: #222;
+	background: #fff;
+}
+.legend .color-button[data-color="#fff200"] { background: #fff200; }
+.legend .color-button[data-color="#ff5555"] { background: #ff5555; }
+.legend .color-button[data-color="#8fd3ff"] { background: #8fd3ff; }
+.legend .color-button.selected {
+	border-color: #111;
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111;
+}
+.note-button { background: #f1f1f1 !important; }
+.note-editor {
+	max-width: 640px;
+	margin: 16px 0;
+}
+.note-editor label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: bold;
+}
+.note-editor textarea {
+	display: block;
+	width: 100%;
+	resize: vertical;
+	padding: 8px;
+	font: inherit;
+}
+.note-editor button {
+	display: inline-block;
+	height: auto;
+	margin: 8px 0 0;
+	padding: 8px 12px;
+}
+.day-note {
+	display: block;
+	margin-top: 3px;
+	overflow: hidden;
+	color: #333;
+	font-size: 11px;
+	line-height: 1.2;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.line-graph {
+	display: block;
+	width: 100%;
+	max-width: 640px;
+	height: auto;
+	overflow: visible;
+}
+.graph-axis {
+	stroke: #777;
+	stroke-width: 1;
+}
+.graph-line {
+	fill: none;
+	stroke: #ff5555;
+	stroke-width: 3;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+.graph-point {
+	fill: #ff5555;
+	stroke: #fff;
+	stroke-width: 2;
+}
+.graph-label {
+	fill: #333;
+	font: 12px Arial, sans-serif;
+}
+@media only screen and (max-width: 670px) {
+	.day { height: 44px; }
+	#title { min-width: 145px; }
+}
+
+
+/* calendar – report style */
+body:has(#cal) {
+	max-width: none;
+	min-height: 100vh;
+	margin: 0;
+	padding: 20px 20px 56px;
+	background: #fafafa;
+	color: #12007a;
+	font-family: Arial, sans-serif;
+}
+body:has(#cal) h2 {
+	margin: 0 0 20px;
+	color: #12007a;
+	font-size: 1.2em;
+	text-align: center;
+}
+body:has(#cal) h3 {
+	margin: 28px 0 12px;
+	color: #12007a;
+	font-size: 1.1em;
+	text-align: center;
+}
+.month-button,
+.export-button,
+.note-editor button {
+	height: auto;
+	margin: 0 6px 14px 0;
+	padding: 12px 24px;
+	border: 0;
+	border-radius: 30px;
+	background: linear-gradient(to right, #feb174, #fe606f);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	color: #fff;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+}
+.month-button {
+	min-width: 48px;
+	padding-right: 16px;
+	padding-left: 16px;
+}
+.month-button:hover,
+.export-button:hover,
+.note-editor button:hover {
+	transform: translateY(-2px);
+	filter: brightness(1.08);
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+#title {
+	min-width: 180px;
+	color: #12007a;
+	font-weight: 700;
+}
+.legend {
+	max-width: 720px;
+	margin: 6px 0 14px;
+	gap: 10px;
+}
+.legend .color-button {
+	min-width: 134px;
+	margin: 0;
+	padding: 10px 14px;
+	border: 2px solid transparent;
+	border-radius: 30px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+	color: #12007a;
+	font-family: Arial, sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.2px;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.legend .color-button:hover { transform: translateY(-2px); }
+.legend .color-button.selected {
+	border-color: #12007a;
+	box-shadow: 0 0 0 3px #fafafa, 0 0 0 5px #12007a;
+}
+.legend .note-button {
+	background: linear-gradient(to right, #feb174, #fe606f) !important;
+	color: #fff;
+}
+body:has(#cal) > label {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 4px 0 16px;
+	color: #12007a;
+	font-weight: 700;
+}
+.grid {
+	max-width: 720px;
+	padding: 12px;
+	border: 2px dashed #ccc;
+	border-radius: 14px;
+	background: #fff;
+	gap: 8px;
+}
+.head {
+	padding: 4px 0;
+	color: #12007a;
+	font-size: 13px;
+	font-weight: 700;
+}
+.day {
+	min-height: 70px;
+	height: auto;
+	padding: 7px;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	background: #fff;
+	color: #12007a;
+	font-weight: 700;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.day:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 10px rgba(18, 0, 122, 0.16);
+}
+.day-note {
+	margin-top: 5px;
+	color: #12007a;
+	font-size: 11px;
+	font-weight: 400;
+}
+.note-editor {
+	max-width: 720px;
+	margin: 16px 0 0;
+	padding: 14px;
+	border: 2px dashed #ccc;
+	border-radius: 14px;
+	background: #fff;
+}
+.note-editor label { color: #12007a; }
+.note-editor textarea {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	color: #12007a;
+	font-family: Arial, sans-serif;
+}
+.trend-section,
+.year-summary {
+	max-width: 720px;
+}
+.line-graph {
+	max-width: 720px;
+	padding: 12px;
+	border: 2px dashed #ccc;
+	border-radius: 14px;
+	background: #fff;
+}
+.graph-axis { stroke: #ccc; }
+.graph-line { stroke: #fe606f; }
+.graph-point { fill: #fe606f; }
+.graph-label {
+	fill: #12007a;
+	font-family: Arial, sans-serif;
+}
+.summary-stats {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+}
+.summary-card {
+	display: grid;
+	justify-items: center;
+	gap: 6px;
+	padding: 14px 8px;
+	border: 2px dashed #ccc;
+	border-radius: 14px;
+	background: #fff;
+	color: #12007a;
+}
+.summary-card strong { font-size: 28px; }
+.summary-swatch {
+	width: 18px;
+	height: 18px;
+	border: 1px solid rgba(18, 0, 122, 0.25);
+	border-radius: 50%;
+}
+.summary-swatch.headache-one { background: #fff200; }
+.summary-swatch.migraine-two { background: #ff5555; }
+.summary-swatch.light-headache { background: #8fd3ff; }
+@media only screen and (max-width: 670px) {
+	body:has(#cal) { padding: 16px 12px 48px; }
+	.legend .color-button { min-width: 0; }
+	.grid { gap: 5px; padding: 8px; }
+	.day { min-height: 52px; padding: 4px; }
+	.summary-stats { grid-template-columns: 1fr; }
+}
+
+
+/* calendar medication and mobile updates */
+.month-summary {
+	max-width: 720px;
+}
+.medication-control {
+	position: absolute;
+	right: 6px;
+	bottom: 5px;
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	margin: 0;
+	padding: 2px 4px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.78);
+	color: #12007a;
+	font-size: 12px;
+	font-weight: 400;
+	cursor: pointer;
+}
+.medication-control input {
+	width: 15px;
+	height: 15px;
+	margin: 0;
+	accent-color: #fe606f;
+	cursor: pointer;
+}
+.day {
+	position: relative;
+	padding-bottom: 26px;
+}
+.trend-section,
+.month-summary {
+	width: 100%;
+}
+@media only screen and (max-width: 670px) {
+	.trend-section,
+	.month-summary,
+	.note-editor,
+	.grid,
+	.line-graph {
+		max-width: 100%;
+	}
+	.head {
+		font-size: 10px;
+	}
+	.day {
+		min-height: 56px;
+		font-size: 12px;
+	}
+	.day-note {
+		margin-top: 2px;
+		font-size: 9px;
+	}
+	.medication-control {
+		right: 3px;
+		bottom: 3px;
+		padding: 1px 3px;
+		font-size: 10px;
+	}
+	.medication-control input {
+		width: 13px;
+		height: 13px;
+	}
+}
+@media only screen and (max-width: 400px) {
+	.month-button {
+		min-width: 38px;
+		padding: 10px 12px;
+	}
+	#title {
+		min-width: 0;
+		width: calc(100% - 108px);
+		font-size: 14px;
+	}
+	.export-button {
+		display: block;
+		width: 100%;
+		margin-right: 0;
+	}
+	.legend {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		width: 100%;
+	}
+	.legend .color-button {
+		width: 100%;
+		min-width: 0;
+		padding: 9px 3px;
+		font-size: 11px;
+	}
+	.grid {
+		gap: 3px;
+		padding: 6px;
+	}
+	.day {
+		min-height: 50px;
+		padding: 3px 3px 22px;
+	}
+	.head {
+		font-size: 9px;
+	}
+	.day-note {
+		overflow: hidden;
+		font-size: 8px;
+	}
+	.summary-card {
+		padding: 10px 6px;
+	}
+}
+
+
+/* calendar two-column layout */
+.legend .color-button {
+	min-width: 104px;
+	padding: 7px 9px;
+	font-size: 11px;
+}
+.calendar-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 720px) minmax(360px, 720px);
+	align-items: start;
+	gap: 32px;
+	max-width: 1480px;
+	margin: 8px auto 0;
+}
+.calendar-column,
+.insights-column {
+	min-width: 0;
+}
+.insights-column {
+	display: grid;
+	gap: 8px;
+}
+.insights-column .trend-section h3,
+.insights-column .month-summary h3 {
+	margin-top: 0;
+}
+@media only screen and (max-width: 1120px) {
+	.calendar-layout {
+		grid-template-columns: 1fr;
+		max-width: 720px;
+		margin-right: 0;
+		margin-left: 0;
+	}
+	.insights-column .trend-section h3,
+	.insights-column .month-summary h3 {
+		margin-top: 28px;
+	}
+}
+@media only screen and (max-width: 400px) {
+	.legend .color-button {
+		padding: 7px 2px;
+		font-size: 10px;
+	}
+}
