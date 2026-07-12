@@ -9,20 +9,23 @@
   <button type="button" class="color-button" data-color="#fff200" aria-pressed="false">🟨 Headache 1</button>
   <button type="button" class="color-button" data-color="#ff5555" aria-pressed="false">🟥 Migraine 2</button>
   <button type="button" class="color-button" data-color="#8fd3ff" aria-pressed="false">🩵 Light headache</button>
-  <button type="button" class="color-button" data-color="#800080" aria-pressed="false">🟪 Note</button>
+  <button type="button" class="color-button note-button" data-action="note" aria-pressed="false">📝 Note</button>
 </div>
 <label><input type=checkbox id=med> Medication</label>
 <div id=cal class=grid></div><h3>Year summary</h3><pre id=stats></pre><h3>Monthly trend</h3><svg id="lineGraph" class="line-graph" viewBox="0 0 640 240" role="img" aria-label="Monthly migraine and headache trend"></svg>
 <script>
-let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', data=JSON.parse(localStorage.migraine||'{}');
-function pick(c){color=c;document.querySelectorAll('.color-button').forEach(button=>{let active=button.dataset.color===c;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',active)})}
-document.querySelectorAll('.color-button').forEach(button=>button.onclick=()=>pick(button.dataset.color));
+let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', mode='color', data=JSON.parse(localStorage.migraine||'{}');
+function selectButton(selectedButton){document.querySelectorAll('.color-button').forEach(button=>{let active=button===selectedButton;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',active)})}
+function pick(c,button){mode='color';color=c;selectButton(button)}
+function pickNote(button){mode='note';color='';selectButton(button)}
+document.querySelectorAll('.color-button').forEach(button=>button.onclick=()=>button.dataset.color?pick(button.dataset.color,button):pickNote(button));
 function draw(){title.innerText=new Date(year,month).toLocaleString('default',{month:'long',year:'numeric'});cal.innerHTML='';
 ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(x=>{let e=document.createElement('div');e.className='head';e.textContent=x;cal.appendChild(e)});
 let first=(new Date(year,month,1).getDay()+6)%7, days=new Date(year,month+1,0).getDate();
 for(let i=0;i<first;i++)cal.appendChild(document.createElement('div'));
-for(let i=1;i<=days;i++){let e=document.createElement('div');e.className='day';e.textContent=i;let k=`${year}-${month+1}-${i}`;if(data[k])e.style.background=data[k].c;
-e.onclick=()=>{if(color=='#800080'){data[k]={c:color,n:prompt('Note',data[k]?.n||'')||''}}else data[k]={c:color,med:document.getElementById('med').checked,n:data[k]?.n||''};save();draw()};cal.appendChild(e)}stats.innerText=summary();drawLineGraph()}
+for(let i=1;i<=days;i++){let e=document.createElement('div');e.className='day';e.textContent=i;let k=`${year}-${month+1}-${i}`;if(data[k]?.c)e.style.background=data[k].c;
+if(data[k]?.n){let note=document.createElement('span');note.className='day-note';note.textContent=data[k].n;e.appendChild(note)}
+e.onclick=()=>{if(mode==='note'){let note=prompt('Note',data[k]?.n||'');if(note!==null){if(note.trim())data[k]={...data[k],n:note.trim()};else if(data[k]){delete data[k].n;if(!data[k].c&&!data[k].med)delete data[k]}}}else data[k]={...data[k],c:color,med:document.getElementById('med').checked};save();draw()};cal.appendChild(e)}stats.innerText=summary();drawLineGraph()}
 function save(){localStorage.migraine=JSON.stringify(data)}
 function changeMonth(x){month+=x;if(month<0){month=11;year--}if(month>11){month=0;year++}draw()}
 function summary(){let a={};Object.values(data).forEach(v=>{let c=v.c;if(c){a[c]=(a[c]||0)+1}});return JSON.stringify(a,null,2)}
