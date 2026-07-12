@@ -988,3 +988,115 @@ body:has(#cal) > label {
 	.day { min-height: 52px; padding: 4px; }
 	.summary-stats { grid-template-columns: 1fr; }
 }
+
+
+/* calendar medication and mobile updates */
+.month-summary {
+	max-width: 720px;
+}
+.medication-control {
+	position: absolute;
+	right: 6px;
+	bottom: 5px;
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	margin: 0;
+	padding: 2px 4px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.78);
+	color: #12007a;
+	font-size: 12px;
+	font-weight: 400;
+	cursor: pointer;
+}
+.medication-control input {
+	width: 15px;
+	height: 15px;
+	margin: 0;
+	accent-color: #fe606f;
+	cursor: pointer;
+}
+.day {
+	position: relative;
+	padding-bottom: 26px;
+}
+.trend-section,
+.month-summary {
+	width: 100%;
+}
+@media only screen and (max-width: 670px) {
+	.trend-section,
+	.month-summary,
+	.note-editor,
+	.grid,
+	.line-graph {
+		max-width: 100%;
+	}
+	.head {
+		font-size: 10px;
+	}
+	.day {
+		min-height: 56px;
+		font-size: 12px;
+	}
+	.day-note {
+		margin-top: 2px;
+		font-size: 9px;
+	}
+	.medication-control {
+		right: 3px;
+		bottom: 3px;
+		padding: 1px 3px;
+		font-size: 10px;
+	}
+	.medication-control input {
+		width: 13px;
+		height: 13px;
+	}
+}
+@media only screen and (max-width: 400px) {
+	.month-button {
+		min-width: 38px;
+		padding: 10px 12px;
+	}
+	#title {
+		min-width: 0;
+		width: calc(100% - 108px);
+		font-size: 14px;
+	}
+	.export-button {
+		display: block;
+		width: 100%;
+		margin-right: 0;
+	}
+	.legend {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		width: 100%;
+	}
+	.legend .color-button {
+		width: 100%;
+		min-width: 0;
+		padding: 9px 3px;
+		font-size: 11px;
+	}
+	.grid {
+		gap: 3px;
+		padding: 6px;
+	}
+	.day {
+		min-height: 50px;
+		padding: 3px 3px 22px;
+	}
+	.head {
+		font-size: 9px;
+	}
+	.day-note {
+		overflow: hidden;
+		font-size: 8px;
+	}
+	.summary-card {
+		padding: 10px 6px;
+	}
+}
