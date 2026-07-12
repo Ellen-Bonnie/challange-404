@@ -672,3 +672,92 @@ body #footer .copyright span{
 	margin-left: 0;
 	transform: none;
 }}
+
+/* calendar */
+body:has(#cal) {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+}
+body:has(#cal) > button {
+	display: inline-block;
+	height: auto;
+	margin: 0 4px 16px 0;
+	padding: 8px 12px;
+}
+#title {
+	display: inline-block;
+	min-width: 180px;
+	text-align: center;
+	font-weight: bold;
+}
+.grid {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	gap: 4px;
+	max-width: 720px;
+}
+.day {
+	height: 60px;
+	padding: 4px;
+	border: 1px solid #ccc;
+	cursor: pointer;
+}
+.head {
+	text-align: center;
+	font-weight: bold;
+}
+.legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 12px 0;
+}
+.legend .color-button {
+	display: inline-block;
+	height: auto;
+	margin: 0;
+	padding: 8px 12px;
+	border: 2px solid transparent;
+	border-radius: 5px;
+	color: #222;
+	background: #fff;
+}
+.legend .color-button[data-color="#fff200"] { background: #fff200; }
+.legend .color-button[data-color="#ff5555"] { background: #ff5555; }
+.legend .color-button[data-color="#8fd3ff"] { background: #8fd3ff; }
+.legend .color-button[data-color="#800080"] { color: #fff; background: #800080; }
+.legend .color-button.selected {
+	border-color: #111;
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111;
+}
+.line-graph {
+	display: block;
+	width: 100%;
+	max-width: 640px;
+	height: auto;
+	overflow: visible;
+}
+.graph-axis {
+	stroke: #777;
+	stroke-width: 1;
+}
+.graph-line {
+	fill: none;
+	stroke: #ff5555;
+	stroke-width: 3;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+.graph-point {
+	fill: #ff5555;
+	stroke: #fff;
+	stroke-width: 2;
+}
+.graph-label {
+	fill: #333;
+	font: 12px Arial, sans-serif;
+}
+@media only screen and (max-width: 670px) {
+	.day { height: 44px; }
+	#title { min-width: 145px; }
+}
