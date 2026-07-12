@@ -2,15 +2,20 @@
 <html><head><meta charset="utf-8"><title>Migraine Year Tracker</title>
 <link rel="stylesheet" href="style.css"></head>
 <body>
-<h2>Migraine Year Tracker</h2>
-<button type="button" class="month-button" onclick="changeMonth(-1)" aria-label="Previous month">◀</button><span id="title"></span><button type="button" class="month-button" onclick="changeMonth(1)" aria-label="Next month">▶</button>
-<button type="button" class="export-button" onclick="exportICS()">Export Apple/Google Calendar</button>
-<div class="legend" aria-label="Choose an entry type">
-  <button type="button" class="color-button" data-color="#fff200" aria-pressed="false">🟨 Headache 1</button>
-  <button type="button" class="color-button" data-color="#ff5555" aria-pressed="false">🟥 Migraine 2</button>
-  <button type="button" class="color-button" data-color="#8fd3ff" aria-pressed="false">🩵 Light headache</button>
-  <button type="button" class="color-button note-button" data-action="note" aria-pressed="false">📝 Note</button>
-</div>
+<header class="calendar-header">
+  <h2>Migraine Year Tracker</h2>
+  <div class="month-navigation">
+    <button type="button" class="month-button" onclick="changeMonth(-1)" aria-label="Previous month">◀</button><span id="title"></span><button type="button" class="month-button" onclick="changeMonth(1)" aria-label="Next month">▶</button>
+  </div>
+  <button type="button" class="export-button" onclick="exportICS()">Export Apple/Google Calendar</button>
+  <div class="legend" aria-label="Choose an entry type">
+    <button type="button" class="color-button" data-color="#fff200" aria-pressed="false">🟨 Headache 1</button>
+    <button type="button" class="color-button" data-color="#ff5555" aria-pressed="false">🟥 Migraine 2</button>
+    <button type="button" class="color-button" data-color="#8fd3ff" aria-pressed="false">🩵 Light headache</button>
+    <button type="button" class="color-button note-button" data-action="note" aria-pressed="false">📝 Note</button>
+  </div>
+  <p id="saveStatus" class="save-status" role="status">Calendar saves automatically on this device.</p>
+</header>
 <main class="calendar-layout">
   <section class="calendar-column">
     <div id=cal class=grid></div>
@@ -32,7 +37,8 @@
   </aside>
 </main>
 <script>
-let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', mode='color', selectedDate='', data=JSON.parse(localStorage.migraine||'{}');Object.values(data).forEach(entry=>{if(entry.c==='#800080')delete entry.c});
+const STORAGE_KEY='migraine';function loadData(){try{let saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');return saved&&typeof saved==='object'&&!Array.isArray(saved)?saved:{}}catch{return{}}}let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', mode='color', selectedDate='', data=loadData();Object.values(data).forEach(entry=>{if(entry.c==='#800080')delete entry.c});
+save();
 function selectButton(selectedButton){document.querySelectorAll('.color-button').forEach(button=>{let active=button===selectedButton;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',active)})}
 function pick(c,button){mode='color';color=c;selectButton(button)}
 function pickNote(button){mode='note';color='';selectButton(button)}
@@ -48,7 +54,7 @@ e.onclick=()=>{if(mode==='note')openNoteEditor(k,new Date(year,month,i));else if
 function setMedication(key,taken){if(taken)data[key]={...data[key],med:true};else if(data[key]){delete data[key].med;if(!data[key].c&&!data[key].n)delete data[key]}save();draw()}
 function openNoteEditor(key,date){selectedDate=key;document.getElementById('noteDate').textContent=date.toLocaleDateString();let field=document.getElementById('noteText');field.value=data[key]?.n||'';document.getElementById('noteEditor').hidden=false;field.focus()}
 function saveNote(){if(!selectedDate)return;let text=document.getElementById('noteText').value.trim();if(text)data[selectedDate]={...data[selectedDate],n:text};else if(data[selectedDate]){delete data[selectedDate].n;if(!data[selectedDate].c&&!data[selectedDate].med)delete data[selectedDate]}document.getElementById('noteEditor').hidden=true;save();draw()}
-function save(){localStorage.migraine=JSON.stringify(data)}
+function save(){let status=document.getElementById('saveStatus');try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));if(status)status.textContent='Saved automatically on this device.'}catch{if(status)status.textContent='Unable to save data on this device.'}}
 function changeMonth(x){month+=x;if(month<0){month=11;year--}if(month>11){month=0;year++}draw()}
 function drawMonthSummary(){let categories=[['#fff200','Headache 1','headache-one'],['#ff5555','Migraine 2','migraine-two'],['#8fd3ff','Light headache','light-headache']];let stats=document.getElementById('stats');stats.textContent='';categories.forEach(([color,label,kind])=>{let count=Object.entries(data).filter(([key,entry])=>{let [entryYear,entryMonth]=key.split('-').map(Number);return entryYear===year&&entryMonth===month+1&&entry.c===color}).length;let card=document.createElement('div');card.className='summary-card';card.innerHTML='<span class="summary-swatch '+kind+'"></span><strong>'+count+'</strong><span>'+label+'</span>';stats.appendChild(card)})}
 function drawLineGraph(){let values=Array(12).fill(0);Object.entries(data).forEach(([key,value])=>{let [entryYear,entryMonth]=key.split('-').map(Number);if(entryYear===year&&value.c)values[entryMonth-1]++});let max=Math.max(1,...values),width=640,height=240,left=38,bottom=30,top=18,right=12,plotWidth=width-left-right,plotHeight=height-top-bottom;let point=(value,index)=>[left+(plotWidth/11)*index,top+plotHeight-(value/max)*plotHeight];let path=values.map((value,index)=>{let [x,y]=point(value,index);return `${index?'L':'M'}${x.toFixed(1)},${y.toFixed(1)}`}).join(' ');let labels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];lineGraph.innerHTML=`<line class="graph-axis" x1="${left}" y1="${top}" x2="${left}" y2="${height-bottom}"/><line class="graph-axis" x1="${left}" y1="${height-bottom}" x2="${width-right}" y2="${height-bottom}"/><text class="graph-label" x="4" y="${top+8}">${max}</text><text class="graph-label" x="12" y="${height-bottom+4}">0</text><path class="graph-line" d="${path}"/>${values.map((value,index)=>{let [x,y]=point(value,index);return `<circle class="graph-point" cx="${x}" cy="${y}" r="4"><title>${labels[index]}: ${value}</title></circle><text class="graph-label" text-anchor="middle" x="${x}" y="${height-8}">${labels[index]}</text>`}).join('')}`}
