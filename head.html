@@ -11,20 +11,26 @@
   <button type="button" class="color-button" data-color="#8fd3ff" aria-pressed="false">🩵 Light headache</button>
   <button type="button" class="color-button note-button" data-action="note" aria-pressed="false">📝 Note</button>
 </div>
-<div id=cal class=grid></div>
-<section id="noteEditor" class="note-editor" hidden>
-  <label for="noteText">Note for <span id="noteDate"></span></label>
-  <textarea id="noteText" rows="4" placeholder="Write a note for this day"></textarea>
-  <button type="button" onclick="saveNote()">Save note</button>
-</section>
-<section class="trend-section">
-  <h3>Monthly trend</h3>
-  <svg id="lineGraph" class="line-graph" viewBox="0 0 640 240" role="img" aria-label="Monthly migraine and headache trend"></svg>
-</section>
-<section class="month-summary">
-  <h3>Month summary</h3>
-  <div id="stats" class="summary-stats" aria-live="polite"></div>
-</section>
+<main class="calendar-layout">
+  <section class="calendar-column">
+    <div id=cal class=grid></div>
+    <section id="noteEditor" class="note-editor" hidden>
+      <label for="noteText">Note for <span id="noteDate"></span></label>
+      <textarea id="noteText" rows="4" placeholder="Write a note for this day"></textarea>
+      <button type="button" onclick="saveNote()">Save note</button>
+    </section>
+  </section>
+  <aside class="insights-column">
+    <section class="trend-section">
+      <h3>Monthly trend</h3>
+      <svg id="lineGraph" class="line-graph" viewBox="0 0 640 240" role="img" aria-label="Monthly migraine and headache trend"></svg>
+    </section>
+    <section class="month-summary">
+      <h3>Month summary</h3>
+      <div id="stats" class="summary-stats" aria-live="polite"></div>
+    </section>
+  </aside>
+</main>
 <script>
 let d=new Date(), month=d.getMonth(), year=d.getFullYear(), color='', mode='color', selectedDate='', data=JSON.parse(localStorage.migraine||'{}');Object.values(data).forEach(entry=>{if(entry.c==='#800080')delete entry.c});
 function selectButton(selectedButton){document.querySelectorAll('.color-button').forEach(button=>{let active=button===selectedButton;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',active)})}
