@@ -725,10 +725,20 @@ body:has(#cal) > button {
 .legend .color-button[data-color="#fff200"] { background: #fff200; }
 .legend .color-button[data-color="#ff5555"] { background: #ff5555; }
 .legend .color-button[data-color="#8fd3ff"] { background: #8fd3ff; }
-.legend .color-button[data-color="#800080"] { color: #fff; background: #800080; }
 .legend .color-button.selected {
 	border-color: #111;
 	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111;
+}
+.note-button { background: #f1f1f1 !important; }
+.day-note {
+	display: block;
+	margin-top: 3px;
+	overflow: hidden;
+	color: #333;
+	font-size: 11px;
+	line-height: 1.2;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .line-graph {
 	display: block;
