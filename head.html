@@ -11,7 +11,6 @@
   <button type="button" class="color-button" data-color="#8fd3ff" aria-pressed="false">🩵 Light headache</button>
   <button type="button" class="color-button note-button" data-action="note" aria-pressed="false">📝 Note</button>
 </div>
-<label><input type=checkbox id=med> Medication</label>
 <div id=cal class=grid></div>
 <section id="noteEditor" class="note-editor" hidden>
   <label for="noteText">Note for <span id="noteDate"></span></label>
@@ -22,8 +21,8 @@
   <h3>Monthly trend</h3>
   <svg id="lineGraph" class="line-graph" viewBox="0 0 640 240" role="img" aria-label="Monthly migraine and headache trend"></svg>
 </section>
-<section class="year-summary">
-  <h3>Year summary</h3>
+<section class="month-summary">
+  <h3>Month summary</h3>
   <div id="stats" class="summary-stats" aria-live="polite"></div>
 </section>
 <script>
@@ -36,14 +35,16 @@ function draw(){title.innerText=new Date(year,month).toLocaleString('default',{m
 ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(x=>{let e=document.createElement('div');e.className='head';e.textContent=x;cal.appendChild(e)});
 let first=(new Date(year,month,1).getDay()+6)%7, days=new Date(year,month+1,0).getDate();
 for(let i=0;i<first;i++)cal.appendChild(document.createElement('div'));
-for(let i=1;i<=days;i++){let e=document.createElement('div');e.className='day';e.textContent=i;let k=`${year}-${month+1}-${i}`;if(data[k]?.c)e.style.background=data[k].c;
+for(let i=1;i<=days;i++){let e=document.createElement('div');e.className='day';e.textContent=i;let k=year+'-'+(month+1)+'-'+i;if(data[k]?.c)e.style.background=data[k].c;
 if(data[k]?.n){let note=document.createElement('span');note.className='day-note';note.textContent=data[k].n;e.appendChild(note)}
-e.onclick=()=>{if(mode==='note')openNoteEditor(k,new Date(year,month,i));else{data[k]={...data[k],c:color,med:document.getElementById('med').checked};save();draw()}};cal.appendChild(e)}drawLineGraph();drawYearSummary()}
+let medication=document.createElement('label');medication.className='medication-control';medication.innerHTML='<input type="checkbox" aria-label="Medication taken on day '+i+'"><span aria-hidden="true">💊</span>';let medicationCheckbox=medication.querySelector('input');medicationCheckbox.checked=Boolean(data[k]?.med);medication.onclick=event=>event.stopPropagation();medicationCheckbox.onchange=()=>setMedication(k,medicationCheckbox.checked);e.appendChild(medication);
+e.onclick=()=>{if(mode==='note')openNoteEditor(k,new Date(year,month,i));else if(color){data[k]={...data[k],c:color};save();draw()}};cal.appendChild(e)}drawLineGraph();drawMonthSummary()}
+function setMedication(key,taken){if(taken)data[key]={...data[key],med:true};else if(data[key]){delete data[key].med;if(!data[key].c&&!data[key].n)delete data[key]}save();draw()}
 function openNoteEditor(key,date){selectedDate=key;document.getElementById('noteDate').textContent=date.toLocaleDateString();let field=document.getElementById('noteText');field.value=data[key]?.n||'';document.getElementById('noteEditor').hidden=false;field.focus()}
 function saveNote(){if(!selectedDate)return;let text=document.getElementById('noteText').value.trim();if(text)data[selectedDate]={...data[selectedDate],n:text};else if(data[selectedDate]){delete data[selectedDate].n;if(!data[selectedDate].c&&!data[selectedDate].med)delete data[selectedDate]}document.getElementById('noteEditor').hidden=true;save();draw()}
 function save(){localStorage.migraine=JSON.stringify(data)}
 function changeMonth(x){month+=x;if(month<0){month=11;year--}if(month>11){month=0;year++}draw()}
-function drawYearSummary(){let categories=[['#fff200','Headache 1','headache-one'],['#ff5555','Migraine 2','migraine-two'],['#8fd3ff','Light headache','light-headache']];let stats=document.getElementById('stats');stats.innerHTML=categories.map(([color,label,kind])=>{let count=Object.values(data).filter(entry=>entry.c===color).length;return `<div class="summary-card"><span class="summary-swatch ${kind}"></span><strong>${count}</strong><span>${label}</span></div>`}).join('')}
+function drawMonthSummary(){let categories=[['#fff200','Headache 1','headache-one'],['#ff5555','Migraine 2','migraine-two'],['#8fd3ff','Light headache','light-headache']];let stats=document.getElementById('stats');stats.textContent='';categories.forEach(([color,label,kind])=>{let count=Object.entries(data).filter(([key,entry])=>{let [entryYear,entryMonth]=key.split('-').map(Number);return entryYear===year&&entryMonth===month+1&&entry.c===color}).length;let card=document.createElement('div');card.className='summary-card';card.innerHTML='<span class="summary-swatch '+kind+'"></span><strong>'+count+'</strong><span>'+label+'</span>';stats.appendChild(card)})}
 function drawLineGraph(){let values=Array(12).fill(0);Object.entries(data).forEach(([key,value])=>{let [entryYear,entryMonth]=key.split('-').map(Number);if(entryYear===year&&value.c)values[entryMonth-1]++});let max=Math.max(1,...values),width=640,height=240,left=38,bottom=30,top=18,right=12,plotWidth=width-left-right,plotHeight=height-top-bottom;let point=(value,index)=>[left+(plotWidth/11)*index,top+plotHeight-(value/max)*plotHeight];let path=values.map((value,index)=>{let [x,y]=point(value,index);return `${index?'L':'M'}${x.toFixed(1)},${y.toFixed(1)}`}).join(' ');let labels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];lineGraph.innerHTML=`<line class="graph-axis" x1="${left}" y1="${top}" x2="${left}" y2="${height-bottom}"/><line class="graph-axis" x1="${left}" y1="${height-bottom}" x2="${width-right}" y2="${height-bottom}"/><text class="graph-label" x="4" y="${top+8}">${max}</text><text class="graph-label" x="12" y="${height-bottom+4}">0</text><path class="graph-line" d="${path}"/>${values.map((value,index)=>{let [x,y]=point(value,index);return `<circle class="graph-point" cx="${x}" cy="${y}" r="4"><title>${labels[index]}: ${value}</title></circle><text class="graph-label" text-anchor="middle" x="${x}" y="${height-8}">${labels[index]}</text>`}).join('')}`}
 function exportICS(){let s='BEGIN:VCALENDAR\nVERSION:2.0\n';Object.entries(data).forEach(([k,v])=>{if(v.c){let date=k.replaceAll('-','');s+=`BEGIN:VEVENT\nDTSTART:${date}\nSUMMARY:${v.c=='#ff5555'?'Migraine':v.c=='#fff200'?'Headache':'Light headache'}\nDESCRIPTION:${v.n||''}${v.med?' Medication taken':''}\nEND:VEVENT\n`}});s+='END:VCALENDAR';let b=new Blob([s],{type:'text/calendar'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='migraine-calendar.ics';a.click()}
 draw();
