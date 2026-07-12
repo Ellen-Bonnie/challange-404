@@ -1100,3 +1100,49 @@ body:has(#cal) > label {
 		padding: 10px 6px;
 	}
 }
+
+
+/* calendar two-column layout */
+.legend .color-button {
+	min-width: 104px;
+	padding: 7px 9px;
+	font-size: 11px;
+}
+.calendar-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 720px) minmax(360px, 720px);
+	align-items: start;
+	gap: 32px;
+	max-width: 1480px;
+	margin: 8px auto 0;
+}
+.calendar-column,
+.insights-column {
+	min-width: 0;
+}
+.insights-column {
+	display: grid;
+	gap: 8px;
+}
+.insights-column .trend-section h3,
+.insights-column .month-summary h3 {
+	margin-top: 0;
+}
+@media only screen and (max-width: 1120px) {
+	.calendar-layout {
+		grid-template-columns: 1fr;
+		max-width: 720px;
+		margin-right: 0;
+		margin-left: 0;
+	}
+	.insights-column .trend-section h3,
+	.insights-column .month-summary h3 {
+		margin-top: 28px;
+	}
+}
+@media only screen and (max-width: 400px) {
+	.legend .color-button {
+		padding: 7px 2px;
+		font-size: 10px;
+	}
+}
