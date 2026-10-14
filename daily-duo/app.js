@@ -2,6 +2,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 let client, user, duo, me, members=[], task, channel, signingUp=false;
+let historyExpanded=false, historyRows=[], historyDuoId=null;
 
 const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const toast = message => {const el=$('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4500);};
@@ -12,7 +13,7 @@ function mode(signup){signingUp=signup;$('show-login').classList.toggle('active'
 function config(){const preset=window.DAILY_DUO_CONFIG;return preset?.url && (preset.key?.startsWith('sb_publishable_') || preset.key?.startsWith('eyJ')) ? preset : null;}
 function initClient(){const c=config();if(!c)return false;if(!window.supabase?.createClient)throw new Error('Supabase SDK не завантажився');client=window.supabase.createClient(c.url,c.key);return true;}
 async function boot(){try{if(!initClient()){show('auth-panel');toast('Конфігурація Supabase відсутня. Перевір config.js.');return;}const {data,error}=await client.auth.getSession();if(error)throw error;user=data.session?.user||null;await load();client.auth.onAuthStateChange((_e,session)=>{user=session?.user||null;setTimeout(()=>load().catch(e=>toast(e.message)),0);});}catch(e){show('auth-panel');toast(e.message);}}
-async function load(){if(!user){show('auth-panel');$('header-signout').classList.add('hidden');return;}const {data,error}=await client.from('duo_members').select('duo_id,user_id,display_name,joined_at,duos(*)').eq('user_id',user.id).order('joined_at',{ascending:false}).limit(1);if(error)throw error;me=data?.[0]||null;duo=me?.duos||null;if(!duo){show('room-panel');$('header-signout').classList.add('hidden');return;}show('dashboard');$('header-signout').classList.remove('hidden');await render();subscribe();}
+async function load(){if(!user){show('auth-panel');$('header-signout').classList.add('hidden');return;}const {data,error}=await client.from('duo_members').select('duo_id,user_id,display_name,joined_at,duos(*)').eq('user_id',user.id).order('joined_at',{ascending:false}).limit(1);if(error)throw error;me=data?.[0]||null;duo=me?.duos||null;if(!duo){historyRows=[];historyExpanded=false;show('room-panel');$('header-signout').classList.add('hidden');return;}if(historyDuoId!==duo.id){historyDuoId=duo.id;historyExpanded=false;historyRows=[];}show('dashboard');$('header-signout').classList.remove('hidden');await render();subscribe();}
 async function render(){if(!duo||!user)return;
  const {data:memberData,error:memberError}=await client.from('duo_members').select('user_id,display_name,joined_at').eq('duo_id',duo.id).order('joined_at');if(memberError)throw memberError;members=memberData||[];
  const {data:todayTask,error:taskError}=await client.rpc('get_or_create_daily_task',{p_duo_id:duo.id});if(taskError){$('task-hint').textContent='Щоденне завдання ще не налаштовано. Потрібно запустити SQL-код для генерації завдань. '+taskError.message;return;}task=todayTask;
@@ -21,11 +22,35 @@ async function render(){if(!duo||!user)return;
  $('members-list').innerHTML=members.map((m,i)=>'<div class="member-row"><div class="avatar '+(i%2?'friend':'')+'">'+(i%2?'💗':'🐾')+'</div><div class="member-info"><div class="member-name">'+escapeHtml(m.display_name)+(m.user_id===user.id?' (ти)':'')+'</div><div class="member-state">'+(completed.has(m.user_id)?'Виконано!':'Ще не відмічено')+'</div></div><button type="button" class="done-button '+(completed.has(m.user_id)?'done':'')+'" data-user="'+m.user_id+'" '+(m.user_id!==user.id?'disabled':'')+'>'+(completed.has(m.user_id)?'✓ Готово':'○ Виконала')+'</button></div>').join('');
  $('members-list').querySelectorAll('button[data-user="'+user.id+'"]').forEach(b=>b.addEventListener('click',toggle));
  $('both-done').classList.toggle('hidden',members.length!==2||completed.size!==2);
- const {data:history}=await client.from('daily_tasks').select('id,task_date,title,task_completions(user_id)').eq('duo_id',duo.id).order('task_date',{ascending:false}).limit(30);
- $('history-list').innerHTML=(history||[]).map(t=>'<div class="history-row"><span class="history-date">'+label(t.task_date)+'</span><span class="history-task">'+escapeHtml(t.title)+'</span><span class="history-status">'+new Set((t.task_completions||[]).map(c=>c.user_id)).size+'/2</span></div>').join('');
+ const history=[];
+ for(let offset=0;offset<10000;offset+=500){
+   const {data:page,error:historyError}=await client.from('daily_tasks')
+     .select('id,task_date,title,task_completions(user_id)')
+     .eq('duo_id',duo.id).order('task_date',{ascending:false}).range(offset,offset+499);
+   if(historyError)throw historyError;
+   history.push(...(page||[]));
+   if((page||[]).length<500)break;
+ }
+ historyRows=history;
+ updateHistoryPreview();
  const both=(history||[]).filter(t=>members.length===2&&new Set((t.task_completions||[]).map(c=>c.user_id)).size===2).length;$('together-count').textContent=both+' дн.';
  const myDates=new Set((history||[]).filter(t=>(t.task_completions||[]).some(c=>c.user_id===user.id)).map(t=>t.task_date));let d=new Date(day()+'T12:00:00');if(!myDates.has(day()))d.setDate(d.getDate()-1);let streak=0;while(streak<30){const s=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(!myDates.has(s))break;streak++;d.setDate(d.getDate()-1);}$('my-streak').textContent=streak+' дн.';
 }
+function updateHistoryPreview(){
+ const shown=historyExpanded?historyRows:historyRows.slice(0,3);
+ $('history-list').innerHTML=shown.length
+   ? shown.map(t=>'<div class="history-row"><span class="history-date">'+label(t.task_date)+'</span><span class="history-task">'+escapeHtml(t.title)+'</span><span class="history-status">'+new Set((t.task_completions||[]).map(c=>c.user_id)).size+'/2</span></div>').join('')
+   : '<p class="history-empty">Поки немає записів. Ваша історія почнеться сьогодні 🐾</p>';
+ const expandable=historyRows.length>3;
+ const button=$('history-toggle');
+ button.classList.toggle('hidden',!expandable);
+ button.setAttribute('aria-expanded',String(expandable&&historyExpanded));
+ button.innerHTML=historyExpanded?'Згорнути історію <span aria-hidden="true">⌃</span>':'Показати всю історію <span aria-hidden="true">⌄</span>';
+}
+$('history-toggle').onclick=()=>{
+ historyExpanded=!historyExpanded;
+ updateHistoryPreview();
+};
 async function toggle(e){const b=e.currentTarget;b.disabled=true;try{const {data,error}=await client.from('task_completions').select('task_id').eq('task_id',task.id).eq('user_id',user.id).maybeSingle();if(error)throw error;if(data){const r=await client.from('task_completions').delete().eq('task_id',task.id).eq('user_id',user.id);if(r.error)throw r.error;toast('Відмітку прибрано');}else{const r=await client.from('task_completions').insert({task_id:task.id,duo_id:duo.id,user_id:user.id});if(r.error)throw r.error;toast('Планку виконано! 💪');}await render();}catch(err){toast(err.message)}finally{b.disabled=false;}}
 function subscribe(){if(channel)client.removeChannel(channel);channel=client.channel('duo-'+duo.id).on('postgres_changes',{event:'*',schema:'public',table:'task_completions'},()=>render().catch(()=>{})).on('postgres_changes',{event:'*',schema:'public',table:'duo_members',filter:'duo_id=eq.'+duo.id},()=>render().catch(()=>{})).on('postgres_changes',{event:'UPDATE',schema:'public',table:'duos',filter:'id=eq.'+duo.id},payload=>{if(payload.new?.name){duo.name=payload.new.name;render().catch(()=>{});}}).subscribe();}
 $('show-login').onclick=()=>mode(false);$('show-signup').onclick=()=>mode(true);
