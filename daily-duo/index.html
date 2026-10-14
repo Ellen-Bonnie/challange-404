@@ -86,12 +86,20 @@
     <button id="invite-open" class="invite-trigger" type="button"><span aria-hidden="true">💌</span> Запросити подругу <span aria-hidden="true">↗</span></button>
 
     <section class="panel reminder-card">
-      <h2>Нагадування 🔔</h2>
-      <p class="muted">Вкажи зручний час для щоденного нагадування.</p>
+      <h2>WhatsApp-нагадування 💬</h2>
+      <p class="muted">Отримуй повідомлення, якщо ще не відмітила сьогоднішню планку. Кожна налаштовує свій номер окремо.</p>
       <label for="reminder-time">Час нагадування</label>
-      <input type="time" id="reminder-time" value="20:00">
-      <button type="button" id="save-reminder" class="secondary-button">Зберегти</button>
-      <p id="reminder-status" class="muted small-note">Автоматичні push-нагадування ще не підключені.</p>
+      <input type="time" id="reminder-time" value="20:00" step="900">
+      <p id="wa-time-zone" class="muted small-note">Часовий пояс визначаємо за телефоном.</p>
+      <label for="wa-phone">Твій номер WhatsApp із кодом країни</label>
+      <input type="tel" id="wa-phone" placeholder="+359XXXXXXXXX" inputmode="tel" autocomplete="tel" maxlength="16">
+      <label class="consent-row" for="wa-consent">
+        <input type="checkbox" id="wa-consent">
+        <span>Це мій номер. Я погоджуюся отримувати щоденні WhatsApp-нагадування Daily Duo та знаю, що можу вимкнути їх тут будь-коли.</span>
+      </label>
+      <button type="button" id="save-reminder" class="secondary-button">Увімкнути WhatsApp-нагадування</button>
+      <button type="button" id="disable-reminder" class="text-button hidden">Вимкнути й видалити мій номер</button>
+      <p id="reminder-status" class="muted small-note" aria-live="polite">Для відправки потрібні налаштування Meta та сервера.</p>
     </section>
 
     <footer class="app-footer"><button type="button" id="leave-room" class="text-button">Покинути дует</button></footer>
