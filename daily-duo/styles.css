@@ -1,2 +1,80 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 :root{--ink:#30253a;--muted:#8e8296;--pink:#f2d5e8;--pink-strong:#d96ca8;--purple:#7853a3;--lav:#f4effa;--paper:#fffdfd;--line:#eee5f0;--mint:#d9f0e5;--shadow:0 14px 40px #5c3b6810}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 10% 0%,#f9e9f4 0,transparent 35%),radial-gradient(ellipse at 95% 15%,#eae6fb 0,transparent 32%),#fbf8fc;color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh}.app-shell{width:min(100% - 32px,650px);margin:0 auto;padding:22px 0 54px}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font:800 21px Manrope,sans-serif;letter-spacing:-.8px}.brand-mark{display:grid;place-items:center;background:#eedcf6;color:#8753a4;width:37px;height:37px;border-radius:13px;font-size:22px}.brand-dot{color:var(--pink-strong)}button,input,textarea{font:inherit}button{cursor:pointer;transition:transform .15s,filter .15s}button:active{transform:scale(.98)}.icon-button{border:1px solid var(--line);background:#ffffffbd;border-radius:13px;width:42px;height:42px;color:var(--purple);font-size:19px}.panel,.stat-card,.invite-card,.reminder-card{background:#ffffffd9;border:1px solid #fff;border-radius:24px;box-shadow:var(--shadow);padding:25px}.auth-panel{max-width:480px;margin:30px auto}.eyebrow{font-size:10px;font-weight:800;letter-spacing:1.7px;color:#a17eae;margin:0 0 10px}.auth-panel h1,.welcome-row h1,.room-panel h1{font:800 clamp(28px,6vw,40px)/1.17 Manrope,sans-serif;letter-spacing:-1.6px;margin:0 0 12px}.auth-panel h1 span,.welcome-row h1 span{color:var(--pink-strong)}.muted{color:var(--muted);font-size:13px;line-height:1.6;margin:0}.segmented{display:flex;background:#f6f0f8;padding:4px;border-radius:13px;margin:23px 0 20px}.segment{flex:1;border:0;background:transparent;padding:11px 6px;border-radius:10px;color:var(--muted);font-weight:700;font-size:12px}.segment.active{background:white;color:var(--purple);box-shadow:0 2px 8px #3a24440b}form label{display:block;color:#66566f;font-size:12px;font-weight:700;margin:0 0 15px}input,textarea{display:block;width:100%;border:1px solid #e9deed;border-radius:12px;background:#fff;padding:13px 14px;margin-top:7px;color:var(--ink);outline:none;font-size:14px}input:focus,textarea:focus{border-color:#c59ad9;box-shadow:0 0 0 3px #d9bde826}.primary,.secondary{border-radius:12px;padding:13px 17px;font-size:13px;font-weight:800;border:0}.primary{background:linear-gradient(135deg,#9b6bbb,#d56fa7);color:#fff;box-shadow:0 7px 16px #a76bb82c}.secondary{background:#f3eaf8;color:#775190;border:1px solid #eaddf0}.full{width:100%}.tiny{font-size:10px;line-height:1.55;margin-top:15px}.hidden{display:none!important}.stack{margin-top:22px}.or{text-align:center;color:#b1a4b8;font-size:11px;margin:20px 0;display:flex;gap:12px;align-items:center}.or:before,.or:after{content:'';height:1px;background:var(--line);flex:1}.text-button{border:0;background:transparent;color:#a18ba9;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:10px}.app-shell #room-panel{margin-top:20px}.welcome-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:10px 2px 24px}.welcome-row h1{font-size:clamp(27px,6vw,35px);margin-bottom:6px}.welcome-row .eyebrow{margin-bottom:9px}.flower-badge{flex-shrink:0;display:grid;place-items:center;width:62px;height:62px;border-radius:23px;background:#f4e1f2;color:#b76cae;font-size:33px;transform:rotate(8deg)}.streak-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:17px}.stat-card{padding:17px 18px;border-radius:19px;display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;row-gap:3px}.stat-icon{grid-row:span 2;font-size:22px}.stat-label{font-size:10px;color:var(--muted)}.stat-card strong{font:800 19px Manrope,sans-serif;letter-spacing:-.5px}.challenge-card{position:relative;overflow:hidden;border-radius:25px;padding:24px 23px 18px;color:white;background:linear-gradient(140deg,#6f4a91,#9467a9 52%,#d17eae);box-shadow:0 15px 30px #8c5da629;margin-bottom:25px}.challenge-card:after{content:'✿';position:absolute;right:-12px;bottom:22px;font-size:140px;color:#ffffff0c;line-height:1;pointer-events:none}.challenge-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:25px}.category-pill{background:#ffffff29;border:1px solid #ffffff38;border-radius:20px;padding:7px 10px;font-size:9px;font-weight:800;letter-spacing:.7px}.date-label{font-size:10px;color:#ffffffc9}.eyebrow.light{color:#f5dced;font-size:9px}.challenge-card h2{font:800 clamp(24px,5.7vw,32px)/1.2 Manrope,sans-serif;letter-spacing:-.8px;max-width:480px;margin:0 0 13px;position:relative;z-index:1}.challenge-hint{font-size:13px;line-height:1.6;color:#ffffffd6;max-width:420px;margin:0 0 32px;position:relative;z-index:1}.task-footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff36;padding-top:13px;font-size:9px;letter-spacing:1.3px;color:#ffffffb8;position:relative;z-index:1}.section-heading{display:flex;align-items:center;justify-content:space-between;margin:0 2px 13px}.section-heading .eyebrow{margin-bottom:4px}.section-heading h2{font:800 21px Manrope,sans-serif;letter-spacing:-.5px;margin:0}.count-pill{background:#f0e4f6;color:#845a9a;border-radius:20px;padding:7px 11px;font-size:11px;font-weight:800}.members-list{display:grid;gap:10px}.member-row{display:flex;align-items:center;gap:12px;padding:14px 15px;border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:0 4px 12px #5c3b6806}.avatar{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;font-size:20px;background:#f7e4f0;flex-shrink:0}.avatar.friend{background:#e9e4fa}.member-info{flex:1;min-width:0}.member-name{font-weight:800;font-size:13px;margin-bottom:3px}.member-state{font-size:10px;color:var(--muted)}.done-button{border:1px solid #e6d9ed;background:#f9f5fb;color:#8c6b9d;border-radius:12px;padding:9px 11px;font-size:11px;font-weight:800;white-space:nowrap}.done-button.done{background:#e4f5eb;border-color:#c6e7d4;color:#438363}.success-note{margin-top:12px;padding:14px;border-radius:14px;background:#e9f7ee;color:#438363;font-size:13px;text-align:center;font-weight:700}.invite-card{margin-top:24px;padding:20px;border-radius:20px}.invite-card h3,.reminder-card h3{font:800 17px Manrope,sans-serif;margin:0 0 5px}.invite-code-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding:12px 13px;border:1px dashed #d9c3e3;border-radius:13px;background:#fbf7fd}.invite-code-row strong{font:800 22px Manrope,sans-serif;letter-spacing:3px;color:#80539c}.small{padding:9px 12px;font-size:11px}.reminder-card{display:flex;gap:13px;margin-top:13px;padding:20px;border-radius:20px}.reminder-icon{width:41px;height:41px;display:grid;place-items:center;background:#f7e8d7;border-radius:14px;font-size:20px;flex-shrink:0}.reminder-content{flex:1;min-width:0}.reminder-controls{display:flex;gap:8px;margin-top:13px}.reminder-controls input{width:120px;margin:0;padding:8px 10px}.reminder-controls button{align-self:center}.history-section{margin-top:28px}.history-list{display:grid;gap:8px}.history-row{display:flex;align-items:center;gap:12px;background:#ffffffbd;border:1px solid var(--line);border-radius:14px;padding:13px}.history-date{min-width:62px;font-size:10px;color:var(--muted)}.history-task{flex:1;font-size:12px;font-weight:700;line-height:1.4}.history-status{font-size:11px;white-space:nowrap}.app-footer{display:flex;justify-content:space-between;margin-top:22px}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;max-width:calc(100% - 32px);background:#30253a;color:white;padding:12px 18px;border-radius:13px;font-size:12px;box-shadow:var(--shadow);transition:.25s;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}.settings-dialog{width:min(100% - 28px,490px);border:1px solid white;border-radius:24px;padding:24px;background:#fffdfd;color:var(--ink);box-shadow:0 20px 90px #30253a30}.settings-dialog::backdrop{background:#30253a70;backdrop-filter:blur(4px)}.dialog-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.dialog-head h2{font:800 23px Manrope,sans-serif;margin:0}.settings-dialog label{margin-top:16px}.settings-dialog .tiny{margin-bottom:16px}@media(min-width:600px){.app-shell{padding-top:30px}.challenge-card{padding:28px 28px 20px}.stat-card{padding:19px 20px}}@media(max-width:390px){.app-shell{width:calc(100% - 22px)}.panel{padding:20px}.stat-card{padding:13px}.stat-card strong{font-size:16px}.challenge-card{padding:20px 18px 16px}.member-row{gap:8px;padding:11px}.done-button{padding:8px}.history-status{font-size:10px}}
+
+/* Daily Duo responsive layout (current HTML markup) */
+html{width:100%;overflow-x:clip;-webkit-text-size-adjust:100%}
+body{width:100%;overflow-x:clip}
+.app-shell{max-width:650px;min-width:0}
+.app-shell > *,#dashboard,#dashboard > *,form,.panel,.invite-card,.reminder-card{min-width:0;max-width:100%}
+button{max-width:100%;overflow-wrap:anywhere}
+#dashboard{display:grid;gap:16px}
+#dashboard.hidden{display:none!important}
+#dashboard .welcome-row{margin:0;min-width:0}
+#dashboard .welcome-row > div{min-width:0}
+#dashboard h2{overflow-wrap:break-word}
+#dashboard .challenge-card{margin:0}
+#dashboard .challenge-card #category-pill{display:inline-block;background:#ffffff2a;border:1px solid #ffffff36;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:700}
+#dashboard .challenge-card #challenge-date{font-size:13px;color:#fffced}
+#dashboard .challenge-card #task-title{margin:12px 0;font-size:clamp(25px,6vw,33px)}
+#dashboard .challenge-card #task-hint{font-size:14px;line-height:1.6;max-width:100%}
+#dashboard .panel h2,#dashboard .invite-card h2,#dashboard .reminder-card h2{font:800 clamp(20px,5.2vw,25px)/1.25 Manrope,sans-serif;letter-spacing:-.6px;margin:0 0 15px}
+#dashboard .panel{padding:22px}
+#dashboard #completion-count{display:inline-block;margin-left:7px;color:#8a65a0;font-size:15px}
+#dashboard .stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#dashboard .stat-card{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;padding:17px;min-width:0}
+#dashboard .stat-card p{margin:0;color:var(--muted);font-size:12px}
+#dashboard .stat-card strong{font:800 clamp(17px,4.5vw,22px) Manrope,sans-serif;overflow-wrap:anywhere}
+#dashboard .invite-card{display:flex;flex-direction:column;align-items:stretch;gap:12px;margin:0;padding:22px}
+#dashboard .invite-card h2{margin:0}
+#dashboard .invite-card p{font-size:14px;line-height:1.55;margin:0}
+#dashboard #invite-code{display:block;width:100%;padding:14px 12px;background:#fbf7fd;border:1px dashed #d9c3e3;border-radius:13px;font-size:clamp(17px,4.9vw,23px);letter-spacing:1px;text-align:center;overflow-wrap:anywhere;word-break:break-word}
+#dashboard #copy-code{align-self:stretch;width:100%;border:0;border-radius:14px;background:#f0e4f6;color:#73498c;font-weight:800;padding:14px 16px;font-size:14px}
+#dashboard .reminder-card{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin:0;padding:22px}
+#dashboard .reminder-card h2{margin:0}
+#dashboard .reminder-card label{display:block;font-size:13px;font-weight:700;color:#66566f}
+#dashboard #reminder-time{display:block;width:100%;min-width:0;max-width:100%;font-size:16px;margin:0;padding:13px;border-radius:13px}
+#dashboard #save-reminder{width:100%;border:0;border-radius:13px;background:#f0e4f6;padding:14px;font-size:14px;font-weight:800;color:#73498c;white-space:normal}
+#dashboard #reminder-status{font-size:12px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere;margin:0}
+#dashboard .history-row{min-width:0;gap:9px}
+#dashboard .history-date{min-width:0;flex:0 0 75px}
+#dashboard .history-task{min-width:0;overflow-wrap:anywhere}
+#dashboard .history-status{flex-shrink:0}
+#dashboard > button,#room-panel form button,#auth-panel form button{border:0;border-radius:13px;background:#f0e4f6;color:#73498c;font-weight:800;padding:13px 16px;font-size:14px}
+#auth-panel .auth-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}
+#auth-panel .auth-switch button{border:0;border-radius:12px;padding:12px 8px;background:#f0e4f6;color:#73498c}
+#auth-panel .auth-switch button.active{background:#7853a3;color:white}
+#auth-panel form label,#room-panel form label{display:block;margin:12px 0 7px}
+#auth-panel form input,#room-panel form input{margin:0 0 10px}
+#auth-panel #auth-submit,#room-panel form button{width:100%;background:#7853a3;color:#fff;margin-top:8px}
+#room-panel form{margin:16px 0}
+#dashboard .member-row{min-width:0;flex-wrap:wrap}
+#dashboard .member-info{min-width:100px}
+#dashboard .done-button{flex-shrink:0}
+dialog{max-width:calc(100vw - 24px);width:min(480px,calc(100vw - 24px));border:1px solid var(--line);border-radius:22px;padding:22px;color:var(--ink)}
+dialog form{min-width:0}
+dialog button{border:0;border-radius:10px;padding:10px 13px;margin:5px 5px 0 0}
+dialog #supabase-url,dialog #supabase-key{max-width:100%;font-size:14px}
+#toast{position:fixed;left:16px;right:16px;bottom:max(20px,env(safe-area-inset-bottom));z-index:999;border-radius:14px;background:#30253a;color:#fff;padding:12px 16px;opacity:0;pointer-events:none;transition:opacity .2s;text-align:center;font-size:13px}
+#toast.show{opacity:1}
+@media(max-width:480px){
+ .app-shell{width:calc(100% - 28px);padding-top:16px;padding-bottom:calc(36px + env(safe-area-inset-bottom))}
+ .topbar{margin-bottom:20px}
+ #dashboard{gap:14px}
+ #dashboard .panel,#dashboard .invite-card,#dashboard .reminder-card{padding:19px;border-radius:22px}
+ #dashboard .welcome-row{align-items:flex-start;gap:10px}
+ #dashboard .welcome-row h1{font-size:26px}
+ #dashboard .welcome-row button{flex-shrink:0;font-size:12px;padding:9px 10px}
+ #dashboard .member-row{padding:11px;gap:9px}
+ #dashboard .avatar{height:36px;width:36px}
+ #dashboard .done-button{font-size:11px}
+ #dashboard .history-date{flex-basis:68px;font-size:10px}
+ #dashboard .history-task{font-size:12px}
+ #dashboard #invite-code{letter-spacing:.4px}
+}
+@media(max-width:350px){
+ #dashboard .member-row .done-button{width:100%}
+ #dashboard .stats-grid{gap:8px}
+ #dashboard .stat-card{padding:12px}
+ #dashboard .history-row{gap:6px;padding:10px}
+ #dashboard .history-date{flex-basis:60px}
+}
