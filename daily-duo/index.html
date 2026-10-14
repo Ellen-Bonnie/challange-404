@@ -55,7 +55,7 @@
   <section id="dashboard" class="hidden">
     <div class="welcome-row">
       <p class="eyebrow">ONE PLANK AT A TIME</p>
-      <h1 id="room-title">Daily Duo</h1>
+      <div class="room-title-row"><h1 id="room-title">Daily Duo</h1><button id="rename-open" type="button" class="rename-open hidden" title="Змінити назву дуету" aria-label="Змінити назву дуету">✎</button></div>
     </div>
 
     <article class="challenge-card">
@@ -99,7 +99,7 @@
   <div class="invite-code" id="invite-code">------</div>
   <div id="rename-wrap" class="rename-wrap hidden">
     <label for="rename-room">Назва вашого дуету</label>
-    <div class="rename-controls"><input id="rename-room" maxlength="40" placeholder="Ваша назва"><button id="save-room-name" type="button" class="secondary-button">Зберегти назву</button></div>
+    <div class="rename-controls"><input id="rename-room" maxlength="40" placeholder="Ваша назва"><button id="save-room-name" type="button" class="secondary-button">Зберегти назву</button></div><p id="rename-message" class="muted small-note" aria-live="polite"></p>
   </div>
   <div class="modal-actions">
     <button type="button" id="copy-code" class="primary-button">Скопіювати код</button>
