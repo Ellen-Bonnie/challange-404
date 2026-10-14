@@ -1,1 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#dff1ff"/><circle cx="256" cy="256" r="190" fill="#f8ddeb"/><g fill="#2f2940"><ellipse cx="150" cy="187" rx="37" ry="49" transform="rotate(-20 150 187)"/><ellipse cx="235" cy="135" rx="38" ry="50" transform="rotate(-7 235 135)"/><ellipse cx="332" cy="149" rx="38" ry="50" transform="rotate(17 332 149)"/><ellipse cx="390" cy="235" rx="35" ry="47" transform="rotate(26 390 235)"/><path d="M117 315c-3-49 40-86 78-104 31-15 76-9 101 20 18 21 33 37 61 59 56 45 21 109-29 117-36 6-54-10-83-18-31-8-48 18-88 11-33-6-39-42-40-85z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Daily Duo — лапка та серце">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C9E9FF"/>
+      <stop offset=".55" stop-color="#E8E9FC"/>
+      <stop offset="1" stop-color="#F9D9E9"/>
+    </linearGradient>
+    <linearGradient id="paw" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#526E9E"/>
+      <stop offset="1" stop-color="#433757"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="496" height="496" rx="126" fill="url(#bg)"/>
+  <circle cx="252" cy="259" r="174" fill="#FFFFFF" opacity=".38"/>
+  <g fill="url(#paw)" transform="rotate(-14 247 275)">
+    <ellipse cx="138" cy="180" rx="35" ry="45" transform="rotate(-18 138 180)"/>
+    <ellipse cx="225" cy="137" rx="33" ry="45" transform="rotate(-4 225 137)"/>
+    <ellipse cx="311" cy="157" rx="33" ry="45" transform="rotate(14 311 157)"/>
+    <ellipse cx="375" cy="227" rx="32" ry="42" transform="rotate(23 375 227)"/>
+    <path d="M131 316c-3-41 36-81 68-100 31-18 67-12 92 12 27 27 47 45 75 77 24 28 15 72-15 89-31 18-56 0-85-6-29-6-47 17-84 13-36-3-49-38-51-85z"/>
+  </g>
+  <path d="M381 83c-11-15-38-12-46 5-9 18-1 34 17 48l29 22 29-22c18-14 26-30 17-48-8-17-35-20-46-5z" fill="#EC93BB"/>
+</svg>
