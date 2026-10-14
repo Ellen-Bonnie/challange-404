@@ -1,1 +1,119 @@
-<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f2d5e8"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Daily Duo"><link rel="manifest" href="./manifest.json"><link rel="icon" href="./icon.svg" type="image/svg+xml"><title>Daily Duo ✿</title><link rel="stylesheet" href="./styles.css"></head><body><main class="app-shell"><header class="topbar"><a class="brand" href="./"><span class="brand-mark">✿</span> Daily Duo<span class="brand-dot">.</span></a><button class="icon-button" id="settings-open" type="button" aria-label="Налаштування">⚙</button></header><section id="auth-panel" class="panel auth-panel"><p class="eyebrow">PLANK TOGETHER, EVERY DAY</p><h1>Кожен день — <span>разом ✿</span></h1><p>Ваша щоденна планка: кожна у своєму комфортному темпі.</p><div class="auth-switch"><button type="button" id="show-login">Увійти</button><button type="button" id="show-signup">Реєстрація</button></div><form id="auth-form"><div id="name-field" class="hidden"><label for="display-name">Як тебе називати?</label><input id="display-name" maxlength="40" autocomplete="nickname"></div><label for="email">Email</label><input id="email" type="email" autocomplete="email" required><label for="password">Пароль</label><input id="password" type="password" autocomplete="current-password" minlength="6" required><button type="submit" id="auth-submit" class="primary-button">Увійти ✨</button></form></section><section id="room-panel" class="panel hidden"><p class="eyebrow">YOUR PERSON, YOUR CHALLENGES</p><h1>Створи ваш <span>дует ✿</span></h1><form id="create-room-form"><label for="room-name">Назва вашого дуету</label><input id="room-name" maxlength="40" placeholder="Наш дует" required><button class="primary-button" type="submit">Створити дует ✨</button></form><p>Або приєднайся за кодом подруги:</p><form id="join-room-form"><label for="room-code">Код запрошення</label><input id="room-code" maxlength="12" required><button type="submit">Приєднатися ♡</button></form><button type="button" id="signout-room">Вийти з акаунта</button></section><section id="dashboard" class="hidden"><div class="welcome-row"><div><p class="eyebrow">ONE PLANK AT A TIME</p><h1 id="room-title">Daily Duo ✿</h1><p id="welcome-copy"></p></div><button type="button" id="signout">Вийти</button></div><article class="panel challenge-card"><p class="eyebrow" id="today-label">TODAY</p><span id="category-pill"></span><p id="challenge-date"></p><h2 id="task-title"></h2><p id="task-hint"></p></article><section class="panel"><h2>Ваша планка · прогрес <span id="completion-count"></span></h2><div id="members-list"></div><p id="both-done" class="hidden">💞 Ви обидві впоралися!</p></section><div class="stats-grid"><div class="stat-card"><p>Мій streak</p><strong id="my-streak">0 днів</strong></div><div class="stat-card"><p>Разом виконано</p><strong id="together-count">0 днів</strong></div></div><section class="invite-card"><h2 id="invite-title">Запросити подругу</h2><p id="invite-copy"></p><strong id="invite-code"></strong><button type="button" id="copy-code">Скопіювати код 💌</button></section><section class="reminder-card"><h2>Нагадування</h2><label for="reminder-time">Час</label><input type="time" id="reminder-time" value="20:00"><button type="button" id="save-reminder">Зберегти</button><p id="reminder-status">Фонові push-нагадування ще не налаштовано.</p></section><section class="panel"><h2>Історія ✿</h2><div id="history-list"></div></section><button type="button" id="leave-room">Покинути дует</button></section></main><dialog id="settings-dialog"><form id="settings-form"><h2>Підключення Supabase</h2><p>Введи лише Project URL і publishable/anon key. Не вводь secret або service_role.</p><label for="supabase-url">Project URL</label><input id="supabase-url" type="url" placeholder="https://...supabase.co" required><label for="supabase-key">Publishable key</label><input id="supabase-key" required><button type="submit">Зберегти</button><button type="button" id="clear-config">Очистити</button><button type="button" onclick="document.getElementById('settings-dialog').close()">Закрити</button></form></dialog><div id="toast" role="status" aria-live="polite"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="./config.js"></script><script src="./app.js" defer></script></body></html>
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7fbff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Daily Duo">
+  <meta name="description" content="Щоденна планка з подругою — одна ціль, дві відмітки.">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Daily Duo 🐾</title>
+</head>
+<body>
+<main class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Daily Duo — головна"><span class="brand-mark" aria-hidden="true">🐾</span><span id="header-room-name">Daily Duo</span></a>
+    <button id="header-signout" class="quiet-button hidden" type="button">Вийти</button>
+  </header>
+
+  <section id="auth-panel" class="panel auth-panel">
+    <p class="eyebrow">PLANK TOGETHER, EVERY DAY</p>
+    <h1>Кожен день — <span>разом 🐾</span></h1>
+    <p class="muted">Ваша щоденна планка: кожна у своєму комфортному темпі.</p>
+    <div class="auth-switch">
+      <button type="button" id="show-login" class="active">Увійти</button>
+      <button type="button" id="show-signup">Реєстрація</button>
+    </div>
+    <form id="auth-form" class="form-stack">
+      <div id="name-field" class="hidden"><label for="display-name">Як тебе називати?</label><input id="display-name" maxlength="40" autocomplete="nickname"></div>
+      <label for="email">Email</label><input id="email" type="email" autocomplete="email" required>
+      <label for="password">Пароль</label><input id="password" type="password" autocomplete="current-password" minlength="6" required>
+      <button type="submit" id="auth-submit" class="primary-button">Увійти ✨</button>
+    </form>
+  </section>
+
+  <section id="room-panel" class="panel hidden">
+    <p class="eyebrow">YOUR PERSON, YOUR CHALLENGE</p>
+    <h1>Створи ваш <span>дует 🐾</span></h1>
+    <form id="create-room-form" class="form-stack">
+      <label for="room-name">Назва вашого дуету</label>
+      <input id="room-name" maxlength="40" placeholder="Наприклад, Plank Besties" required>
+      <button class="primary-button" type="submit">Створити дует 🐾</button>
+    </form>
+    <div class="separator">або приєднайся до подруги</div>
+    <form id="join-room-form" class="form-stack">
+      <label for="room-code">Код запрошення</label>
+      <input id="room-code" maxlength="12" autocapitalize="characters" required>
+      <button class="secondary-button" type="submit">Приєднатися ♡</button>
+    </form>
+    <button type="button" id="signout-room" class="text-button">Вийти з акаунта</button>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="welcome-row">
+      <p class="eyebrow">ONE PLANK AT A TIME</p>
+      <h1 id="room-title">Daily Duo</h1>
+      <p id="welcome-copy" class="muted"></p>
+    </div>
+
+    <article class="challenge-card">
+      <div class="challenge-top"><span id="category-pill" class="category-pill">💪 ПЛАНКА</span><span id="challenge-date"></span></div>
+      <p class="eyebrow" id="today-label">СЬОГОДНІ</p>
+      <h2 id="task-title">Планка 💪</h2>
+      <p id="task-hint">Кожна у своєму темпі.</p>
+      <span class="challenge-paw" aria-hidden="true">🐾</span>
+    </article>
+
+    <section class="panel progress-panel">
+      <div class="section-heading"><h2>Відмітки виконання</h2><span id="completion-count" class="count-pill">0 / 2</span></div>
+      <div id="members-list" class="members-list"></div>
+      <p id="both-done" class="success-note hidden">💗 Ви обидві впоралися!</p>
+    </section>
+
+    <div class="stats-grid">
+      <div class="stat-card"><span class="stat-emoji">🔥</span><p>Мій streak</p><strong id="my-streak">0 днів</strong></div>
+      <div class="stat-card"><span class="stat-emoji">💞</span><p>Разом виконано</p><strong id="together-count">0 днів</strong></div>
+    </div>
+
+    <section class="panel history-section">
+      <div class="section-heading"><h2>Історія <span aria-hidden="true">🐾</span></h2></div>
+      <div id="history-list" class="history-list"></div>
+    </section>
+
+    <button id="invite-open" class="invite-trigger" type="button"><span aria-hidden="true">💌</span> Запросити подругу <span aria-hidden="true">↗</span></button>
+
+    <section class="panel reminder-card">
+      <h2>Нагадування 🔔</h2>
+      <p class="muted">Вкажи зручний час для щоденного нагадування.</p>
+      <label for="reminder-time">Час нагадування</label>
+      <input type="time" id="reminder-time" value="20:00">
+      <button type="button" id="save-reminder" class="secondary-button">Зберегти</button>
+      <p id="reminder-status" class="muted small-note">Автоматичні push-нагадування ще не підключені.</p>
+    </section>
+
+    <footer class="app-footer"><button type="button" id="leave-room" class="text-button">Покинути дует</button></footer>
+  </section>
+  <div id="toast" role="status" aria-live="polite"></div>
+</main>
+
+<dialog id="invite-dialog" aria-labelledby="invite-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">JUST THE TWO OF YOU 🐾</p><h2 id="invite-title">Запросити подругу</h2></div>
+    <button id="invite-close" class="modal-close" type="button" aria-label="Закрити">×</button>
+  </div>
+  <p class="muted" id="invite-copy">Надішли код подрузі, щоб вона приєдналась до вашого дуету.</p>
+  <div class="invite-code" id="invite-code">------</div>
+  <div class="modal-actions">
+    <button type="button" id="copy-code" class="primary-button">Скопіювати код</button>
+    <button type="button" id="share-code" class="secondary-button">Поділитися ↗</button>
+  </div>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="./config.js"></script>
+<script src="./app.js" defer></script>
+</body>
+</html>
