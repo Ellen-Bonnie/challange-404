@@ -1,0 +1,18 @@
+{
+  "name": "Daily Duo — челенджі з Bestie",
+  "short_name": "Daily Duo",
+  "description": "Різні групи, спільні челенджі та окремий прогрес.",
+  "start_url": "/daily-duo/",
+  "scope": "/daily-duo/",
+  "display": "standalone",
+  "background_color": "#f7fbff",
+  "theme_color": "#dff1ff",
+  "icons": [
+    {
+      "src": "/daily-duo/paw-heart.png?v=5",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

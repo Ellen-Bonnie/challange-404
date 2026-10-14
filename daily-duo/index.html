@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<link rel="icon" type="image/png" sizes="128x128" href="/daily-duo/paw-heart.png?v=5">
+<link rel="apple-touch-icon" href="/daily-duo/paw-heart.png?v=5">
+<link rel="manifest" href="/daily-duo/manifest.json?v=5">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7fbff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Daily Duo">
+  <meta name="description" content="Спільні челенджі в різних групах, окремі відмітки та прогрес.">
+  
+  
+  
+  <link rel="stylesheet" href="./styles.css">
+  <title>Daily Duo 🐾</title>
+</head>
+<body>
+<main class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Daily Duo — головна"><span class="brand-mark" aria-hidden="true">🐾</span></a>
+    <button id="header-signout" class="quiet-button hidden" type="button">Вийти</button>
+  </header>
+
+  <section id="auth-panel" class="panel auth-panel">
+    <p class="eyebrow">TOGETHER, EVERY DAY</p>
+    <h1>Кожен день — <span>разом 🐾</span></h1>
+    <p class="muted">Ваші спільні цілі, окремі галочки та щоденний прогрес.</p>
+    <div class="auth-switch">
+      <button type="button" id="show-login" class="active">Увійти</button>
+      <button type="button" id="show-signup">Реєстрація</button>
+    </div>
+    <form id="auth-form" class="form-stack">
+      <div id="name-field" class="hidden"><label for="display-name">Як тебе називати?</label><input id="display-name" maxlength="40" autocomplete="nickname"></div>
+      <label for="email">Email</label><input id="email" type="email" autocomplete="email" required>
+      <label for="password">Пароль</label>
+      <div class="password-wrap">
+        <input id="password" type="password" autocomplete="current-password" minlength="6" required>
+        <button type="button" class="password-visibility" data-toggle-password="password" aria-label="Показати пароль" aria-pressed="false">👁</button>
+      </div>
+      <button id="forgot-password-open" type="button" class="forgot-password-button">Забула пароль?</button>
+      <button type="submit" id="auth-submit" class="primary-button">Увійти ✨</button>
+    </form>
+  </section>
+
+  <section id="room-panel" class="panel hidden">
+    <p class="eyebrow">YOUR PERSON, YOUR CHALLENGE</p>
+    <h1>Створи вашу <span>команду 🐾</span></h1>
+    <form id="create-room-form" class="form-stack">
+      <label for="room-name">Назва вашої групи</label>
+      <input id="room-name" maxlength="40" placeholder="Наприклад, Plank Besties" required>
+      <button class="primary-button" type="submit">Створити групу 🐾</button>
+    </form>
+    <div class="separator">або приєднайся до подруги</div>
+    <form id="join-room-form" class="form-stack">
+      <label for="room-code">Код запрошення</label>
+      <input id="room-code" maxlength="12" autocapitalize="characters" required>
+      <button class="secondary-button" type="submit">Приєднатися ♡</button>
+    </form>
+    <button type="button" id="change-password-room" class="text-button">Змінити пароль</button>
+    <button type="button" id="signout-room" class="text-button">Вийти з акаунта</button>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="welcome-row">
+      <div class="group-switcher">
+        <label for="group-select">МОЇ ГРУПИ</label>
+        <select id="group-select" aria-label="Оберіть групу"></select>
+      </div>
+      <p class="eyebrow">ONE DAY AT A TIME</p>
+      <div class="room-title-row"><h1 id="room-title">Daily Duo</h1><button id="rename-open" type="button" class="rename-open hidden" title="Змінити назву групи" aria-label="Змінити назву групи">✎</button></div>
+    </div>
+
+    <section class="challenges-section" aria-labelledby="daily-challenges-heading">
+      <div class="section-heading challenges-heading">
+        <div>
+          <p class="eyebrow" id="today-label">СЬОГОДНІ</p>
+          <h2 id="daily-challenges-heading">Ваші челенджі</h2>
+        </div>
+        <button id="add-challenge-open" type="button" class="add-challenge-button">+ Додати</button>
+      </div>
+      <div id="challenge-list" class="challenge-list" aria-live="polite"></div>
+    </section>
+
+    <div class="stats-grid">
+      <div class="stat-card"><span class="stat-emoji">🔥</span><p>Мій streak</p><strong id="my-streak">0 днів</strong></div>
+      <div class="stat-card"><span class="stat-emoji">💞</span><p>Разом виконано</p><strong id="together-count">0 днів</strong></div>
+    </div>
+
+    <section class="panel history-section">
+      <div class="section-heading">
+        <button type="button" id="history-toggle" class="history-heading-toggle" aria-expanded="false" aria-controls="history-list" aria-label="Розгорнути історію">
+          <span>Історія <span aria-hidden="true">🐾</span></span>
+          <span id="history-chevron" class="history-chevron" aria-hidden="true">⌄</span>
+        </button>
+      </div>
+      <div id="history-list" class="history-list"></div>
+    </section>
+
+    <button id="invite-open" class="invite-trigger" type="button"><span aria-hidden="true">💌</span> Запросити Bestie <span aria-hidden="true">↗</span></button>
+
+
+
+    <footer class="app-footer">
+      <button type="button" id="manage-challenges-open" class="manage-challenges-button">⚙ Керувати челенджами</button>
+      <button type="button" id="leave-room" class="text-button">Покинути групу</button>
+      <button type="button" id="add-group-open" class="add-group-button">＋ Додати групу</button>
+      <button type="button" id="change-password-dashboard" class="text-button">🔒 Змінити пароль</button>
+    </footer>
+  </section>
+  <div id="toast" role="status" aria-live="polite"></div>
+</main>
+
+<dialog id="password-reset-request-dialog" aria-labelledby="password-reset-request-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">ACCOUNT SECURITY</p><h2 id="password-reset-request-title">Відновити пароль 💌</h2></div>
+    <button type="button" id="password-reset-request-close" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <p class="muted">Введи email свого акаунта. Ми надішлемо лист із посиланням для зміни пароля.</p>
+  <form id="password-reset-request-form" class="form-stack">
+    <label for="password-reset-email">Email</label>
+    <input id="password-reset-email" type="email" autocomplete="email" required>
+    <button id="password-reset-request-send" class="primary-button" type="submit">Надіслати посилання</button>
+  </form>
+  <p id="password-reset-request-message" class="muted password-message" aria-live="polite"></p>
+</dialog>
+
+<dialog id="password-change-dialog" aria-labelledby="password-change-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">ACCOUNT SECURITY</p><h2 id="password-change-title">Змінити пароль 🔒</h2></div>
+    <button type="button" id="password-change-close" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <p id="password-change-description" class="muted">Встанови новий пароль для свого акаунта.</p>
+  <form id="password-change-form" class="form-stack">
+    <label for="new-password">Новий пароль</label>
+    <div class="password-wrap">
+      <input id="new-password" type="password" minlength="8" autocomplete="new-password" required>
+      <button type="button" class="password-visibility" data-toggle-password="new-password" aria-label="Показати пароль" aria-pressed="false">👁</button>
+    </div>
+    <label for="confirm-new-password">Повтори новий пароль</label>
+    <div class="password-wrap">
+      <input id="confirm-new-password" type="password" minlength="8" autocomplete="new-password" required>
+      <button type="button" class="password-visibility" data-toggle-password="confirm-new-password" aria-label="Показати пароль" aria-pressed="false">👁</button>
+    </div>
+    <button id="password-change-save" class="primary-button" type="submit">Зберегти новий пароль</button>
+  </form>
+  <p id="password-change-message" class="muted password-message" aria-live="polite"></p>
+</dialog>
+
+<dialog id="group-dialog" aria-labelledby="group-dialog-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">MORE GROUPS, MORE MEMORIES</p><h2 id="group-dialog-title">Додати групу 🐾</h2></div>
+    <button id="group-dialog-close" type="button" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <form id="group-create-form" class="form-stack">
+    <label for="new-group-name">Назва нової групи</label>
+    <input id="new-group-name" maxlength="40" required placeholder="Наприклад, Reading Besties">
+    <button id="create-group-save" type="submit" class="primary-button">Створити групу</button>
+  </form>
+  <div class="separator">або приєднатися до Bestie</div>
+  <form id="group-join-form" class="form-stack">
+    <label for="new-group-code">Код запрошення</label>
+    <input id="new-group-code" maxlength="12" autocapitalize="characters" required placeholder="Код групи">
+    <button id="join-group-save" type="submit" class="secondary-button">Приєднатися до групи</button>
+  </form>
+  <p id="group-message" class="muted" aria-live="polite"></p>
+</dialog>
+
+<dialog id="manage-challenges-dialog" aria-labelledby="manage-challenges-title">
+  <div class="modal-head">
+    <div>
+      <p class="eyebrow">YOUR TEAM</p>
+      <h2 id="manage-challenges-title">Керування челенджами 🐾</h2>
+    </div>
+    <button id="manage-challenges-close" type="button" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <p class="muted manage-challenges-description">Архівування зберігає історію, а видалення назавжди прибирає всі відмітки цього челенджу. Обери потрібну дію.</p>
+  <div id="manage-challenges-list" class="manage-challenges-list"></div>
+  <p id="manage-challenges-message" class="muted manage-challenges-message" aria-live="polite"></p>
+</dialog>
+
+<dialog id="challenge-dialog" aria-labelledby="challenge-dialog-title">
+  <div class="modal-head">
+    <div>
+      <p class="eyebrow">ONE TEAM, MANY CHALLENGES</p>
+      <h2 id="challenge-dialog-title">Новий челендж 🐾</h2>
+    </div>
+    <button id="challenge-dialog-close" class="modal-close" type="button" aria-label="Закрити">×</button>
+  </div>
+  <form id="challenge-form" class="form-stack">
+    <label for="new-challenge-title">Назва челенджу</label>
+    <input id="new-challenge-title" maxlength="60" placeholder="Наприклад, Читати щодня 📖" required>
+    <label for="new-challenge-description">Короткий опис</label>
+    <textarea id="new-challenge-description" maxlength="280" rows="3" placeholder="Що потрібно зробити?"></textarea>
+    <p class="muted">Челендж зʼявиться в цій команді для вас обох. Щодня кожна ставитиме свою галочку.</p>
+    <button id="add-challenge-save" class="primary-button" type="submit">Створити челендж</button>
+  </form>
+</dialog>
+
+<dialog id="invite-dialog" aria-labelledby="invite-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">JUST THE TWO OF YOU 🐾</p><h2 id="invite-title">Запросити Bestie</h2></div>
+    <button id="invite-close" class="modal-close" type="button" aria-label="Закрити">×</button>
+  </div>
+  <p class="muted" id="invite-copy">Надішли код Bestie, щоб вона приєдналась до вашої групи.</p>
+  <div class="invite-code" id="invite-code">------</div>
+  <div id="rename-wrap" class="rename-wrap hidden">
+    <label for="rename-room">Назва вашої групи</label>
+    <div class="rename-controls"><input id="rename-room" maxlength="40" placeholder="Ваша назва"><button id="save-room-name" type="button" class="secondary-button">Зберегти назву</button></div><p id="rename-message" class="muted small-note" aria-live="polite"></p>
+  </div>
+  <div class="modal-actions">
+    <button type="button" id="copy-code" class="primary-button">Скопіювати код</button>
+    <button type="button" id="share-code" class="secondary-button">Поділитися ↗</button>
+  </div>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="./config.js"></script>
+<script src="./app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="uk"><head>
+<link rel="icon" type="image/png" sizes="128x128" href="/daily-duo/paw-heart.png?v=5">
+<link rel="apple-touch-icon" href="/daily-duo/paw-heart.png?v=5">
+<link rel="manifest" href="/site.webmanifest?v=5">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f9fbff"><title>Headspace · Migraine Journal</title><meta name="description" content="Приватний щоденник мігрені й головного болю"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2f2940;--muted:#79778c;--pink:#e88ab3;--blue:#8cc7f7;--lav:#dcd2ff;--line:#e9e8f2;--bg:#f9fbff;--shadow:0 12px 34px #7977a212}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 5% 0,#fce5f1 0,transparent 35%),radial-gradient(ellipse at 95% 5%,#e0f2ff 0,transparent 36%),var(--bg);color:var(--ink);font:14px 'DM Sans',sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #8cc7f7;outline-offset:2px}button:disabled{opacity:.55;cursor:not-allowed}.shell{max-width:1150px;padding:25px 22px 80px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:29px}.brand{display:flex;align-items:center;gap:11px;font:800 20px Manrope,sans-serif;letter-spacing:-.7px}.mark{width:42px;height:42px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(130deg,#dceeff,#f8ddeb);font-size:21px}.topright{display:flex;gap:10px;align-items:center}.small-btn{border:1px solid var(--line);border-radius:13px;background:#fff;padding:10px 13px;color:#665e7c;font-weight:700}.eyebrow{font-size:11px;letter-spacing:2px;color:#af8cb4;font-weight:800;text-transform:uppercase;margin:0 0 8px}h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-.6px}h1{font-size:clamp(27px,4vw,39px);margin:0 0 7px}h2{font-size:19px;margin:0}h3{font-size:15px}.muted{color:var(--muted)}.intro{margin-bottom:25px}.intro p{margin:0;line-height:1.65}.cols{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start}.stack{display:grid;gap:18px}.card{background:#ffffffeb;border:1px solid #ecebf4;border-radius:24px;box-shadow:var(--shadow);padding:23px;min-width:0}.hero{position:relative;overflow:hidden;background:linear-gradient(120deg,#dcecff,#f7dceb 80%);border-color:#e9e4f4;padding:29px}.hero:after{content:'✿';position:absolute;right:26px;bottom:-45px;font-size:185px;color:#fff8;pointer-events:none}.hero>*{position:relative;z-index:1}.hero h2{font-size:clamp(22px,3vw,28px);max-width:390px}.hero p{max-width:370px;line-height:1.55}.primary{border:0;border-radius:14px;background:#2f2940;color:white;padding:13px 18px;font-weight:800;box-shadow:0 8px 18px #392c4a25}.hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:21px}.soft{border:1px solid #ffffff9c;background:#ffffffb8;color:var(--ink);padding:12px 15px;border-radius:14px;font-weight:800}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.quick button{border:1px solid #ede8f3;background:#fbfaff;border-radius:16px;padding:15px 7px;color:var(--ink);font-weight:700;display:grid;justify-items:center;gap:8px}.quick .emoji{font-size:23px}.quick button:nth-child(1){background:#fff1f6}.quick button:nth-child(2){background:#eef7ff}.quick button:nth-child(3){background:#f4f0ff}.quick button:nth-child(4){background:#ebf8f4}.calnav{display:flex;align-items:center;gap:8px}.calnav button{background:#f6f4fc;border:0;width:35px;height:35px;border-radius:12px;font-size:22px;color:#76648c}.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}.weekday{text-align:center;padding:5px 0 12px;color:#a5a0b2;font-size:11px;font-weight:800}.date{height:51px;min-width:0;border:1px solid transparent;border-radius:13px;background:transparent;display:grid;place-content:center;gap:4px;font-weight:700;color:var(--ink)}.date:hover{background:#f1f1fa}.date.today{border-color:#afa6e9}.date.selected{outline:2px solid #bba8e9}.date.outside{opacity:.24}.dots{display:flex;gap:3px;justify-content:center;min-height:5px}.dot{width:5px;height:5px;border-radius:50%;background:var(--lav)}.dot.migraine,.legend-dot.migraine{background:#eb91ae}.dot.headache,.legend-dot.headache{background:#80bdf0}.dot.light_headache,.legend-dot.light_headache{background:#b9a7ff}.dot.pain_free,.legend-dot.pain_free{background:#86c9af}.dot.note,.legend-dot.note{background:#a5a0b2}.legend{display:flex;gap:11px;flex-wrap:wrap;margin-top:17px}.legend span{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}.legend-dot{width:9px;height:9px;border-radius:50%}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.stat{padding:20px 17px;border-radius:20px;background:#f8f3ff}.stat:nth-child(2){background:#fff1f6}.stat:nth-child(3){background:#edf8f5}.stat:nth-child(4){background:#eff7ff}.stat strong{display:block;font:800 28px Manrope;margin:8px 0 5px}.stat span{font-size:12px;color:#77718a}.entries{display:grid;gap:10px}.entry{border:1px solid var(--line);background:#fcfbff;border-radius:16px;padding:13px;display:flex;gap:11px;align-items:center;justify-content:space-between}.entry-title{font-weight:800}.entry-meta{font-size:12px;color:var(--muted);margin-top:5px}.entry button{border:0;border-radius:10px;background:#efeafa;color:#61527c;padding:9px}.text-link{background:none;border:0;color:#9374b2;font-weight:800}.empty{padding:22px;text-align:center;border-radius:17px;background:#faf9ff;color:var(--muted);line-height:1.65}.insight{background:linear-gradient(135deg,#fbf1ff,#eff7ff)}.insight p{line-height:1.65;margin-bottom:0}dialog{border:1px solid #e8e4f0;border-radius:25px;padding:0;width:min(520px,calc(100vw - 25px));max-height:88vh;color:var(--ink);box-shadow:0 25px 90px #2f294044}dialog::backdrop{background:#31294080;backdrop-filter:blur(4px)}.dialog-body{padding:23px;overflow:auto;max-height:88vh}.dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.x{background:#f5f2fb;border:0;border-radius:11px;font-size:23px;width:38px;height:38px}.field{display:grid;gap:7px;margin:13px 0}.field label,.field>span{font-size:12px;font-weight:800;color:#746b81}.field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #e0dfeb;border-radius:12px;background:#fff;color:var(--ink);font-size:16px}.field textarea{resize:vertical;min-height:70px}.radios,.chips{display:flex;flex-wrap:wrap;gap:7px}.chips label{cursor:pointer}.chips input{position:absolute;opacity:0}.chips span{display:inline-block;border:1px solid #e6dfec;border-radius:11px;padding:9px 11px;background:#faf8fd;color:#77718a;font-size:12px}.chips input:checked+span{background:#f7dfeb;border-color:#e88ab3;color:#71456b}.range{width:100%;accent-color:#e88ab3}.formrow{display:grid;grid-template-columns:1fr 1fr;gap:11px}.actions{display:flex;gap:10px;margin-top:21px;flex-wrap:wrap}.actions .primary{flex:1}.danger{background:#fff1f3;border:0;border-radius:13px;color:#b15172;padding:12px;font-weight:800}.hide{display:none!important}.auth{max-width:490px;margin:65px auto}.auth h2{font-size:23px}.auth p{line-height:1.65}.auth button{margin-top:9px}.foot{font-size:11px;color:#a39bad;text-align:center;margin-top:30px}#toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,12px);background:#30283f;color:#fff;border-radius:13px;padding:12px 19px;opacity:0;pointer-events:none;transition:.2s;z-index:30}#toast.on{opacity:1;transform:translate(-50%,0)}@media(max-width:790px){.cols{grid-template-columns:1fr}.shell{max-width:620px}}@media(max-width:460px){.shell{padding:17px 13px 60px}.card{padding:18px}.hero{padding:23px}.quick{gap:6px}.quick button{font-size:11px;padding:13px 3px}.date{height:43px}.legend{gap:7px}.legend span{font-size:10px}.brand{font-size:17px}.topright .small-btn{font-size:11px;padding:8px}.stat{padding:15px 12px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Migraine entry dialog: one scrollable form area, fixed header and actions. */
+#entry-modal{box-sizing:border-box;width:min(560px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);padding:0;overflow:hidden;border:1px solid #eee8f5;border-radius:26px;box-shadow:0 30px 95px #2f29404a;overscroll-behavior:contain}
+#entry-modal[open]{display:flex;flex-direction:column}
+#entry-modal::backdrop{background:#2f294077;backdrop-filter:blur(7px)}
+#entry-modal .dialog-body{display:flex;flex:1;flex-direction:column;min-height:0;min-width:0;width:100%;max-height:none;padding:0;overflow:hidden}
+#entry-modal .dialog-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0;padding:23px 25px 17px;background:linear-gradient(105deg,#fcf5ff 0%,#eef7ff 100%);border-bottom:1px solid #eee8f5}
+#entry-modal .dialog-head h2{margin:0;font-size:21px;line-height:1.3}
+#entry-modal .dialog-head .eyebrow{margin:0 0 6px;color:#a185b2;font-size:10px}
+#entry-modal .x{display:grid;place-items:center;flex-shrink:0;background:#ffffffc9;border:1px solid #ece4f3;color:#72657c;font-size:24px}
+#entry-modal #entry-form{display:flex;flex:1;flex-direction:column;min-height:0;min-width:0;margin:0;overflow:hidden}
+#entry-modal .modal-scroll{flex:1;min-height:0;min-width:0;max-width:100%;padding:14px 25px 21px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+#entry-modal .modal-scroll::-webkit-scrollbar{display:none}
+#entry-modal .field{min-width:0;margin:11px 0 16px;gap:8px}
+#entry-modal .formrow{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;min-width:0}
+#entry-modal .formrow>*{min-width:0}
+#entry-modal input,#entry-modal textarea,#entry-modal select{min-width:0;max-width:100%;box-sizing:border-box}
+#entry-modal .field input:not([type=range]),#entry-modal .field select,#entry-modal .field textarea{display:block;width:100%;border-color:#e6e2ee;background:#fff;border-radius:13px;padding:12px 13px;min-height:46px;color:#2f2940}
+#entry-modal .field input[type=date],#entry-modal .field input[type=time]{width:100%;min-width:0;max-width:100%}
+#entry-modal .field input[type=range]{display:block;width:100%;height:29px;padding:0;border:0;accent-color:#e88ab3}
+#entry-modal .field textarea{min-height:84px;line-height:1.55}
+#entry-modal .field label,#entry-modal .field>span{color:#6f657e}
+#entry-modal .chips{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+#entry-modal .chips label{position:relative;min-width:0;margin:0;display:inline-flex}
+#entry-modal .chips span{max-width:100%;white-space:normal;overflow-wrap:anywhere;border-radius:999px;padding:9px 13px;background:#f9f7fd;color:#756883;transition:background .15s,border-color .15s}
+#entry-modal .chips input:checked+span{background:#f8e2ed;border-color:#e88ab3;color:#81516d}
+#entry-modal .chips input:focus-visible+span{outline:3px solid #8cc7f7;outline-offset:2px}
+#entry-modal .actions{position:relative;display:flex;flex:0 0 auto;align-items:center;gap:10px;flex-wrap:nowrap;margin:0;padding:15px 25px calc(15px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #eee8f5;box-shadow:0 -8px 26px #7b65a00d}
+#entry-modal .actions .primary{min-width:0;min-height:48px;flex:1;border-radius:14px}
+#entry-modal .actions .danger{flex-shrink:0;min-height:48px;border-radius:14px}
+#entry-modal .modal-scroll :is(input,select,textarea):focus-visible{outline:2px solid #a5bcf5;outline-offset:1px}
+@media(max-width:540px){
+#entry-modal{position:fixed;inset:auto 0 0 0;margin:0;width:100%;max-width:100%;max-height:calc(100dvh - 18px);border-radius:24px 24px 0 0;border-bottom:0}
+#entry-modal .dialog-head{padding:20px 19px 15px}
+#entry-modal .modal-scroll{padding:12px 19px 18px}
+#entry-modal .actions{padding:12px 19px calc(12px + env(safe-area-inset-bottom,0px))}
+#entry-modal .formrow{gap:10px}
+}
+@media(max-width:360px){
+#entry-modal .formrow{grid-template-columns:1fr;gap:0}
+#entry-modal .field{margin:9px 0 12px}
+}
+
+/* Pastel date picker & intensity control: tablet/iOS-safe layout */
+#entry-modal .date-field,#entry-modal .intensity-field{width:100%;max-width:100%;min-width:0}
+#entry-modal .date-field{margin:12px 0 20px}
+#entry-modal .date-control{position:relative;display:flex;align-items:center;gap:12px;min-width:0;width:100%;height:58px;padding:0 17px;border:1px solid #e4dfec;border-radius:16px;background:linear-gradient(110deg,#fdfbff,#f7f8ff);color:#2f2940;box-shadow:0 2px 9px #66517f08;cursor:pointer;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+#entry-modal .date-control:focus-within{border-color:#aaa1e4;box-shadow:0 0 0 3px #dcd2ff66}
+#entry-modal .date-icon{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:11px;background:#f2eafb;color:#987eb7}
+#entry-modal .date-value{flex:1;min-width:0;color:#413950;font-size:15px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+#entry-modal .date-chevron{font-size:24px;color:#a393b6;line-height:1;margin-top:-8px}
+#entry-modal .date-native,#entry-modal .field input.date-native{position:absolute;inset:0;width:100%;height:100%;min-height:0;max-width:100%;margin:0;padding:0;opacity:0;cursor:pointer;z-index:2;appearance:none;-webkit-appearance:none}
+#entry-modal .date-native::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;padding:0;margin:0;opacity:0;cursor:pointer}
+#entry-modal .intensity-field{display:flex;flex-direction:column;gap:14px;margin:0 0 20px;padding:16px 17px 13px;background:#fcf9ff;border:1px solid #eee9f4;border-radius:17px}
+#entry-modal .intensity-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#entry-modal .intensity-heading label{font-weight:800;font-size:13px;color:#70667f}
+#entry-modal .intensity-value{display:flex;align-items:baseline;gap:1px;justify-content:center;min-width:57px;padding:6px 9px;border-radius:11px;background:#f9e1ed;color:#a14c7d;font:800 16px Manrope,sans-serif}
+#entry-modal .intensity-value small{font-size:11px;opacity:.75}
+#entry-modal .field input.range,#entry-modal #intensity{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;height:26px;min-height:26px;padding:0;margin:2px 0;border:0;border-radius:0;background:transparent;accent-color:unset;cursor:pointer;box-shadow:none;outline-offset:5px}
+#entry-modal #intensity::-webkit-slider-runnable-track{height:8px;border:0;border-radius:999px;background:linear-gradient(to right,#e88ab3 0%,#e88ab3 var(--progress,44.4%),#e6e1ed var(--progress,44.4%),#e6e1ed 100%)}
+#entry-modal #intensity::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;margin-top:-8px;border:5px solid #e88ab3;border-radius:50%;background:#fff;box-shadow:0 2px 8px #a25d8c50;cursor:grab}
+#entry-modal #intensity::-moz-range-track{height:8px;border:0;border-radius:999px;background:#e6e1ed}
+#entry-modal #intensity::-moz-range-progress{height:8px;border-radius:999px;background:#e88ab3}
+#entry-modal #intensity::-moz-range-thumb{width:16px;height:16px;border:4px solid #e88ab3;border-radius:50%;background:#fff;box-shadow:0 2px 8px #a25d8c50;cursor:grab}
+#entry-modal .intensity-scale{display:flex;justify-content:space-between;gap:10px;color:#92869c;font-size:11px;font-weight:600;line-height:1.4}
+@media(max-width:540px){#entry-modal .date-control{height:54px}#entry-modal .intensity-field{padding:14px 15px 12px}}
+
+/* Calendar 2.0 — balanced day tiles and readable legend */
+.calendar-card{padding:24px 24px 19px}
+.calendar-heading{align-items:center;margin-bottom:19px}
+.calendar-heading .eyebrow{margin-bottom:7px;font-size:10px;letter-spacing:1.45px}
+.calendar-heading h2{font-size:clamp(18px,2vw,21px);line-height:1.35;text-transform:none}
+.calendar-subtitle{margin:5px 0 0;font-size:12px;line-height:1.45;color:#91869d}
+.calendar-card .calnav{gap:8px;flex-shrink:0}
+.calendar-card .calnav button{display:grid;place-items:center;width:38px;height:38px;line-height:1;border-radius:13px;background:#f4f1fb;border:1px solid #eeebf6;color:#77628f;font-size:25px;transition:background .15s,transform .15s}
+.calendar-card .calnav button:hover{background:#e9e2fa}
+.calendar-card .calnav button:active{transform:scale(.94)}
+.calendar-surface{border:1px solid #eeedf6;border-radius:22px;background:#fbfaff;padding:13px 15px 15px;min-width:0}
+.calendar-card .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;width:100%;max-width:530px;margin:0 auto;min-width:0}
+.calendar-card .weekday{display:grid;place-items:center;height:31px;padding:0;color:#9991ad;font-size:11px;font-weight:800;text-align:center}
+.calendar-card .calendar-spacer{display:block;min-width:0;min-height:49px}
+.calendar-card .date{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;height:49px;min-width:0;margin:0;padding:4px 2px;border:1px solid #f0edf8;border-radius:13px;background:#fff;font-size:13px;font-weight:800;line-height:1;color:#40384f;outline:none;box-shadow:0 1px 2px #7969a008;transition:background .16s,border-color .16s,box-shadow .16s,transform .16s}
+.calendar-card .date-number{display:block}
+.calendar-card .dots{display:flex;align-items:center;justify-content:center;gap:3px;height:5px;min-height:5px;line-height:0}
+.calendar-card .dot{display:block;width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.calendar-card .date.has-entries{border-color:#e8e0f0}
+.calendar-card .date[data-primary="migraine"]{background:#fff0f5;border-color:#f6dce6}
+.calendar-card .date[data-primary="headache"]{background:#eaf6ff;border-color:#d7ebfb}
+.calendar-card .date[data-primary="light_headache"]{background:#f3efff;border-color:#e5ddfb}
+.calendar-card .date[data-primary="pain_free"]{background:#eaf8f2;border-color:#daefe3}
+.calendar-card .date[data-primary="note"]{background:#f1eff6;border-color:#e4e0eb}
+.calendar-card .date.today:not(.selected){border:2px solid #bdade8;box-shadow:0 0 0 2px #eae4ff90}
+.calendar-card .date.selected{background:linear-gradient(135deg,#f7e4f1,#e5efff);border:2px solid #ac95e7;box-shadow:0 4px 12px #aa98d737;color:#2f2940;transform:translateY(-1px)}
+.calendar-card .date:hover{border-color:#bca8df;box-shadow:0 4px 12px #a997cd24}
+.calendar-card .date:focus-visible{outline:3px solid #9dbcf4;outline-offset:2px}
+.calendar-legend{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:17px}
+.calendar-legend span{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:#faf9fe;border:1px solid #efebf6;border-radius:999px;padding:7px 10px;color:#82768f;font-size:11px;font-weight:700}
+.calendar-legend .legend-dot{display:block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.day-card .section-head{gap:12px}
+.day-card .text-link{white-space:nowrap;border:1px solid #f0e4f6;border-radius:12px;padding:9px 12px;background:#faf6ff;color:#9873b3}
+.day-card .empty{padding:20px 15px;background:#faf8ff;border:1px dashed #ebe2f4;border-radius:16px}
+@media(max-width:590px){
+ .calendar-card{padding:19px 15px 17px}
+ .calendar-heading{gap:8px}
+ .calendar-heading h2{font-size:18px}
+ .calendar-subtitle{font-size:11px}
+ .calendar-surface{padding:8px 7px 10px;border-radius:17px}
+ .calendar-card .calendar{gap:5px}
+ .calendar-card .date{height:43px;border-radius:11px;font-size:12px}
+ .calendar-card .calendar-spacer{min-height:43px}
+ .calendar-card .weekday{height:28px;font-size:10px}
+ .calendar-card .calnav button{width:33px;height:33px;border-radius:11px}
+ .calendar-legend{gap:6px;margin-top:14px}
+ .calendar-legend span{font-size:10px;padding:6px 8px;gap:5px}
+}
+@media(max-width:350px){
+ .calendar-surface{padding:6px 4px 9px}
+ .calendar-card .calendar{gap:3px}
+ .calendar-card .date{height:39px;font-size:11px;border-radius:9px}
+ .calendar-card .calendar-spacer{min-height:39px}
+ .calendar-card .dots{gap:2px}
+ .calendar-card .dot{width:4px;height:4px}
+}
+
+/* Monthly/yearly statistics and responsive 12-month trend */
+.analytics-card{padding:22px 20px 20px}
+.analytics-header{display:flex;align-items:center;justify-content:space-between;gap:11px;flex-wrap:wrap;margin-bottom:18px}
+.analytics-header h2{font-size:20px}
+.analytics-header .eyebrow{font-size:10px;letter-spacing:1.2px;margin:0 0 5px}
+.analytics-switch{display:flex;align-items:center;gap:3px;padding:4px;background:#f2f0fa;border:1px solid #eae5f3;border-radius:13px}
+.analytics-switch button{border:0;border-radius:10px;padding:9px 12px;background:transparent;color:#83768e;font-size:12px;font-weight:800;transition:background .16s}
+.analytics-switch button.active{background:white;color:#6b5091;box-shadow:0 2px 9px #75659920}
+.analytics-switch button:focus-visible{outline:2px solid #9e9cf0;outline-offset:1px}
+.analytics-period{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}
+.analytics-period h3{margin:0 0 3px;font-size:16px;font-weight:800}
+.analytics-caption{margin:0;color:#9c91a6;font-size:11px}
+.analytics-period .calnav{display:flex;gap:7px;flex-shrink:0}
+.analytics-period .calnav button{width:33px;height:33px;border:1px solid #ece7f3;background:#f7f4fd;color:#7a6894;border-radius:11px;font-size:21px}
+.analytics-card .stats{gap:10px}
+.analytics-card .stat{padding:16px 13px;min-width:0}
+.analytics-card .stat strong{font-size:26px}
+.analytics-card .stat span{line-height:1.45}
+.analytics-footnote{font-size:11px;line-height:1.6;color:#988da3;margin:14px 1px 0}
+.yearly-details{border-top:1px solid #f0ebf7;margin-top:17px;padding-top:19px}
+.yearly-heading h3{font-size:15px;margin:0 0 4px}
+.yearly-heading p{margin:0;color:#988da3;font-size:11px}
+.yearly-chart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;align-items:end;margin-top:19px;width:100%;height:175px;min-width:0}
+.yearly-month{display:flex;flex-direction:column;align-items:center;justify-content:end;min-width:0;height:100%;padding:0;border:0;border-radius:6px;background:transparent;cursor:pointer;color:#7a6b8b;gap:5px}
+.yearly-month:focus-visible{outline:2px solid #9e9cf0;outline-offset:2px}
+.yearly-count{display:block;min-height:15px;font-size:10px;font-weight:800;line-height:15px;color:#8c738f}
+.yearly-track{display:flex;flex-direction:column;justify-content:flex-end;flex-shrink:0;width:min(100%,22px);height:124px;background:#f6f3fa;border-radius:6px 6px 3px 3px;overflow:hidden}
+.yearly-bar{width:100%;flex-shrink:0;display:block;transition:height .2s}
+.yearly-bar.other{background:#8cc7f7}
+.yearly-bar.migraine{background:#e88ab3}
+.yearly-month:hover .yearly-track{box-shadow:0 0 0 2px #d6c8ef}
+.yearly-label{min-width:0;max-width:100%;font-size:10px;font-weight:700;line-height:14px;white-space:nowrap}
+.yearly-key{display:flex;flex-wrap:wrap;justify-content:center;gap:9px 14px;margin-top:15px;color:#847b93;font-size:11px}
+.yearly-key span{display:inline-flex;align-items:center;gap:6px}
+.yearly-swatch{display:inline-block;width:9px;height:9px;border-radius:3px}
+.yearly-swatch.migraine{background:#e88ab3}
+.yearly-swatch.headache{background:#8cc7f7}
+.yearly-empty{background:#faf8ff;border-radius:11px;padding:9px 11px;text-align:center;color:#81768d;font-size:11px;line-height:1.5;margin:13px 0 0}
+@media(max-width:420px){.analytics-card{padding:18px 15px}.analytics-header{align-items:flex-start}.analytics-switch button{padding:8px 10px}.yearly-chart{gap:2px}.yearly-track{height:110px;width:min(100%,17px)}.yearly-label{font-size:9px}.yearly-month{gap:4px}.analytics-card .stat{padding:13px 10px}}
+</style></head><body><main class="shell">
+<header class="top"><div class="brand"><div class="mark">🌷</div><span>headspace<span style="color:#c29bbc">.</span></span></div><div class="topright"><span class="muted" id="account-label" style="font-size:12px"></span><button class="small-btn hide" id="signout">Вийти</button></div></header>
+<section id="auth" class="card auth"><p class="eyebrow">YOUR PRIVATE SPACE</p><h2>Твій щоденник самопочуття 🌸</h2><p class="muted">Використовуй ті самі email і пароль, що й у Daily Duo. Якщо ти вже увійшла в челендж у цьому браузері, трекер відкриється автоматично.</p><form id="auth-form"><div class="field"><label for="email">Email</label><input type="email" id="email" required autocomplete="email"></div><div class="field"><label for="password">Пароль</label><input type="password" id="password" required autocomplete="current-password"></div><button class="primary" style="width:100%" type="submit">Увійти через акаунт Daily Duo ✨</button></form><p class="muted" style="font-size:12px">Якщо акаунта ще немає або треба відновити пароль, зроби це в <a href="/daily-duo/" style="color:#a07abb">Daily Duo</a>. Це спільний акаунт для обох застосунків.</p></section>
+<section id="dashboard" class="hide">
+<div class="intro"><p class="eyebrow">YOUR WELLNESS JOURNAL</p><h1>Твій простір турботи ✨</h1><p class="muted" id="today-label"></p></div>
+<div class="cols"><div class="stack"><div class="card hero"><p class="eyebrow">СЬОГОДНІ</p><h2 id="hero-title">Як ти почуваєшся сьогодні?</h2><p id="hero-text">Зроби коротку відмітку, щоб поступово побачити повнішу картину самопочуття.</p><div class="hero-actions"><button class="primary" id="add-entry">＋ Додати запис</button><button class="soft" id="quick-free">♡ Без болю</button></div></div>
+<div class="card"><div class="section-head"><h2>Швидка відмітка</h2><span class="muted" style="font-size:12px">Пара натискань 💗</span></div><div class="quick"><button data-quick="migraine"><span class="emoji">🌷</span>Мігрень</button><button data-quick="headache"><span class="emoji">💧</span>Головний біль</button><button data-quick="light_headache"><span class="emoji">☁️</span>Легкий біль</button><button data-quick="note"><span class="emoji">📝</span>Нотатка</button></div></div>
+<div class="card calendar-card">
+  <div class="section-head calendar-heading">
+    <div><p class="eyebrow">МІЙ КАЛЕНДАР</p><h2 id="calendar-title"></h2><p class="calendar-subtitle">Обери день, щоб побачити свої записи</p></div>
+    <div class="calnav"><button type="button" id="prev-month" aria-label="Попередній місяць">‹</button><button type="button" id="next-month" aria-label="Наступний місяць">›</button></div>
+  </div>
+  <div class="calendar-surface"><div id="calendar" class="calendar" role="group" aria-label="Календар записів"></div></div>
+  <div class="calendar-legend" aria-label="Позначення в календарі">
+    <span><i class="legend-dot migraine"></i>Мігрень</span>
+    <span><i class="legend-dot headache"></i>Головний біль</span>
+    <span><i class="legend-dot light_headache"></i>Легкий біль</span>
+    <span><i class="legend-dot pain_free"></i>Без болю</span>
+    <span><i class="legend-dot note"></i>Нотатка</span>
+  </div>
+</div>
+<div class="card day-card"><div class="section-head"><h2 id="day-heading">Записи за день</h2><button class="text-link" id="day-add">＋ Додати</button></div><div id="day-entries" class="entries"></div></div></div>
+<div class="stack"><div class="card analytics-card">
+  <div class="analytics-header">
+    <div><p class="eyebrow">WELLNESS IN NUMBERS</p><h2>Статистика</h2></div>
+    <div class="analytics-switch" role="group" aria-label="Період статистики">
+      <button type="button" id="stats-month" class="active" aria-pressed="true">Місяць</button>
+      <button type="button" id="stats-year" aria-pressed="false">Рік</button>
+    </div>
+  </div>
+  <div class="analytics-period">
+    <div><h3 id="stat-period">Цей місяць</h3><p id="stat-caption" class="analytics-caption">Підсумки за твоїми записами</p></div>
+    <div id="year-nav" class="calnav hide">
+      <button type="button" id="stats-prev-year" aria-label="Попередній рік">‹</button>
+      <button type="button" id="stats-next-year" aria-label="Наступний рік">›</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><span>🌷 Днів з мігренню</span><strong id="stat-migraine">0</strong><span>за записами</span></div>
+    <div class="stat"><span>🩵 Днів з болем</span><strong id="stat-headache">0</strong><span>включно з мігренню</span></div>
+    <div class="stat"><span>🌿 Днів без болю</span><strong id="stat-free">0</strong><span>підтверджено</span></div>
+    <div class="stat"><span>✨ Середня інтенсивність</span><strong id="stat-intensity">—</strong><span>шкала 1–10</span></div>
+  </div>
+  <p class="analytics-footnote">Дні без записів не враховуються як дні без болю.</p>
+  <div id="yearly-details" class="yearly-details hide">
+    <div class="yearly-heading"><h3>Рік за місяцями</h3><p>Натисни на стовпчик, щоб відкрити місяць</p></div>
+    <div id="yearly-chart" class="yearly-chart" role="group" aria-label="Дні з головним болем за місяцями"></div>
+    <div class="yearly-key"><span><i class="yearly-swatch migraine"></i>Мігрень</span><span><i class="yearly-swatch headache"></i>Інший головний біль</span></div>
+    <p id="yearly-empty" class="yearly-empty hide">За цей рік ще немає записів про головний біль.</p>
+  </div>
+</div><div class="card insight"><p class="eyebrow">GENTLE INSIGHTS</p><h2>Маленькі спостереження 🔎</h2><p class="muted" id="insight-text">Коли з'являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.</p></div><div class="card"><div class="section-head"><h2>Останні записи</h2><button class="text-link" id="export-csv">Експорт CSV ↗</button></div><div id="recent" class="entries"></div></div></div></div></section>
+<footer class="foot">Made with care ♡ · Приватний щоденник, не медична діагностика</footer></main>
+<dialog id="entry-modal" aria-labelledby="modal-title"><div class="dialog-body"><div class="dialog-head"><div><p class="eyebrow">YOUR WELLNESS JOURNAL</p><h2 id="modal-title">Новий запис 🌷</h2></div><button class="x" id="close-modal" type="button" aria-label="Закрити">×</button></div><form id="entry-form"><div class="modal-scroll"><div class="field"><label for="entry-type">Тип запису</label><select id="entry-type"><option value="migraine">Мігрень</option><option value="headache">Головний біль</option><option value="light_headache">Легкий головний біль</option><option value="pain_free">Без болю</option><option value="note">Нотатка</option></select></div><div class="field date-field"><label for="entry-date">Дата запису</label>
+<div class="date-control"><span class="date-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18"/></svg></span><span class="date-value" id="date-display">Обрати дату</span><span class="date-chevron" aria-hidden="true">⌄</span><input id="entry-date" class="date-native" type="date" aria-label="Дата запису" required></div>
+</div>
+<div class="field intensity-field" id="intensity-field"><div class="intensity-heading"><label for="intensity">Інтенсивність болю</label><span class="intensity-value"><b id="intensity-number">5</b><small> / 10</small></span></div><input class="range" id="intensity" type="range" min="1" max="10" step="1" value="5" aria-label="Інтенсивність болю від 1 до 10"><div class="intensity-scale" aria-hidden="true"><span>1 · Легкий</span><span>10 · Сильний</span></div></div><div id="pain-fields"><div class="field"><span>Симптоми</span><div class="chips" id="symptoms"><label><input type="checkbox" value="Нудота"><span>Нудота</span></label><label><input type="checkbox" value="Чутливість до світла"><span>Світло</span></label><label><input type="checkbox" value="Чутливість до звуку"><span>Звук</span></label><label><input type="checkbox" value="Аура"><span>Аура</span></label><label><input type="checkbox" value="Запаморочення"><span>Запаморочення</span></label></div></div><div class="field"><span>Можливі тригери</span><div class="chips" id="triggers"><label><input type="checkbox" value="Стрес"><span>Стрес</span></label><label><input type="checkbox" value="Недосип"><span>Недосип</span></label><label><input type="checkbox" value="Погода"><span>Погода</span></label><label><input type="checkbox" value="Екран"><span>Екран</span></label><label><input type="checkbox" value="Харчування"><span>Харчування</span></label></div></div><div class="field"><label for="medication">Ліки (необов'язково)</label><input id="medication" maxlength="500" placeholder="Назва / час / ефект"></div></div><div class="field"><label for="notes">Нотатки</label><textarea id="notes" maxlength="4000" placeholder="Що ще хочеш запам'ятати?"></textarea></div></div><div class="actions"><button class="danger hide" type="button" id="delete-entry">Видалити</button><button class="primary" id="save-entry" type="submit">Зберегти запис ♡</button></div></form></div></dialog><div id="toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.min.js"></script><script src="/daily-duo/config.js"></script>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id), TYPES={migraine:'Мігрень',headache:'Головний біль',light_headache:'Легкий біль',pain_free:'Без болю',note:'Нотатка'}, PAIN=['migraine','headache','light_headache'];let client,user,records=[],selected,shownMonth,editing=null,toastTimeout,statsView='month',statsYear=new Date().getFullYear();
+const dateLocal=(d=new Date())=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Sofia',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const v=k=>p.find(x=>x.type===k).value;return v('year')+'-'+v('month')+'-'+v('day')};
+const display=d=>new Date(d+'T12:00:00').toLocaleDateString('uk-UA',{day:'numeric',month:'long'});
+const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=s=>{clearTimeout(toastTimeout);$('toast').textContent=s;$('toast').classList.add('on');toastTimeout=setTimeout(()=>$('toast').classList.remove('on'),3500)};
+const monthKey=d=>d.slice(0,7);
+function openForm(type='migraine',date=selected,row=null){editing=row?.id||null;$('entry-form').reset();$('entry-type').value=row?.type||type;$('entry-date').value=row?.entry_date||date;$('intensity').value=row?.intensity??5;$('medication').value=row?.medication||'';$('notes').value=row?.notes||'';for(const id of ['symptoms','triggers'])for(const input of $(id).querySelectorAll('input'))input.checked=(row?.[id]||[]).includes(input.value);$('delete-entry').classList.toggle('hide',!row);$('modal-title').textContent=row?'Редагувати запис ✏️':'Новий запис 🌷';syncForm();$('entry-modal').showModal();$('entry-modal').querySelector('.modal-scroll').scrollTop=0}
+function syncDateLabel(){const value=$('entry-date').value;$('date-display').textContent=value?new Date(value+'T12:00:00').toLocaleDateString('uk-UA',{day:'numeric',month:'long',year:'numeric'}):'Обрати дату'}
+function syncForm(){const pain=PAIN.includes($('entry-type').value);$('pain-fields').classList.toggle('hide',!pain);$('intensity-field').classList.toggle('hide',!pain);const level=Number($('intensity').value);$('intensity-number').textContent=level;$('intensity').style.setProperty('--progress',((level-1)/9*100).toFixed(1)+'%');syncDateLabel()}
+async function reload(){
+  const all=[],pageSize=1000;
+  for(let offset=0;;offset+=pageSize){
+    const {data,error}=await client.from('migraine_entries').select('*').eq('user_id',user.id)
+      .order('entry_date',{ascending:false}).order('created_at',{ascending:false})
+      .range(offset,offset+pageSize-1);
+    if(error)throw error;
+    all.push(...(data||[]));
+    if(!data||data.length<pageSize)break;
+  }
+  records=all;render();
+}
+const rowsFor=d=>records.filter(r=>r.entry_date===d), hasPain=r=>PAIN.includes(r.type);
+function renderCalendar(){
+  const [y,m]=shownMonth.split('-').map(Number);
+  const first=new Date(y,m-1,1);
+  const count=new Date(y,m,0).getDate();
+  const offset=(first.getDay()+6)%7;
+  const monthName=first.toLocaleDateString('uk-UA',{month:'long'});
+  $('calendar-title').textContent=monthName.charAt(0).toLocaleUpperCase('uk-UA')+monthName.slice(1)+' '+y;
+  
+  const weekdays=['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+  const priority=['migraine','headache','light_headache','pain_free','note'];
+  const calendarRows=Math.ceil((offset+count)/7)*7;
+  const monthEntries=records.filter(r=>r.entry_date.startsWith(shownMonth+'-'));
+  const byDate=new Map();
+  for(const entry of monthEntries){
+    if(!byDate.has(entry.entry_date))byDate.set(entry.entry_date,new Set());
+    byDate.get(entry.entry_date).add(entry.type);
+  }
+  const weekdaysHtml=weekdays.map(n=>'<div class="weekday" aria-hidden="true">'+n+'</div>').join('');
+  const cells=Array.from({length:calendarRows},(_,i)=>{
+    const n=i-offset+1;
+    if(n<1||n>count)return '<span class="calendar-spacer" aria-hidden="true"></span>';
+    const date=shownMonth+'-'+String(n).padStart(2,'0');
+    const types=Array.from(byDate.get(date)||[]).sort((a,b)=>priority.indexOf(a)-priority.indexOf(b));
+    const primary=types[0]||'';
+    const isToday=date===dateLocal();
+    const isSelected=date===selected;
+    const classes=['date',isToday?'today':'',isSelected?'selected':'',types.length?'has-entries':''].filter(Boolean).join(' ');
+    const dots=types.slice(0,4).map(t=>'<i class="dot '+t+'"></i>').join('');
+    const label=display(date)+(types.length?' — '+types.map(t=>TYPES[t]).join(', '):' — без записів');
+    return '<button type="button" class="'+classes+'" data-date="'+date+'" data-primary="'+primary+'" aria-label="'+escape(label)+'" aria-pressed="'+isSelected+'"><span class="date-number">'+n+'</span><span class="dots" aria-hidden="true">'+dots+'</span></button>';
+  }).join('');
+  $('calendar').innerHTML=weekdaysHtml+cells;
+  $('calendar').querySelectorAll('[data-date]').forEach(el=>el.onclick=()=>{selected=el.dataset.date;render()});
+}
+function entryHTML(r){return '<div class="entry"><div><div class="entry-title">'+({migraine:'🌷',headache:'💧',light_headache:'☁️',pain_free:'🌿',note:'📝'}[r.type])+' '+TYPES[r.type]+'</div><div class="entry-meta">'+escape(display(r.entry_date))+(r.intensity?' · '+r.intensity+'/10':'')+(r.notes?' · '+escape(r.notes.slice(0,55)):'')+'</div></div><button data-edit="'+escape(r.id)+'" aria-label="Редагувати запис">✎</button></div>'}
+function mountEntries(id,data,empty){$(id).innerHTML=data.length?data.map(entryHTML).join(''):'<div class="empty">'+empty+'</div>';$(id).querySelectorAll('[data-edit]').forEach(el=>el.onclick=()=>{const r=records.find(x=>x.id===el.dataset.edit);if(r)openForm(r.type,r.entry_date,r)})}
+function getStats(rows){
+  const days=new Map();
+  for(const row of rows){
+    if(!days.has(row.entry_date))days.set(row.entry_date,new Set());
+    days.get(row.entry_date).add(row.type);
+  }
+  let migraineDays=0,headacheDays=0,freeDays=0;
+  for(const types of days.values()){
+    const hasMigraine=types.has('migraine');
+    const hasHeadache=PAIN.some(t=>types.has(t));
+    if(hasMigraine)migraineDays++;
+    if(hasHeadache)headacheDays++;
+    if(!hasHeadache&&types.has('pain_free'))freeDays++;
+  }
+  const levels=rows.filter(hasPain).map(r=>Number(r.intensity)).filter(n=>Number.isFinite(n)&&n>=1&&n<=10);
+  return {migraineDays,headacheDays,freeDays,
+    avgIntensity:levels.length?(levels.reduce((a,b)=>a+b,0)/levels.length).toFixed(1):'—',
+    painEntries:levels.length,entryCount:rows.length,dates:days.size};
+}
+function renderYearChart(year){
+  const months=Array.from({length:12},(_,index)=>{
+    const key=year+'-'+String(index+1).padStart(2,'0');
+    const stat=getStats(records.filter(r=>r.entry_date.startsWith(key+'-')));
+    const name=new Date(year,index,1).toLocaleDateString('uk-UA',{month:'short'});
+    return {key,label:name.charAt(0).toUpperCase()+name.slice(1),...stat};
+  });
+  const maxValue=Math.max(1,...months.map(m=>m.headacheDays));
+  $('yearly-chart').innerHTML=months.map(m=>{
+    const other=m.headacheDays-m.migraineDays;
+    const migraineHeight=(m.migraineDays/maxValue*100).toFixed(2);
+    const otherHeight=(other/maxValue*100).toFixed(2);
+    const title=m.label+' '+year+': '+m.migraineDays+' дн. з мігренню, '+other+' дн. з іншим болем, '+m.freeDays+' дн. без болю';
+    return '<button type="button" class="yearly-month" data-chart-month="'+m.key+'" title="'+escape(title)+'" aria-label="'+escape(title)+'. Відкрити місяць">'
+      +'<span class="yearly-count">'+(m.headacheDays||'')+'</span>'
+      +'<span class="yearly-track"><span class="yearly-bar other" style="height:'+otherHeight+'%"></span><span class="yearly-bar migraine" style="height:'+migraineHeight+'%"></span></span>'
+      +'<span class="yearly-label">'+escape(m.label)+'</span></button>';
+  }).join('');
+  $('yearly-chart').querySelectorAll('[data-chart-month]').forEach(button=>{
+    button.onclick=()=>{
+      shownMonth=button.dataset.chartMonth;
+      selected=shownMonth+'-01';
+      statsView='month';
+      render();
+      document.querySelector('.calendar-card')?.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+  });
+  $('yearly-empty').classList.toggle('hide',months.some(m=>m.headacheDays>0));
+}
+function renderStats(){
+  const yearly=statsView==='year';
+  const rows=yearly?records.filter(r=>r.entry_date.startsWith(String(statsYear)+'-')):records.filter(r=>r.entry_date.startsWith(shownMonth+'-'));
+  const summary=getStats(rows);
+  $('stats-month').classList.toggle('active',!yearly);
+  $('stats-year').classList.toggle('active',yearly);
+  $('stats-month').setAttribute('aria-pressed',String(!yearly));
+  $('stats-year').setAttribute('aria-pressed',String(yearly));
+  $('year-nav').classList.toggle('hide',!yearly);
+  $('yearly-details').classList.toggle('hide',!yearly);
+  $('stat-period').textContent=yearly?String(statsYear):new Date(Number(shownMonth.slice(0,4)),Number(shownMonth.slice(5,7))-1,1).toLocaleDateString('uk-UA',{month:'long',year:'numeric'});
+  $('stat-caption').textContent=yearly?summary.entryCount+' записів за рік':summary.entryCount+' записів за місяць';
+  $('stat-migraine').textContent=summary.migraineDays;
+  $('stat-headache').textContent=summary.headacheDays;
+  $('stat-free').textContent=summary.freeDays;
+  $('stat-intensity').textContent=summary.avgIntensity;
+  if(yearly)renderYearChart(statsYear);
+}
+function render(){renderCalendar();renderStats();const today=dateLocal(),now=rowsFor(today),pain=now.filter(hasPain);$('today-label').textContent=new Date().toLocaleDateString('uk-UA',{timeZone:'Europe/Sofia',weekday:'long',day:'numeric',month:'long',year:'numeric'});$('hero-title').textContent=pain.length?'Сьогодні є запис про головний біль':now.some(r=>r.type==='pain_free')?'Ти відмітила день без болю 🌿':'Як ти почуваєшся сьогодні?';$('hero-text').textContent=now.length?'Сьогодні збережено записів: '+now.length+'. Ти завжди можеш їх відредагувати.':'Відмічай самопочуття, навіть коли болю немає. Це допоможе побачити закономірності.';const thisMonth=records.filter(r=>monthKey(r.entry_date)===shownMonth),levels=thisMonth.filter(hasPain).map(r=>r.intensity);$('day-heading').textContent='Записи · '+display(selected);mountEntries('day-entries',rowsFor(selected),'На цей день записів ще немає. 🌸');mountEntries('recent',records.slice(0,5),'Твої перші записи з’являться тут.');const triggers=thisMonth.filter(hasPain).flatMap(r=>r.triggers||[]);const counts={};for(const t of triggers)counts[t]=(counts[t]||0)+1;const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];$('insight-text').textContent=top?'У записах цього місяця найчастіше вказано «'+top[0]+'» ('+top[1]+' разів). Це спостереження, а не встановлена причина.':levels.length?'Цього місяця зафіксовано '+levels.length+' записів болю. Додавай можливі тригери, щоб краще бачити тенденції.':'Коли з’являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.'}
+async function save(e){e.preventDefault();const button=$('save-entry');button.disabled=true;try{const date=$('entry-date').value,type=$('entry-type').value,pain=PAIN.includes(type);const payload={user_id:user.id,entry_date:date,type,intensity:pain?Number($('intensity').value):null,symptoms:pain?[...$('symptoms').querySelectorAll('input:checked')].map(x=>x.value):[],triggers:pain?[...$('triggers').querySelectorAll('input:checked')].map(x=>x.value):[],medication:pain?$('medication').value.trim():'',notes:$('notes').value.trim()};const q=editing?client.from('migraine_entries').update(payload).eq('id',editing).eq('user_id',user.id):client.from('migraine_entries').insert(payload);const {error}=await q;if(error)throw error;selected=date;shownMonth=monthKey(date);$('entry-modal').close();await reload();toast('Запис збережено ♡')}catch(error){toast('Не вдалося зберегти: '+error.message)}finally{button.disabled=false}}
+async function remove(){if(!editing||!confirm('Видалити цей запис назавжди?'))return;try{const {error}=await client.from('migraine_entries').delete().eq('id',editing).eq('user_id',user.id);if(error)throw error;$('entry-modal').close();await reload();toast('Запис видалено')}catch(e){toast(e.message)}}
+function exportCSV(){const headers=['Дата','Тип','Інтенсивність','Початок','Завершення','Триває','Симптоми','Можливі тригери','Ліки','Нотатки'];const lines=[headers,...records.map(r=>[r.entry_date,TYPES[r.type],r.intensity??'',r.started_at||'',r.ended_at||'',r.ongoing?'Так':'Ні',(r.symptoms||[]).join('; '),(r.triggers||[]).join('; '),r.medication,r.notes])].map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(','));const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='migraine-journal-'+dateLocal()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function showUser(u){user=u;$('auth').classList.toggle('hide',!!u);$('dashboard').classList.toggle('hide',!u);$('signout').classList.toggle('hide',!u);$('account-label').textContent=u?'Приватний щоденник 🔒':'';if(u){try{await reload()}catch(e){toast('Не вдалося отримати записи: '+e.message)}}else{records=[]}}
+async function boot(){selected=dateLocal();shownMonth=monthKey(selected);statsYear=Number(shownMonth.slice(0,4));$('today-label').textContent='';const cfg=window.DAILY_DUO_CONFIG;if(!cfg?.url||!cfg?.key||!window.supabase){toast('Не вдалося завантажити підключення');return}client=window.supabase.createClient(cfg.url,cfg.key);const {data,error}=await client.auth.getSession();if(error)console.warn(error.message);await showUser(data?.session?.user||null);client.auth.onAuthStateChange((event,session)=>{if(['SIGNED_IN','SIGNED_OUT'].includes(event))setTimeout(()=>showUser(session?.user||null),0)})}
+$('auth-form').onsubmit=async e=>{e.preventDefault();try{const {error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;$('password').value='';}catch(error){toast('Помилка входу: '+error.message)}};
+$('signout').onclick=async()=>{const {error}=await client.auth.signOut();if(error)toast(error.message)};
+$('add-entry').onclick=()=>openForm();$('day-add').onclick=()=>openForm();$('quick-free').onclick=()=>openForm('pain_free',dateLocal());document.querySelectorAll('[data-quick]').forEach(b=>b.onclick=()=>openForm(b.dataset.quick,dateLocal()));$('prev-month').onclick=()=>changeMonth(-1);$('next-month').onclick=()=>changeMonth(1);function changeMonth(n){const [y,m]=shownMonth.split('-').map(Number);const d=new Date(y,m-1+n,1);shownMonth=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');selected=shownMonth+'-01';render()}
+$('stats-month').onclick=()=>{statsView='month';renderStats()};
+$('stats-year').onclick=()=>{if(statsView!=='year')statsYear=Number(shownMonth.slice(0,4));statsView='year';renderStats()};
+$('stats-prev-year').onclick=()=>{statsYear--;renderStats()};
+$('stats-next-year').onclick=()=>{statsYear++;renderStats()};
+$('entry-type').onchange=syncForm;$('intensity').oninput=syncForm;$('entry-date').onchange=syncDateLabel;$('entry-date').oninput=syncDateLabel;$('close-modal').onclick=()=>$('entry-modal').close();$('entry-form').onsubmit=save;$('delete-entry').onclick=remove;$('export-csv').onclick=exportCSV;
+boot().catch(e=>toast(e.message));
+})();
+</script></body></html>
