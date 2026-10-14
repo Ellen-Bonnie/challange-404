@@ -177,3 +177,12 @@ dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
 .manage-challenge-action{flex:0 0 auto;border-radius:10px;border:1px solid #e9cad8;background:#fff1f5;color:#a85577;font-size:11px;font-weight:800;padding:10px 11px}
 .manage-challenge-action.restore{border-color:#bddbcf;background:#ecf8f1;color:#4a836a}
 .manage-challenges-message{min-height:16px;margin:12px 0 0;font-size:12px}
+
+/* Separate reversible archive from irreversible permanent deletion */
+.manage-challenge-row{align-items:flex-start;flex-wrap:wrap}
+.manage-challenge-info{flex:1 1 145px}
+.manage-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;align-self:center}
+.manage-challenge-action{font-size:11px;padding:9px 10px}
+.manage-challenge-action.archive{border-color:#cbdff1;background:#e9f5ff;color:#537b9a}
+.manage-challenge-action.danger{border-color:#e7c2d3;background:#fff0f5;color:#a34a70}
+@media(max-width:420px){.manage-actions{width:100%;justify-content:stretch}.manage-actions button{flex:1 1 auto}}
