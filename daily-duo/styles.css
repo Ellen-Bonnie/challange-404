@@ -186,3 +186,14 @@ dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
 .manage-challenge-action.archive{border-color:#cbdff1;background:#e9f5ff;color:#537b9a}
 .manage-challenge-action.danger{border-color:#e7c2d3;background:#fff0f5;color:#a34a70}
 @media(max-width:420px){.manage-actions{width:100%;justify-content:stretch}.manage-actions button{flex:1 1 auto}}
+
+/* Multi-group switcher and add-group flow */
+.group-switcher{display:flex;flex-direction:column;align-items:stretch;gap:5px;margin:0 0 16px}
+.group-switcher label{font-size:10px;font-weight:800;letter-spacing:1.3px;color:#9e82ad}
+.group-switcher select{display:block;width:100%;border:1px solid #cddff0;border-radius:13px;background:#ffffffda;color:var(--ink);font:800 13px 'DM Sans',sans-serif;min-height:43px;padding:10px 35px 10px 12px;outline:none}
+.group-switcher select:focus{border-color:#8cc7f7;box-shadow:0 0 0 3px #bfe5ff55}
+.add-group-button{width:100%;border:1px dashed #bfceea;background:#f9f2ff;color:#8b68a0;border-radius:15px;font-size:13px;font-weight:800;padding:14px}
+.add-group-button:hover{background:#f1eafa}
+#group-dialog .separator{margin:19px 0}
+#group-dialog .form-stack label{display:block}
+#group-dialog #group-message{margin:14px 0 0;font-size:12px;min-height:16px}
