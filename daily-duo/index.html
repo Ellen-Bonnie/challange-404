@@ -30,7 +30,12 @@
     <form id="auth-form" class="form-stack">
       <div id="name-field" class="hidden"><label for="display-name">Як тебе називати?</label><input id="display-name" maxlength="40" autocomplete="nickname"></div>
       <label for="email">Email</label><input id="email" type="email" autocomplete="email" required>
-      <label for="password">Пароль</label><input id="password" type="password" autocomplete="current-password" minlength="6" required>
+      <label for="password">Пароль</label>
+      <div class="password-wrap">
+        <input id="password" type="password" autocomplete="current-password" minlength="6" required>
+        <button type="button" class="password-visibility" data-toggle-password="password" aria-label="Показати пароль" aria-pressed="false">◉</button>
+      </div>
+      <button id="forgot-password-open" type="button" class="forgot-password-button">Забула пароль?</button>
       <button type="submit" id="auth-submit" class="primary-button">Увійти ✨</button>
     </form>
   </section>
@@ -49,6 +54,7 @@
       <input id="room-code" maxlength="12" autocapitalize="characters" required>
       <button class="secondary-button" type="submit">Приєднатися ♡</button>
     </form>
+    <button type="button" id="change-password-room" class="text-button">Змінити пароль</button>
     <button type="button" id="signout-room" class="text-button">Вийти з акаунта</button>
   </section>
 
@@ -96,10 +102,47 @@
       <button type="button" id="manage-challenges-open" class="manage-challenges-button">⚙ Керувати челенджами</button>
       <button type="button" id="leave-room" class="text-button">Покинути групу</button>
       <button type="button" id="add-group-open" class="add-group-button">＋ Додати групу</button>
+      <button type="button" id="change-password-dashboard" class="text-button">🔒 Змінити пароль</button>
     </footer>
   </section>
   <div id="toast" role="status" aria-live="polite"></div>
 </main>
+
+<dialog id="password-reset-request-dialog" aria-labelledby="password-reset-request-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">ACCOUNT SECURITY</p><h2 id="password-reset-request-title">Відновити пароль 💌</h2></div>
+    <button type="button" id="password-reset-request-close" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <p class="muted">Введи email свого акаунта. Ми надішлемо лист із посиланням для зміни пароля.</p>
+  <form id="password-reset-request-form" class="form-stack">
+    <label for="password-reset-email">Email</label>
+    <input id="password-reset-email" type="email" autocomplete="email" required>
+    <button id="password-reset-request-send" class="primary-button" type="submit">Надіслати посилання</button>
+  </form>
+  <p id="password-reset-request-message" class="muted password-message" aria-live="polite"></p>
+</dialog>
+
+<dialog id="password-change-dialog" aria-labelledby="password-change-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">ACCOUNT SECURITY</p><h2 id="password-change-title">Змінити пароль 🔒</h2></div>
+    <button type="button" id="password-change-close" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <p id="password-change-description" class="muted">Встанови новий пароль для свого акаунта.</p>
+  <form id="password-change-form" class="form-stack">
+    <label for="new-password">Новий пароль</label>
+    <div class="password-wrap">
+      <input id="new-password" type="password" minlength="8" autocomplete="new-password" required>
+      <button type="button" class="password-visibility" data-toggle-password="new-password" aria-label="Показати пароль" aria-pressed="false">◉</button>
+    </div>
+    <label for="confirm-new-password">Повтори новий пароль</label>
+    <div class="password-wrap">
+      <input id="confirm-new-password" type="password" minlength="8" autocomplete="new-password" required>
+      <button type="button" class="password-visibility" data-toggle-password="confirm-new-password" aria-label="Показати пароль" aria-pressed="false">◉</button>
+    </div>
+    <button id="password-change-save" class="primary-button" type="submit">Зберегти новий пароль</button>
+  </form>
+  <p id="password-change-message" class="muted password-message" aria-live="polite"></p>
+</dialog>
 
 <dialog id="group-dialog" aria-labelledby="group-dialog-title">
   <div class="modal-head">
