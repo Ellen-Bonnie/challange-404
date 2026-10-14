@@ -171,14 +171,16 @@ function renderChallengeManagement(){
  list.innerHTML=ordered.length
    ? ordered.map(c=>{
        const canManage=c.created_by===user?.id||duo?.created_by===user?.id;
+       const controls=canManage?'<div class="manage-actions">'+
+           '<button type="button" data-manage-challenge="'+c.id+'" data-manage-action="toggle" class="manage-challenge-action '+(c.is_active?'archive':'restore')+'">'+
+             (c.is_active?'Архівувати':'Відновити')+'</button>'+
+           '<button type="button" data-manage-challenge="'+c.id+'" data-manage-action="delete" class="manage-challenge-action danger">Видалити назавжди</button>'+
+         '</div>':'';
        return '<div class="manage-challenge-row"><div class="manage-challenge-info">'+
          '<strong>'+escapeHtml(c.title)+'</strong>'+
          (c.description?'<span>'+escapeHtml(c.description)+'</span>':'')+
          (!c.is_active?'<span class="manage-archived-label">В архіві</span>':'')+
-         '</div>'+
-         (canManage?'<button type="button" data-manage-challenge="'+c.id+'" class="manage-challenge-action '+(c.is_active?'danger':'restore')+'">'+
-           (c.is_active?'Видалити':'Відновити')+'</button>':'')+
-       '</div>';
+         '</div>'+controls+'</div>';
      }).join('')
    : '<p class="muted">Тут поки немає челенджів.</p>';
 }
@@ -193,33 +195,58 @@ $('manage-challenges-dialog').addEventListener('click',e=>{
  if(e.target===$('manage-challenges-dialog'))$('manage-challenges-dialog').close();
 });
 $('manage-challenges-list').onclick=async e=>{
- const button=e.target.closest('button[data-manage-challenge]');
+ const button=e.target.closest('button[data-manage-challenge][data-manage-action]');
  if(!button||button.disabled||!client||!duo||!user)return;
  const definition=challengeDefinitions.find(c=>c.id===button.dataset.manageChallenge);
  if(!definition)return;
  if(definition.created_by!==user.id&&duo.created_by!==user.id){
-   $('manage-challenges-message').textContent='Прибирати челендж може авторка або власниця команди.';
+   $('manage-challenges-message').textContent='Ці дії доступні авторці челенджу або власниці команди.';
    return;
  }
- if(definition.is_active&&!window.confirm('Прибрати «'+definition.title+'» з активних челенджів? Історія та відмітки залишаться.'))return;
- const nextActive=!definition.is_active;
- button.disabled=true;
+ const action=button.dataset.manageAction;
+ if(action!=='toggle'&&action!=='delete')return;
+ if(action==='delete'){
+   const message='Видалити «'+definition.title+'» НАЗАВЖДИ?\n\nБуде безповоротно видалено всі щоденні записи та галочки обох учасниць цього челенджу. Це змінить історію і статистику. Повернути дані не можна.';
+   if(!window.confirm(message))return;
+   // Extra confirmation protects against accidental irreversible deletion on mobile.
+   if(!window.confirm('Підтвердити остаточне видалення «'+definition.title+'»?'))return;
+ }else if(definition.is_active){
+   if(!window.confirm('Архівувати «'+definition.title+'»? Челендж зникне з активних, але історія збережеться.'))return;
+ }
+ const buttons=[...$('manage-challenges-list').querySelectorAll('button[data-manage-challenge]')];
+ buttons.forEach(b=>b.disabled=true);
  $('manage-challenges-message').textContent='Зберігаємо зміни…';
  try{
-   const {data,error}=await client.from('duo_challenges')
-     .update({is_active:nextActive})
-     .eq('id',definition.id).eq('duo_id',duo.id)
-     .select('id,is_active').maybeSingle();
-   if(error)throw error;
-   if(!data||data.is_active!==nextActive)throw new Error('Сервер не підтвердив зміну. Перевір права доступу.');
-   await render();
-   $('manage-challenges-message').textContent=nextActive
-     ? 'Челендж відновлено! Він знову буде у щоденному списку.'
-     : 'Челендж прибрано з активних. Його історію збережено.';
-   toast(nextActive?'Челендж відновлено 🐾':'Челендж прибрано 🐾');
+   if(action==='delete'){
+     const {data,error}=await client.from('duo_challenges')
+       .delete()
+       .eq('id',definition.id).eq('duo_id',duo.id)
+       .select('id').maybeSingle();
+     if(error)throw error;
+     if(!data)throw new Error('Сервер не підтвердив видалення. Перевір права доступу.');
+     // Database ON DELETE CASCADE removes associated daily_tasks and completions.
+     await render();
+     $('manage-challenges-message').textContent='Челендж і його історію видалено назавжди.';
+     toast('Челендж повністю видалено 🐾');
+   }else{
+     const nextActive=!definition.is_active;
+     const {data,error}=await client.from('duo_challenges')
+       .update({is_active:nextActive})
+       .eq('id',definition.id).eq('duo_id',duo.id)
+       .select('id,is_active').maybeSingle();
+     if(error)throw error;
+     if(!data||data.is_active!==nextActive)throw new Error('Сервер не підтвердив зміну. Перевір права доступу.');
+     await render();
+     $('manage-challenges-message').textContent=nextActive
+       ? 'Челендж відновлено! Він знову зʼявиться у щоденному списку.'
+       : 'Челендж в архіві. Його історія збережена.';
+     toast(nextActive?'Челендж відновлено 🐾':'Челендж архівовано 🐾');
+   }
  }catch(err){
-   $('manage-challenges-message').textContent='Не вдалося зберегти: '+err.message;
- }finally{button.disabled=false;}
+   $('manage-challenges-message').textContent='Не вдалося виконати дію: '+err.message;
+ }finally{
+   $('manage-challenges-list').querySelectorAll('button[data-manage-challenge]').forEach(b=>b.disabled=false);
+ }
 };
 $('add-challenge-open').onclick=()=>{
  $('challenge-form').reset();
