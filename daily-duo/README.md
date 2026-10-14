@@ -10,7 +10,7 @@ A mobile-first shared plank tracker for two friends, hosted under `/daily-duo/` 
 - Supabase Realtime listening for completion and membership changes.
 - Mobile blue-and-pink interface, invitation popup, share/copy actions.
 - Duo display names persisted via the `duos.name` database column.
-- Local preference for reminder time (not push notifications).
+- Optional WhatsApp reminder opt-in with a personal phone number, consent, a server scheduler, and a one-attempt-per-day delivery log. Sending remains disabled until an authorized operator configures Meta and Netlify. See [WhatsApp setup](WHATSAPP_SETUP.md).
 
 ## Required database update
 
@@ -26,11 +26,11 @@ The browser-side Supabase **publishable** key and project URL live in `config.js
 
 If your Netlify site is connected to branch `main` with root publish directory, the page is served at `/daily-duo/` after Netlify deploys this commit. If not, redeploy the repository as a static site, using the repository root as the publish directory.
 
-## Push status
+## Reminder status
 
-**Real background push notifications are not implemented.** The reminder-time control saves a time in this device's local storage, but does not schedule a notification. Production push would additionally require notification permission, a service worker, push subscriptions, a trusted sending service and scheduled server-side delivery. The UI explicitly communicates this rather than implying that a reminder will arrive.
+**WhatsApp sending is implemented in code but not active by default.** First, run [`whatsapp-setup.sql`](whatsapp-setup.sql), and complete the authorized Meta Business Platform integration and Netlify environment configuration described in [`WHATSAPP_SETUP.md`](WHATSAPP_SETUP.md). `WHATSAPP_SEND_ENABLED` is required to enable delivery. Each member manages their own phone, consent, and time in Supabase.
 
-On iOS, supported Web Push for web apps normally requires adding the app to the Home Screen and granting notifications. Push behavior should be tested separately on both phones.
+Native Web Push notifications are **not** implemented; WhatsApp Cloud API is a separate notification channel. WhatsApp Cloud API is a business service, so eligibility, approved templates and charges can prevent purely personal use.
 
 ## Security and UX
 
