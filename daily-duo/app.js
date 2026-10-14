@@ -16,7 +16,35 @@ const label = d => new Date(d+'T12:00:00').toLocaleDateString('uk-UA',{day:'nume
 function mode(signup){signingUp=signup;$('show-login').classList.toggle('active',!signup);$('show-signup').classList.toggle('active',signup);$('name-field').classList.toggle('hidden',!signup);$('display-name').required=signup;$('auth-submit').textContent=signup?'Зареєструватися ✨':'Увійти ✨';}
 function config(){const preset=window.DAILY_DUO_CONFIG;return preset?.url && (preset.key?.startsWith('sb_publishable_') || preset.key?.startsWith('eyJ')) ? preset : null;}
 function initClient(){const c=config();if(!c)return false;if(!window.supabase?.createClient)throw new Error('Supabase SDK не завантажився');client=window.supabase.createClient(c.url,c.key);return true;}
-async function boot(){try{if(!initClient()){show('auth-panel');toast('Конфігурація Supabase відсутня. Перевір config.js.');return;}const {data,error}=await client.auth.getSession();if(error)throw error;user=data.session?.user||null;await load();client.auth.onAuthStateChange((_e,session)=>{user=session?.user||null;setTimeout(()=>load().catch(e=>toast(e.message)),0);});}catch(e){show('auth-panel');toast(e.message);}}
+async function boot(){
+ try{
+   if(!initClient()){show('auth-panel');toast('Конфігурація Supabase відсутня. Перевір config.js.');return;}
+   const {data,error}=await client.auth.getSession();
+   if(error)throw error;
+   user=data.session?.user||null;
+   client.auth.onAuthStateChange((event,session)=>{
+     user=session?.user||null;
+     if(event==='PASSWORD_RECOVERY'){
+       // Supabase has verified the emailed recovery link and created a temporary session.
+       setTimeout(()=>openPasswordChange(true),0);
+     }
+     if(event==='SIGNED_IN'||event==='SIGNED_OUT'||event==='USER_UPDATED'||event==='INITIAL_SESSION'){
+       setTimeout(()=>load().catch(e=>toast(e.message)),0);
+     }
+   });
+   await load();
+   if(location.hash.includes('type=recovery')||new URLSearchParams(location.search).get('type')==='recovery'){
+     // Supabase processes the recovery token during client initialization.
+     setTimeout(async()=>{
+       const {data:current}=await client.auth.getSession();
+       if(current.session)openPasswordChange(true);
+     },200);
+   }
+   const qs=new URLSearchParams(location.search),hash=new URLSearchParams(location.hash.slice(1));
+   const authError=qs.get('error_description')||hash.get('error_description');
+   if(authError)toast('Посилання для відновлення недійсне або протерміноване. Надішли новий запит.');
+ }catch(e){show('auth-panel');toast(e.message);}
+}
 const selectedGroupKey=()=>user?'daily-duo-selected-group-'+user.id:'';
 function displayGroupSwitcher(){
  const dropdown=$('group-select');
@@ -321,6 +349,89 @@ $('challenge-form').onsubmit=async e=>{
    toast('Челендж «'+data.title+'» додано до команди! 💗');
  }catch(err){toast('Не вдалося створити челендж: '+err.message);}
  finally{b.disabled=false;}
+};
+// Password fields: visibility toggles, recovery email, authenticated password update.
+let passwordRecoveryMode=false;
+document.addEventListener('click',e=>{
+ const toggle=e.target.closest('button[data-toggle-password]');
+ if(!toggle)return;
+ const input=$(toggle.dataset.togglePassword);
+ if(!input)return;
+ const visible=input.type==='password';
+ input.type=visible?'text':'password';
+ toggle.setAttribute('aria-pressed',String(visible));
+ toggle.setAttribute('aria-label',visible?'Приховати пароль':'Показати пароль');
+ toggle.textContent=visible?'◎':'◉';
+});
+function openPasswordChange(recovery=false){
+ if(!$('password-change-dialog')||!client)return;
+ passwordRecoveryMode=Boolean(recovery);
+ $('password-change-title').textContent=recovery?'Новий пароль 💗':'Змінити пароль 🔒';
+ $('password-change-description').textContent=recovery
+   ? 'Посилання підтверджено. Придумай новий пароль для входу.'
+   : 'Придумай новий пароль для свого акаунта.';
+ $('password-change-form').reset();
+ $('password-change-message').textContent='';
+ if(!$('password-change-dialog').open)$('password-change-dialog').showModal();
+}
+$('forgot-password-open').onclick=()=>{
+ $('password-reset-request-form').reset();
+ $('password-reset-email').value=$('email').value.trim();
+ $('password-reset-request-message').textContent='';
+ $('password-reset-request-dialog').showModal();
+};
+$('password-reset-request-close').onclick=()=>$('password-reset-request-dialog').close();
+$('password-reset-request-dialog').addEventListener('click',e=>{
+ if(e.target===$('password-reset-request-dialog'))$('password-reset-request-dialog').close();
+});
+$('password-reset-request-form').onsubmit=async e=>{
+ e.preventDefault();
+ const email=$('password-reset-email').value.trim(),button=$('password-reset-request-send');
+ if(!client)return toast('Немає підключення до Supabase.');
+ if(!email)return;
+ button.disabled=true;
+ $('password-reset-request-message').textContent='Надсилаємо лист…';
+ try{
+   const redirectTo=location.origin+location.pathname;
+   const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo});
+   if(error)throw error;
+   // Avoid revealing whether a specific email has an account.
+   $('password-reset-request-message').textContent='Якщо цей email зареєстрований, на нього надійде лист із посиланням. Перевір також Спам.';
+ }catch(err){
+   $('password-reset-request-message').textContent='Не вдалося надіслати лист: '+err.message;
+ }finally{button.disabled=false;}
+};
+$('change-password-room').onclick=()=>openPasswordChange(false);
+$('change-password-dashboard').onclick=()=>openPasswordChange(false);
+$('password-change-close').onclick=()=>{
+ $('password-change-dialog').close();
+ passwordRecoveryMode=false;
+};
+$('password-change-form').onsubmit=async e=>{
+ e.preventDefault();
+ const password=$('new-password').value,confirmPassword=$('confirm-new-password').value;
+ const button=$('password-change-save');
+ if(password.length<8)return $('password-change-message').textContent='Пароль має містити щонайменше 8 символів.';
+ if(password!==confirmPassword)return $('password-change-message').textContent='Паролі не збігаються.';
+ button.disabled=true;
+ $('password-change-message').textContent='Змінюємо пароль…';
+ try{
+   const {data:sessionInfo,error:sessionError}=await client.auth.getSession();
+   if(sessionError)throw sessionError;
+   if(!sessionInfo.session)throw new Error('Сеанс завершився. Запроси нове посилання для відновлення або увійди знову.');
+   const {error}=await client.auth.updateUser({password});
+   if(error)throw error;
+   $('password-change-form').reset();
+   $('password-change-message').textContent='✓ Пароль успішно змінено! Тепер можна входити з новим паролем.';
+   toast('Пароль оновлено 🔒');
+   const wasRecovery=passwordRecoveryMode;
+   passwordRecoveryMode=false;
+   if(wasRecovery){
+     // Strip reset tokens from browser history after successful use.
+     history.replaceState(null,'',location.pathname);
+   }
+ }catch(err){$('password-change-message').textContent='Не вдалося змінити пароль: '+err.message;}
+ finally{button.disabled=false;}
 };
 $('show-login').onclick=()=>mode(false);$('show-signup').onclick=()=>mode(true);
 $('auth-form').onsubmit=async e=>{e.preventDefault();if(!client){toast('Не вдалося підключити сервер. Спробуй оновити сторінку.');return;}const email=$('email').value.trim(),password=$('password').value,b=$('auth-submit');b.disabled=true;try{if(signingUp){const {data,error}=await client.auth.signUp({email,password,options:{data:{display_name:$('display-name').value.trim()}}});if(error)throw error;toast(data.session?'Акаунт створено!':'Перевір пошту й підтвердь адресу, потім увійди.');}else{const {error}=await client.auth.signInWithPassword({email,password});if(error)throw error;}}catch(err){toast(err.message)}finally{b.disabled=false;}};
