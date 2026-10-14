@@ -20,9 +20,9 @@
   </header>
 
   <section id="auth-panel" class="panel auth-panel">
-    <p class="eyebrow">PLANK TOGETHER, EVERY DAY</p>
+    <p class="eyebrow">TOGETHER, EVERY DAY</p>
     <h1>Кожен день — <span>разом 🐾</span></h1>
-    <p class="muted">Ваша щоденна планка: кожна у своєму комфортному темпі.</p>
+    <p class="muted">Ваші спільні цілі, окремі галочки та щоденний прогрес.</p>
     <div class="auth-switch">
       <button type="button" id="show-login" class="active">Увійти</button>
       <button type="button" id="show-signup">Реєстрація</button>
@@ -37,7 +37,7 @@
 
   <section id="room-panel" class="panel hidden">
     <p class="eyebrow">YOUR PERSON, YOUR CHALLENGE</p>
-    <h1>Створи ваш <span>дует 🐾</span></h1>
+    <h1>Створи вашу <span>команду 🐾</span></h1>
     <form id="create-room-form" class="form-stack">
       <label for="room-name">Назва вашого дуету</label>
       <input id="room-name" maxlength="40" placeholder="Наприклад, Plank Besties" required>
@@ -54,21 +54,19 @@
 
   <section id="dashboard" class="hidden">
     <div class="welcome-row">
-      <p class="eyebrow">ONE PLANK AT A TIME</p>
+      <p class="eyebrow">ONE DAY AT A TIME</p>
       <div class="room-title-row"><h1 id="room-title">Daily Duo</h1><button id="rename-open" type="button" class="rename-open hidden" title="Змінити назву дуету" aria-label="Змінити назву дуету">✎</button></div>
     </div>
 
-    <article class="challenge-card">
-      <div class="challenge-top"><span id="category-pill" class="category-pill">💪 ПЛАНКА</span></div>
-      <p class="eyebrow" id="today-label">СЬОГОДНІ</p>
-      <p id="task-hint">Кожна у своєму темпі.</p>
-      <span class="challenge-paw" aria-hidden="true">🐾</span>
-    </article>
-
-    <section class="panel progress-panel">
-      <div class="section-heading"><h2>Відмітки виконання</h2><span id="completion-count" class="count-pill">0 / 2</span></div>
-      <div id="members-list" class="members-list"></div>
-      <p id="both-done" class="success-note hidden">💗 Ви обидві впоралися!</p>
+    <section class="challenges-section" aria-labelledby="daily-challenges-heading">
+      <div class="section-heading challenges-heading">
+        <div>
+          <p class="eyebrow" id="today-label">СЬОГОДНІ</p>
+          <h2 id="daily-challenges-heading">Ваші челенджі</h2>
+        </div>
+        <button id="add-challenge-open" type="button" class="add-challenge-button">+ Додати</button>
+      </div>
+      <div id="challenge-list" class="challenge-list" aria-live="polite"></div>
     </section>
 
     <div class="stats-grid">
@@ -94,6 +92,24 @@
   </section>
   <div id="toast" role="status" aria-live="polite"></div>
 </main>
+
+<dialog id="challenge-dialog" aria-labelledby="challenge-dialog-title">
+  <div class="modal-head">
+    <div>
+      <p class="eyebrow">ONE TEAM, MANY CHALLENGES</p>
+      <h2 id="challenge-dialog-title">Новий челендж 🐾</h2>
+    </div>
+    <button id="challenge-dialog-close" class="modal-close" type="button" aria-label="Закрити">×</button>
+  </div>
+  <form id="challenge-form" class="form-stack">
+    <label for="new-challenge-title">Назва челенджу</label>
+    <input id="new-challenge-title" maxlength="60" placeholder="Наприклад, Читати щодня 📖" required>
+    <label for="new-challenge-description">Короткий опис</label>
+    <textarea id="new-challenge-description" maxlength="280" rows="3" placeholder="Що потрібно зробити?"></textarea>
+    <p class="muted">Челендж зʼявиться в цій команді для вас обох. Щодня кожна ставитиме свою галочку.</p>
+    <button id="add-challenge-save" class="primary-button" type="submit">Створити челендж</button>
+  </form>
+</dialog>
 
 <dialog id="invite-dialog" aria-labelledby="invite-title">
   <div class="modal-head">
