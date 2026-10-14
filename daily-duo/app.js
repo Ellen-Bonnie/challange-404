@@ -12,12 +12,12 @@ function mode(signup){signingUp=signup;$('show-login').classList.toggle('active'
 function config(){const preset=window.DAILY_DUO_CONFIG;return preset?.url && (preset.key?.startsWith('sb_publishable_') || preset.key?.startsWith('eyJ')) ? preset : null;}
 function initClient(){const c=config();if(!c)return false;if(!window.supabase?.createClient)throw new Error('Supabase SDK не завантажився');client=window.supabase.createClient(c.url,c.key);return true;}
 async function boot(){try{if(!initClient()){show('auth-panel');toast('Конфігурація Supabase відсутня. Перевір config.js.');return;}const {data,error}=await client.auth.getSession();if(error)throw error;user=data.session?.user||null;await load();client.auth.onAuthStateChange((_e,session)=>{user=session?.user||null;setTimeout(()=>load().catch(e=>toast(e.message)),0);});}catch(e){show('auth-panel');toast(e.message);}}
-async function load(){if(!user){show('auth-panel');$('header-signout').classList.add('hidden');$('header-room-name').textContent='Daily Duo';return;}const {data,error}=await client.from('duo_members').select('duo_id,user_id,display_name,joined_at,duos(*)').eq('user_id',user.id).order('joined_at',{ascending:false}).limit(1);if(error)throw error;me=data?.[0]||null;duo=me?.duos||null;if(!duo){show('room-panel');$('header-signout').classList.add('hidden');$('header-room-name').textContent='Daily Duo';return;}show('dashboard');$('header-signout').classList.remove('hidden');await render();subscribe();}
+async function load(){if(!user){show('auth-panel');$('header-signout').classList.add('hidden');return;}const {data,error}=await client.from('duo_members').select('duo_id,user_id,display_name,joined_at,duos(*)').eq('user_id',user.id).order('joined_at',{ascending:false}).limit(1);if(error)throw error;me=data?.[0]||null;duo=me?.duos||null;if(!duo){show('room-panel');$('header-signout').classList.add('hidden');return;}show('dashboard');$('header-signout').classList.remove('hidden');await render();subscribe();}
 async function render(){if(!duo||!user)return;
  const {data:memberData,error:memberError}=await client.from('duo_members').select('user_id,display_name,joined_at').eq('duo_id',duo.id).order('joined_at');if(memberError)throw memberError;members=memberData||[];
  const {data:todayTask,error:taskError}=await client.rpc('get_or_create_daily_task',{p_duo_id:duo.id});if(taskError){$('task-hint').textContent='Щоденне завдання ще не налаштовано. Потрібно запустити SQL-код для генерації завдань. '+taskError.message;return;}task=todayTask;
  const {data:checks,error:checksError}=await client.from('task_completions').select('user_id,completed_at').eq('task_id',task.id);if(checksError)throw checksError;const completed=new Set((checks||[]).map(c=>c.user_id));
- const roomName=duo.name||'Daily Duo';$('room-title').textContent=roomName;$('header-room-name').textContent=roomName;$('rename-wrap').classList.toggle('hidden',duo.created_by!==user.id);$('rename-open').classList.toggle('hidden',duo.created_by!==user.id);if(document.activeElement!==$('rename-room'))$('rename-room').value=roomName;$('today-label').textContent='TODAY · '+label(task.task_date).toUpperCase();$('category-pill').textContent=task.category||'💪 ПЛАНКА';$('task-hint').textContent=task.description||'';$('invite-title').textContent='Запросити подругу';$('invite-code').textContent=duo.invite_code;$('invite-copy').textContent='Поділися цим кодом, щоб подруга приєдналася.';$('completion-count').textContent=completed.size+' / '+members.length;
+ const roomName=duo.name||'Daily Duo';$('room-title').textContent=roomName;$('rename-wrap').classList.toggle('hidden',duo.created_by!==user.id);$('rename-open').classList.toggle('hidden',duo.created_by!==user.id);if(document.activeElement!==$('rename-room'))$('rename-room').value=roomName;$('today-label').textContent='TODAY · '+label(task.task_date).toUpperCase();$('category-pill').textContent=task.category||'💪 ПЛАНКА';$('task-hint').textContent=task.description||'';$('invite-title').textContent='Запросити подругу';$('invite-code').textContent=duo.invite_code;$('invite-copy').textContent='Поділися цим кодом, щоб подруга приєдналася.';$('completion-count').textContent=completed.size+' / '+members.length;
  $('members-list').innerHTML=members.map((m,i)=>'<div class="member-row"><div class="avatar '+(i%2?'friend':'')+'">'+(i%2?'💗':'🐾')+'</div><div class="member-info"><div class="member-name">'+escapeHtml(m.display_name)+(m.user_id===user.id?' (ти)':'')+'</div><div class="member-state">'+(completed.has(m.user_id)?'Виконано!':'Ще не відмічено')+'</div></div><button type="button" class="done-button '+(completed.has(m.user_id)?'done':'')+'" data-user="'+m.user_id+'" '+(m.user_id!==user.id?'disabled':'')+'>'+(completed.has(m.user_id)?'✓ Готово':'○ Виконала')+'</button></div>').join('');
  $('members-list').querySelectorAll('button[data-user="'+user.id+'"]').forEach(b=>b.addEventListener('click',toggle));
  $('both-done').classList.toggle('hidden',members.length!==2||completed.size!==2);
@@ -54,7 +54,7 @@ async function persistDuoName(value) {
  if(readError||verified?.name!==name)throw new Error('Не вдалося перевірити назву в базі.');
  duo.name=verified.name;
  $('room-title').textContent=verified.name;
- $('header-room-name').textContent=verified.name;
+ 
  return verified.name;
 }
 $('create-room-form').onsubmit=async e=>{
@@ -72,7 +72,7 @@ $('create-room-form').onsubmit=async e=>{
  }catch(err){toast(err.message);}
 };
 $('join-room-form').onsubmit=async e=>{e.preventDefault();try{const name=$('display-name').value.trim()||user.user_metadata?.display_name||user.email.split('@')[0];const {error}=await client.rpc('join_duo',{p_invite_code:$('room-code').value.trim(),p_display_name:name});if(error)throw error;await load();toast('Ти приєдналася! 💞');}catch(err){toast(err.message);}};
-async function signout(){if(channel)client.removeChannel(channel);await client.auth.signOut();user=null;duo=null;show('auth-panel');$('header-signout').classList.add('hidden');$('header-room-name').textContent='Daily Duo';}
+async function signout(){if(channel)client.removeChannel(channel);await client.auth.signOut();user=null;duo=null;show('auth-panel');$('header-signout').classList.add('hidden');}
 $('header-signout').onclick=signout;$('signout-room').onclick=signout;
 $('leave-room').onclick=()=>toast('Вихід із дуету поки недоступний; акаунт можна змінити через «Вийти».');
 $('copy-code').onclick=async()=>{try{await navigator.clipboard.writeText(duo.invite_code);toast('Код скопійовано! 💌');}catch{toast('Код: '+duo.invite_code);}};
