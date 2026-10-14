@@ -72,6 +72,63 @@
 #entry-modal #intensity::-moz-range-thumb{width:16px;height:16px;border:4px solid #e88ab3;border-radius:50%;background:#fff;box-shadow:0 2px 8px #a25d8c50;cursor:grab}
 #entry-modal .intensity-scale{display:flex;justify-content:space-between;gap:10px;color:#92869c;font-size:11px;font-weight:600;line-height:1.4}
 @media(max-width:540px){#entry-modal .date-control{height:54px}#entry-modal .intensity-field{padding:14px 15px 12px}}
+
+/* Calendar 2.0 — balanced day tiles and readable legend */
+.calendar-card{padding:24px 24px 19px}
+.calendar-heading{align-items:center;margin-bottom:19px}
+.calendar-heading .eyebrow{margin-bottom:7px;font-size:10px;letter-spacing:1.45px}
+.calendar-heading h2{font-size:clamp(18px,2vw,21px);line-height:1.35;text-transform:none}
+.calendar-subtitle{margin:5px 0 0;font-size:12px;line-height:1.45;color:#91869d}
+.calendar-card .calnav{gap:8px;flex-shrink:0}
+.calendar-card .calnav button{display:grid;place-items:center;width:38px;height:38px;line-height:1;border-radius:13px;background:#f4f1fb;border:1px solid #eeebf6;color:#77628f;font-size:25px;transition:background .15s,transform .15s}
+.calendar-card .calnav button:hover{background:#e9e2fa}
+.calendar-card .calnav button:active{transform:scale(.94)}
+.calendar-surface{border:1px solid #eeedf6;border-radius:22px;background:#fbfaff;padding:13px 15px 15px;min-width:0}
+.calendar-card .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;width:100%;max-width:530px;margin:0 auto;min-width:0}
+.calendar-card .weekday{display:grid;place-items:center;height:31px;padding:0;color:#9991ad;font-size:11px;font-weight:800;text-align:center}
+.calendar-card .calendar-spacer{display:block;min-width:0;min-height:49px}
+.calendar-card .date{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;height:49px;min-width:0;margin:0;padding:4px 2px;border:1px solid #f0edf8;border-radius:13px;background:#fff;font-size:13px;font-weight:800;line-height:1;color:#40384f;outline:none;box-shadow:0 1px 2px #7969a008;transition:background .16s,border-color .16s,box-shadow .16s,transform .16s}
+.calendar-card .date-number{display:block}
+.calendar-card .dots{display:flex;align-items:center;justify-content:center;gap:3px;height:5px;min-height:5px;line-height:0}
+.calendar-card .dot{display:block;width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.calendar-card .date.has-entries{border-color:#e8e0f0}
+.calendar-card .date[data-primary="migraine"]{background:#fff0f5;border-color:#f6dce6}
+.calendar-card .date[data-primary="headache"]{background:#eaf6ff;border-color:#d7ebfb}
+.calendar-card .date[data-primary="light_headache"]{background:#f3efff;border-color:#e5ddfb}
+.calendar-card .date[data-primary="pain_free"]{background:#eaf8f2;border-color:#daefe3}
+.calendar-card .date[data-primary="note"]{background:#f1eff6;border-color:#e4e0eb}
+.calendar-card .date.today:not(.selected){border:2px solid #bdade8;box-shadow:0 0 0 2px #eae4ff90}
+.calendar-card .date.selected{background:linear-gradient(135deg,#f7e4f1,#e5efff);border:2px solid #ac95e7;box-shadow:0 4px 12px #aa98d737;color:#2f2940;transform:translateY(-1px)}
+.calendar-card .date:hover{border-color:#bca8df;box-shadow:0 4px 12px #a997cd24}
+.calendar-card .date:focus-visible{outline:3px solid #9dbcf4;outline-offset:2px}
+.calendar-legend{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:17px}
+.calendar-legend span{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:#faf9fe;border:1px solid #efebf6;border-radius:999px;padding:7px 10px;color:#82768f;font-size:11px;font-weight:700}
+.calendar-legend .legend-dot{display:block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.day-card .section-head{gap:12px}
+.day-card .text-link{white-space:nowrap;border:1px solid #f0e4f6;border-radius:12px;padding:9px 12px;background:#faf6ff;color:#9873b3}
+.day-card .empty{padding:20px 15px;background:#faf8ff;border:1px dashed #ebe2f4;border-radius:16px}
+@media(max-width:590px){
+ .calendar-card{padding:19px 15px 17px}
+ .calendar-heading{gap:8px}
+ .calendar-heading h2{font-size:18px}
+ .calendar-subtitle{font-size:11px}
+ .calendar-surface{padding:8px 7px 10px;border-radius:17px}
+ .calendar-card .calendar{gap:5px}
+ .calendar-card .date{height:43px;border-radius:11px;font-size:12px}
+ .calendar-card .calendar-spacer{min-height:43px}
+ .calendar-card .weekday{height:28px;font-size:10px}
+ .calendar-card .calnav button{width:33px;height:33px;border-radius:11px}
+ .calendar-legend{gap:6px;margin-top:14px}
+ .calendar-legend span{font-size:10px;padding:6px 8px;gap:5px}
+}
+@media(max-width:350px){
+ .calendar-surface{padding:6px 4px 9px}
+ .calendar-card .calendar{gap:3px}
+ .calendar-card .date{height:39px;font-size:11px;border-radius:9px}
+ .calendar-card .calendar-spacer{min-height:39px}
+ .calendar-card .dots{gap:2px}
+ .calendar-card .dot{width:4px;height:4px}
+}
 </style></head><body><main class="shell">
 <header class="top"><div class="brand"><div class="mark">🌷</div><span>headspace<span style="color:#c29bbc">.</span></span></div><div class="topright"><span class="muted" id="account-label" style="font-size:12px"></span><button class="small-btn hide" id="signout">Вийти</button></div></header>
 <section id="auth" class="card auth"><p class="eyebrow">YOUR PRIVATE SPACE</p><h2>Твій щоденник самопочуття 🌸</h2><p class="muted">Використовуй ті самі email і пароль, що й у Daily Duo. Якщо ти вже увійшла в челендж у цьому браузері, трекер відкриється автоматично.</p><form id="auth-form"><div class="field"><label for="email">Email</label><input type="email" id="email" required autocomplete="email"></div><div class="field"><label for="password">Пароль</label><input type="password" id="password" required autocomplete="current-password"></div><button class="primary" style="width:100%" type="submit">Увійти через акаунт Daily Duo ✨</button></form><p class="muted" style="font-size:12px">Якщо акаунта ще немає або треба відновити пароль, зроби це в <a href="/daily-duo/" style="color:#a07abb">Daily Duo</a>. Це спільний акаунт для обох застосунків.</p></section>
@@ -79,8 +136,21 @@
 <div class="intro"><p class="eyebrow">YOUR WELLNESS JOURNAL</p><h1>Твій простір турботи ✨</h1><p class="muted" id="today-label"></p></div>
 <div class="cols"><div class="stack"><div class="card hero"><p class="eyebrow">СЬОГОДНІ</p><h2 id="hero-title">Як ти почуваєшся сьогодні?</h2><p id="hero-text">Зроби коротку відмітку, щоб поступово побачити повнішу картину самопочуття.</p><div class="hero-actions"><button class="primary" id="add-entry">＋ Додати запис</button><button class="soft" id="quick-free">♡ Без болю</button></div></div>
 <div class="card"><div class="section-head"><h2>Швидка відмітка</h2><span class="muted" style="font-size:12px">Пара натискань 💗</span></div><div class="quick"><button data-quick="migraine"><span class="emoji">🌷</span>Мігрень</button><button data-quick="headache"><span class="emoji">💧</span>Головний біль</button><button data-quick="light_headache"><span class="emoji">☁️</span>Легкий біль</button><button data-quick="note"><span class="emoji">📝</span>Нотатка</button></div></div>
-<div class="card"><div class="section-head"><h2 id="calendar-title"></h2><div class="calnav"><button id="prev-month" aria-label="Попередній місяць">‹</button><button id="next-month" aria-label="Наступний місяць">›</button></div></div><div id="calendar" class="calendar"></div><div class="legend"><span><i class="legend-dot migraine"></i>Мігрень</span><span><i class="legend-dot headache"></i>Біль</span><span><i class="legend-dot light_headache"></i>Легкий</span><span><i class="legend-dot pain_free"></i>Без болю</span><span><i class="legend-dot note"></i>Нотатка</span></div></div>
-<div class="card"><div class="section-head"><h2 id="day-heading">Записи за день</h2><button class="text-link" id="day-add">＋ Додати</button></div><div id="day-entries" class="entries"></div></div></div>
+<div class="card calendar-card">
+  <div class="section-head calendar-heading">
+    <div><p class="eyebrow">МІЙ КАЛЕНДАР</p><h2 id="calendar-title"></h2><p class="calendar-subtitle">Обери день, щоб побачити свої записи</p></div>
+    <div class="calnav"><button type="button" id="prev-month" aria-label="Попередній місяць">‹</button><button type="button" id="next-month" aria-label="Наступний місяць">›</button></div>
+  </div>
+  <div class="calendar-surface"><div id="calendar" class="calendar" role="group" aria-label="Календар записів"></div></div>
+  <div class="calendar-legend" aria-label="Позначення в календарі">
+    <span><i class="legend-dot migraine"></i>Мігрень</span>
+    <span><i class="legend-dot headache"></i>Головний біль</span>
+    <span><i class="legend-dot light_headache"></i>Легкий біль</span>
+    <span><i class="legend-dot pain_free"></i>Без болю</span>
+    <span><i class="legend-dot note"></i>Нотатка</span>
+  </div>
+</div>
+<div class="card day-card"><div class="section-head"><h2 id="day-heading">Записи за день</h2><button class="text-link" id="day-add">＋ Додати</button></div><div id="day-entries" class="entries"></div></div></div>
 <div class="stack"><div class="card"><div class="section-head"><h2>Цей місяць</h2><span class="muted" style="font-size:12px" id="stat-month"></span></div><div class="stats"><div class="stat"><span>🌷 Днів з мігренню</span><strong id="stat-migraine">0</strong><span>за записами</span></div><div class="stat"><span>🩵 Днів з болем</span><strong id="stat-headache">0</strong><span>включно з мігренню</span></div><div class="stat"><span>🌿 Днів без болю</span><strong id="stat-free">0</strong><span>підтверджено</span></div><div class="stat"><span>✨ Середня інтенсивність</span><strong id="stat-intensity">—</strong><span>шкала 1–10</span></div></div></div><div class="card insight"><p class="eyebrow">GENTLE INSIGHTS</p><h2>Маленькі спостереження 🔎</h2><p class="muted" id="insight-text">Коли з'являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.</p></div><div class="card"><div class="section-head"><h2>Останні записи</h2><button class="text-link" id="export-csv">Експорт CSV ↗</button></div><div id="recent" class="entries"></div></div></div></div></section>
 <footer class="foot">Made with care ♡ · Приватний щоденник, не медична діагностика</footer></main>
 <dialog id="entry-modal" aria-labelledby="modal-title"><div class="dialog-body"><div class="dialog-head"><div><p class="eyebrow">YOUR WELLNESS JOURNAL</p><h2 id="modal-title">Новий запис 🌷</h2></div><button class="x" id="close-modal" type="button" aria-label="Закрити">×</button></div><form id="entry-form"><div class="modal-scroll"><div class="field"><label for="entry-type">Тип запису</label><select id="entry-type"><option value="migraine">Мігрень</option><option value="headache">Головний біль</option><option value="light_headache">Легкий головний біль</option><option value="pain_free">Без болю</option><option value="note">Нотатка</option></select></div><div class="field date-field"><label for="entry-date">Дата запису</label>
@@ -100,7 +170,40 @@ function syncDateLabel(){const value=$('entry-date').value;$('date-display').tex
 function syncForm(){const pain=PAIN.includes($('entry-type').value);$('pain-fields').classList.toggle('hide',!pain);$('intensity-field').classList.toggle('hide',!pain);const level=Number($('intensity').value);$('intensity-number').textContent=level;$('intensity').style.setProperty('--progress',((level-1)/9*100).toFixed(1)+'%');syncDateLabel()}
 async function reload(){const {data,error}=await client.from('migraine_entries').select('*').eq('user_id',user.id).order('entry_date',{ascending:false}).order('created_at',{ascending:false}).limit(3000);if(error)throw error;records=data||[];render()}
 const rowsFor=d=>records.filter(r=>r.entry_date===d), hasPain=r=>PAIN.includes(r.type);
-function renderCalendar(){const [y,m]=shownMonth.split('-').map(Number);const first=new Date(y,m-1,1), count=new Date(y,m,0).getDate(), offset=(first.getDay()+6)%7;$('calendar-title').textContent=first.toLocaleDateString('uk-UA',{month:'long',year:'numeric'});$('stat-month').textContent=first.toLocaleDateString('uk-UA',{month:'long'});const names=['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];$('calendar').innerHTML=names.map(n=>'<div class="weekday">'+n+'</div>').join('')+Array.from({length:Math.ceil((offset+count)/7)*7},(_,i)=>{const n=i-offset+1;if(n<1||n>count)return '<span></span>';const d=shownMonth+'-'+String(n).padStart(2,'0');const types=[...new Set(rowsFor(d).map(x=>x.type))].sort((a,b)=>['migraine','headache','light_headache','pain_free','note'].indexOf(a)-['migraine','headache','light_headache','pain_free','note'].indexOf(b));return '<button class="date'+(d===dateLocal()?' today':'')+(d===selected?' selected':'')+'" data-date="'+d+'" aria-label="'+escape(display(d))+'"><span>'+n+'</span><span class="dots">'+types.slice(0,4).map(t=>'<i class="dot '+t+'"></i>').join('')+'</span></button>'}).join('');$('calendar').querySelectorAll('[data-date]').forEach(el=>el.onclick=()=>{selected=el.dataset.date;render()})}
+function renderCalendar(){
+  const [y,m]=shownMonth.split('-').map(Number);
+  const first=new Date(y,m-1,1);
+  const count=new Date(y,m,0).getDate();
+  const offset=(first.getDay()+6)%7;
+  const monthName=first.toLocaleDateString('uk-UA',{month:'long'});
+  $('calendar-title').textContent=monthName.charAt(0).toLocaleUpperCase('uk-UA')+monthName.slice(1)+' '+y;
+  $('stat-month').textContent=monthName;
+  const weekdays=['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+  const priority=['migraine','headache','light_headache','pain_free','note'];
+  const calendarRows=Math.ceil((offset+count)/7)*7;
+  const monthEntries=records.filter(r=>r.entry_date.startsWith(shownMonth+'-'));
+  const byDate=new Map();
+  for(const entry of monthEntries){
+    if(!byDate.has(entry.entry_date))byDate.set(entry.entry_date,new Set());
+    byDate.get(entry.entry_date).add(entry.type);
+  }
+  const weekdaysHtml=weekdays.map(n=>'<div class="weekday" aria-hidden="true">'+n+'</div>').join('');
+  const cells=Array.from({length:calendarRows},(_,i)=>{
+    const n=i-offset+1;
+    if(n<1||n>count)return '<span class="calendar-spacer" aria-hidden="true"></span>';
+    const date=shownMonth+'-'+String(n).padStart(2,'0');
+    const types=Array.from(byDate.get(date)||[]).sort((a,b)=>priority.indexOf(a)-priority.indexOf(b));
+    const primary=types[0]||'';
+    const isToday=date===dateLocal();
+    const isSelected=date===selected;
+    const classes=['date',isToday?'today':'',isSelected?'selected':'',types.length?'has-entries':''].filter(Boolean).join(' ');
+    const dots=types.slice(0,4).map(t=>'<i class="dot '+t+'"></i>').join('');
+    const label=display(date)+(types.length?' — '+types.map(t=>TYPES[t]).join(', '):' — без записів');
+    return '<button type="button" class="'+classes+'" data-date="'+date+'" data-primary="'+primary+'" aria-label="'+escape(label)+'" aria-pressed="'+isSelected+'"><span class="date-number">'+n+'</span><span class="dots" aria-hidden="true">'+dots+'</span></button>';
+  }).join('');
+  $('calendar').innerHTML=weekdaysHtml+cells;
+  $('calendar').querySelectorAll('[data-date]').forEach(el=>el.onclick=()=>{selected=el.dataset.date;render()});
+}
 function entryHTML(r){return '<div class="entry"><div><div class="entry-title">'+({migraine:'🌷',headache:'💧',light_headache:'☁️',pain_free:'🌿',note:'📝'}[r.type])+' '+TYPES[r.type]+'</div><div class="entry-meta">'+escape(display(r.entry_date))+(r.intensity?' · '+r.intensity+'/10':'')+(r.notes?' · '+escape(r.notes.slice(0,55)):'')+'</div></div><button data-edit="'+escape(r.id)+'" aria-label="Редагувати запис">✎</button></div>'}
 function mountEntries(id,data,empty){$(id).innerHTML=data.length?data.map(entryHTML).join(''):'<div class="empty">'+empty+'</div>';$(id).querySelectorAll('[data-edit]').forEach(el=>el.onclick=()=>{const r=records.find(x=>x.id===el.dataset.edit);if(r)openForm(r.type,r.entry_date,r)})}
 function render(){renderCalendar();const today=dateLocal(),now=rowsFor(today),pain=now.filter(hasPain);$('today-label').textContent=new Date().toLocaleDateString('uk-UA',{timeZone:'Europe/Sofia',weekday:'long',day:'numeric',month:'long',year:'numeric'});$('hero-title').textContent=pain.length?'Сьогодні є запис про головний біль':now.some(r=>r.type==='pain_free')?'Ти відмітила день без болю 🌿':'Як ти почуваєшся сьогодні?';$('hero-text').textContent=now.length?'Сьогодні збережено записів: '+now.length+'. Ти завжди можеш їх відредагувати.':'Відмічай самопочуття, навіть коли болю немає. Це допоможе побачити закономірності.';const thisMonth=records.filter(r=>monthKey(r.entry_date)===shownMonth),dates=[...new Set(thisMonth.map(r=>r.entry_date))];$('stat-migraine').textContent=dates.filter(d=>rowsFor(d).some(r=>r.type==='migraine')).length;$('stat-headache').textContent=dates.filter(d=>rowsFor(d).some(hasPain)).length;$('stat-free').textContent=dates.filter(d=>rowsFor(d).some(r=>r.type==='pain_free')&&!rowsFor(d).some(hasPain)).length;const levels=thisMonth.filter(hasPain).map(r=>r.intensity);$('stat-intensity').textContent=levels.length?(levels.reduce((a,b)=>a+b,0)/levels.length).toFixed(1):'—';$('day-heading').textContent='Записи · '+display(selected);mountEntries('day-entries',rowsFor(selected),'На цей день записів ще немає. 🌸');mountEntries('recent',records.slice(0,5),'Твої перші записи з’являться тут.');const triggers=thisMonth.filter(hasPain).flatMap(r=>r.triggers||[]);const counts={};for(const t of triggers)counts[t]=(counts[t]||0)+1;const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];$('insight-text').textContent=top?'У записах цього місяця найчастіше вказано «'+top[0]+'» ('+top[1]+' разів). Це спостереження, а не встановлена причина.':levels.length?'Цього місяця зафіксовано '+levels.length+' записів болю. Додавай можливі тригери, щоб краще бачити тенденції.':'Коли з’являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.'}
