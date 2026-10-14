@@ -1,7 +1,7 @@
 {
-  "name": "Daily Duo — Планка щодня",
+  "name": "Daily Duo — челенджі з Bestie",
   "short_name": "Daily Duo",
-  "description": "Щоденна планка з подругою — окремі галочки та спільний прогрес.",
+  "description": "Різні групи, спільні челенджі та окремий прогрес.",
   "start_url": "/daily-duo/",
   "scope": "/daily-duo/",
   "display": "standalone",
@@ -9,7 +9,7 @@
   "theme_color": "#dff1ff",
   "icons": [
     {
-      "src": "/daily-duo/icon.svg",
+      "src": "/daily-duo/icon.svg?v=2",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
