@@ -19,9 +19,10 @@ function initClient(){const c=config();if(!c)return false;if(!window.supabase?.c
 async function boot(){
  try{
    if(!initClient()){show('auth-panel');toast('Конфігурація Supabase відсутня. Перевір config.js.');return;}
-   const {data,error}=await client.auth.getSession();
-   if(error)throw error;
-   user=data.session?.user||null;
+   // Subscribe before reading the session so PASSWORD_RECOVERY is not missed
+   // while the Supabase client exchanges the recovery link for a session.
+   const recoveryLink=location.hash.includes('type=recovery')||
+     new URLSearchParams(location.search).get('type')==='recovery';
    client.auth.onAuthStateChange((event,session)=>{
      user=session?.user||null;
      if(event==='PASSWORD_RECOVERY'){
@@ -32,8 +33,11 @@ async function boot(){
        setTimeout(()=>load().catch(e=>toast(e.message)),0);
      }
    });
+   const {data,error}=await client.auth.getSession();
+   if(error)throw error;
+   user=data.session?.user||null;
    await load();
-   if(location.hash.includes('type=recovery')||new URLSearchParams(location.search).get('type')==='recovery'){
+   if(recoveryLink){
      // Supabase processes the recovery token during client initialization.
      setTimeout(async()=>{
        const {data:current}=await client.auth.getSession();
@@ -361,7 +365,7 @@ document.addEventListener('click',e=>{
  input.type=visible?'text':'password';
  toggle.setAttribute('aria-pressed',String(visible));
  toggle.setAttribute('aria-label',visible?'Приховати пароль':'Показати пароль');
- toggle.textContent=visible?'◎':'◉';
+ toggle.textContent=visible?'🙈':'👁';
 });
 function openPasswordChange(recovery=false){
  if(!$('password-change-dialog')||!client)return;
