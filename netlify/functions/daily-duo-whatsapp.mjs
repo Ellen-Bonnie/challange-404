@@ -4,8 +4,7 @@
  * No secrets are exposed to browser code.
  * At most one send attempt per user and Daily Duo day is reserved in Supabase.
  */
-const SCHEDULE = "*/15 * * * *";
-export const config = { schedule: SCHEDULE };
+export const config = { schedule: "*/15 * * * *" };
 
 const needed = [
   "SUPABASE_URL",
