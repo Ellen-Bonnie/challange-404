@@ -43,9 +43,11 @@ function updateHistoryPreview(){
    : '<p class="history-empty">Поки немає записів. Ваша історія почнеться сьогодні 🐾</p>';
  const expandable=historyRows.length>3;
  const button=$('history-toggle');
- button.classList.toggle('hidden',!expandable);
+ button.disabled=!expandable;
  button.setAttribute('aria-expanded',String(expandable&&historyExpanded));
- button.innerHTML=historyExpanded?'Згорнути історію <span aria-hidden="true">⌃</span>':'Показати всю історію <span aria-hidden="true">⌄</span>';
+ button.setAttribute('aria-label',expandable?(historyExpanded?'Згорнути історію':'Розгорнути історію'):'Історія — усі записи показано');
+ $('history-chevron').classList.toggle('hidden',!expandable);
+ $('history-chevron').textContent=historyExpanded?'⌃':'⌄';
 }
 $('history-toggle').onclick=()=>{
  historyExpanded=!historyExpanded;
