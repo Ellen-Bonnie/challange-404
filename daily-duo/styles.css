@@ -102,7 +102,10 @@ dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
 .rename-wrap .small-note{font-size:12px;line-height:1.5;margin:10px 0 0;color:#775e87}
 
 /* Three-row history preview with accessible expand/collapse control */
-.history-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:13px;padding:12px;border:1px solid #cde4f8;border-radius:13px;background:#edf7ff;color:#527c9b;font-size:13px;font-weight:800}
-.history-toggle:hover{background:#e2f1ff}
-.history-toggle span{font-size:18px;line-height:1}
+.history-heading-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:0;background:transparent;border:0;color:var(--ink);font:800 19px Manrope,sans-serif;letter-spacing:-.7px;text-align:left}
+.history-heading-toggle:not(:disabled){cursor:pointer}
+.history-heading-toggle:focus-visible{outline:2px solid #8cc7f7;outline-offset:5px;border-radius:5px}
+.history-heading-toggle:disabled{opacity:1;cursor:default}
+.history-heading-toggle>span:first-child span{font-size:17px}
+.history-chevron{display:grid;place-items:center;flex-shrink:0;width:30px;height:30px;border-radius:10px;background:var(--blue);color:#527c9b;font:800 22px/1 Manrope,sans-serif}
 .history-empty{margin:0;padding:12px 0;font-size:13px;color:var(--muted)}
