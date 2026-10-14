@@ -30,4 +30,4 @@ If your Netlify site is connected to branch `main` with root publish directory, 
 - Only a duo's creator can rename it under the provided SQL policy.
 - Supabase authorization rules must stay enabled on membership, tasks and completions; do not expose secret credentials in static JS.
 - Previous static pages remain untouched.
-- Daily Duo deliberately has no notification or reminder features; daily tasks and completion history remain available when members open the app.
+- Daily challenges and completion history appear when each member opens the app.
