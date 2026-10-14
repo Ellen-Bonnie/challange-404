@@ -26,4 +26,15 @@ The browser's Supabase publishable key and URL are in `config.js` (not service s
 
 Deploy GitHub `main` with the repository root as the Netlify publish directory so `/daily-duo/` resolves correctly. Refresh the page on each device after deployment.
 
+## Passwords and account recovery
+
+Daily Duo supports:
+
+- An eye icon to show/hide entered passwords.
+- **Забула пароль?** on the sign-in page via Supabase Auth `resetPasswordForEmail`.
+- **Змінити пароль** while signed in, via Supabase Auth `updateUser({ password })`.
+- Recovery links open the new password form (minimum 8 characters).
+
+**Supabase configuration required:** Authentication → URL Configuration → Redirect URLs must include the actual Daily Duo site address, for example `https://YOUR-SITE.netlify.app/daily-duo/`. A recovery email uses the origin and pathname from the website where it was requested. If your site uses a custom domain, allow that URL too. Recovery email sending also depends on the Supabase project's email sending limits/configuration.
+
 This project deliberately has no automatic notification delivery.
