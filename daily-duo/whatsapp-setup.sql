@@ -82,13 +82,13 @@ create or replace function public.daily_duo_reminder_ensure_task(
   p_duo_id uuid,
   p_task_date date
 )
-returns uuid
+returns text
 language plpgsql
 security definer
 set search_path = ''
 as $$
 declare
-  v_task_id uuid;
+  v_task_id text;
 begin
   if auth.role() is distinct from 'service_role' then
     raise exception 'Not authorized';
@@ -101,10 +101,10 @@ begin
     '💪 ПЛАНКА'
   )
   on conflict (duo_id, task_date) do nothing
-  returning id into v_task_id;
+  returning id::text into v_task_id;
 
   if v_task_id is null then
-    select id into v_task_id
+    select id::text into v_task_id
     from public.daily_tasks
     where duo_id = p_duo_id and task_date = p_task_date;
   end if;
