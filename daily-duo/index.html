@@ -39,9 +39,9 @@
     <p class="eyebrow">YOUR PERSON, YOUR CHALLENGE</p>
     <h1>Створи вашу <span>команду 🐾</span></h1>
     <form id="create-room-form" class="form-stack">
-      <label for="room-name">Назва вашого дуету</label>
+      <label for="room-name">Назва вашої групи</label>
       <input id="room-name" maxlength="40" placeholder="Наприклад, Plank Besties" required>
-      <button class="primary-button" type="submit">Створити дует 🐾</button>
+      <button class="primary-button" type="submit">Створити групу 🐾</button>
     </form>
     <div class="separator">або приєднайся до подруги</div>
     <form id="join-room-form" class="form-stack">
@@ -54,8 +54,12 @@
 
   <section id="dashboard" class="hidden">
     <div class="welcome-row">
+      <div class="group-switcher">
+        <label for="group-select">МОЇ ГРУПИ</label>
+        <select id="group-select" aria-label="Оберіть групу"></select>
+      </div>
       <p class="eyebrow">ONE DAY AT A TIME</p>
-      <div class="room-title-row"><h1 id="room-title">Daily Duo</h1><button id="rename-open" type="button" class="rename-open hidden" title="Змінити назву дуету" aria-label="Змінити назву дуету">✎</button></div>
+      <div class="room-title-row"><h1 id="room-title">Daily Duo</h1><button id="rename-open" type="button" class="rename-open hidden" title="Змінити назву групи" aria-label="Змінити назву групи">✎</button></div>
     </div>
 
     <section class="challenges-section" aria-labelledby="daily-challenges-heading">
@@ -84,17 +88,37 @@
       <div id="history-list" class="history-list"></div>
     </section>
 
-    <button id="invite-open" class="invite-trigger" type="button"><span aria-hidden="true">💌</span> Запросити подругу <span aria-hidden="true">↗</span></button>
+    <button id="invite-open" class="invite-trigger" type="button"><span aria-hidden="true">💌</span> Запросити Bestie <span aria-hidden="true">↗</span></button>
 
 
 
     <footer class="app-footer">
       <button type="button" id="manage-challenges-open" class="manage-challenges-button">⚙ Керувати челенджами</button>
-      <button type="button" id="leave-room" class="text-button">Покинути дует</button>
+      <button type="button" id="leave-room" class="text-button">Покинути групу</button>
+      <button type="button" id="add-group-open" class="add-group-button">＋ Додати групу</button>
     </footer>
   </section>
   <div id="toast" role="status" aria-live="polite"></div>
 </main>
+
+<dialog id="group-dialog" aria-labelledby="group-dialog-title">
+  <div class="modal-head">
+    <div><p class="eyebrow">MORE GROUPS, MORE MEMORIES</p><h2 id="group-dialog-title">Додати групу 🐾</h2></div>
+    <button id="group-dialog-close" type="button" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <form id="group-create-form" class="form-stack">
+    <label for="new-group-name">Назва нової групи</label>
+    <input id="new-group-name" maxlength="40" required placeholder="Наприклад, Reading Besties">
+    <button id="create-group-save" type="submit" class="primary-button">Створити групу</button>
+  </form>
+  <div class="separator">або приєднатися до Bestie</div>
+  <form id="group-join-form" class="form-stack">
+    <label for="new-group-code">Код запрошення</label>
+    <input id="new-group-code" maxlength="12" autocapitalize="characters" required placeholder="Код групи">
+    <button id="join-group-save" type="submit" class="secondary-button">Приєднатися до групи</button>
+  </form>
+  <p id="group-message" class="muted" aria-live="polite"></p>
+</dialog>
 
 <dialog id="manage-challenges-dialog" aria-labelledby="manage-challenges-title">
   <div class="modal-head">
@@ -129,13 +153,13 @@
 
 <dialog id="invite-dialog" aria-labelledby="invite-title">
   <div class="modal-head">
-    <div><p class="eyebrow">JUST THE TWO OF YOU 🐾</p><h2 id="invite-title">Запросити подругу</h2></div>
+    <div><p class="eyebrow">JUST THE TWO OF YOU 🐾</p><h2 id="invite-title">Запросити Bestie</h2></div>
     <button id="invite-close" class="modal-close" type="button" aria-label="Закрити">×</button>
   </div>
-  <p class="muted" id="invite-copy">Надішли код подрузі, щоб вона приєдналась до вашого дуету.</p>
+  <p class="muted" id="invite-copy">Надішли код Bestie, щоб вона приєдналась до вашої групи.</p>
   <div class="invite-code" id="invite-code">------</div>
   <div id="rename-wrap" class="rename-wrap hidden">
-    <label for="rename-room">Назва вашого дуету</label>
+    <label for="rename-room">Назва вашої групи</label>
     <div class="rename-controls"><input id="rename-room" maxlength="40" placeholder="Ваша назва"><button id="save-room-name" type="button" class="secondary-button">Зберегти назву</button></div><p id="rename-message" class="muted small-note" aria-live="polite"></p>
   </div>
   <div class="modal-actions">
