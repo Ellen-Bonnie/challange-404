@@ -205,7 +205,13 @@ function subscribe(){
    .on('postgres_changes',{event:'*',schema:'public',table:'daily_tasks',filter:'duo_id=eq.'+duo.id},()=>render().catch(err=>toast(err.message)))
    .on('postgres_changes',{event:'*',schema:'public',table:'duo_members',filter:'duo_id=eq.'+duo.id},()=>render().catch(err=>toast(err.message)))
    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'duos',filter:'id=eq.'+duo.id},payload=>{
-     if(payload.new?.name){duo.name=payload.new.name;render().catch(()=>{});}
+     if(payload.new?.name&&duo?.id===payload.new.id){
+       duo.name=payload.new.name;
+       const row=myGroups.find(g=>g.duo_id===duo.id);
+       if(row?.duos)row.duos.name=payload.new.name;
+       displayGroupSwitcher();
+       render().catch(()=>{});
+     }
    }).subscribe();
 }
 function renderChallengeManagement(){
@@ -341,6 +347,9 @@ async function persistDuoName(value) {
  const {data:verified,error:readError}=await client.from('duos').select('id,name').eq('id',duo.id).single();
  if(readError||verified?.name!==name)throw new Error('Не вдалося перевірити назву в базі.');
  duo.name=verified.name;
+ const selectedGroup=myGroups.find(g=>g.duo_id===duo.id);
+ if(selectedGroup?.duos)selectedGroup.duos.name=verified.name;
+ displayGroupSwitcher();
  $('room-title').textContent=verified.name;
  
  return verified.name;
