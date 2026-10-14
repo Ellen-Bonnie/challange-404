@@ -7,7 +7,11 @@ let historyExpanded=false, historyRows=[], historyDuoId=null;
 const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const toast = message => {const el=$('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4500);};
 const show = id => ['auth-panel','room-panel','dashboard'].forEach(p=>$(p).classList.toggle('hidden',p!==id));
-const day = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Sofia',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const day = () => {
+ const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Sofia',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+ const value=t=>parts.find(p=>p.type===t)?.value;
+ return value('year')+'-'+value('month')+'-'+value('day');
+};
 const label = d => new Date(d+'T12:00:00').toLocaleDateString('uk-UA',{day:'numeric',month:'long'});
 function mode(signup){signingUp=signup;$('show-login').classList.toggle('active',!signup);$('show-signup').classList.toggle('active',signup);$('name-field').classList.toggle('hidden',!signup);$('display-name').required=signup;$('auth-submit').textContent=signup?'Зареєструватися ✨':'Увійти ✨';}
 function config(){const preset=window.DAILY_DUO_CONFIG;return preset?.url && (preset.key?.startsWith('sb_publishable_') || preset.key?.startsWith('eyJ')) ? preset : null;}
@@ -79,8 +83,12 @@ async function render(){
    if((page||[]).length<500)break;
  }
  if(!user||!duo||duo.id!==activeDuoId)return;
+ // Archive removes a challenge from the active tracker and its visible history.
+ // Keep all historical records in Supabase so restoring brings them back.
+ const activeChallengeIds=new Set(challengeDefinitions.filter(c=>c.is_active).map(c=>c.id));
  const byDay=new Map();
  for(const t of history){
+   if(!activeChallengeIds.has(t.challenge_id))continue;
    if(!byDay.has(t.task_date))byDay.set(t.task_date,[]);
    byDay.get(t.task_date).push(t);
  }
@@ -91,6 +99,8 @@ async function render(){
  );
  const togetherDays=historyRows.filter(row=>members.length===2&&hasAllChecks(row.tasks,members.map(m=>m.user_id))).length;
  $('together-count').textContent=togetherDays+' дн.';
+ // The current streak includes today only once ALL currently active challenges
+ // are marked; archived challenges must never block it.
  const myCompletedDays=new Set(historyRows.filter(row=>hasAllChecks(row.tasks,[user.id])).map(row=>row.date));
  let dateCursor=new Date(day()+'T12:00:00');
  if(!myCompletedDays.has(day()))dateCursor.setDate(dateCursor.getDate()-1);
