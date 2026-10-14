@@ -9,10 +9,10 @@
   "theme_color": "#dff1ff",
   "icons": [
     {
-      "src": "/daily-duo/icon.svg?v=2",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/daily-duo/paw-heart.png?v=3",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
