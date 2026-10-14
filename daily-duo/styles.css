@@ -28,7 +28,7 @@ p{line-height:1.55}
 .auth-switch{display:grid;grid-template-columns:1fr 1fr;gap:6px;border-radius:13px;background:#eaf4fb;padding:5px;margin:22px 0}
 .auth-switch button{border:0;background:transparent;padding:11px;border-radius:10px;color:#75849b;font-size:13px;font-weight:800}
 .auth-switch button.active{background:white;box-shadow:0 2px 8px #7995af15;color:var(--ink)}
-form label,.reminder-card label{display:block;margin:12px 0 7px;font-size:12px;font-weight:800;color:#65657d}
+form label{display:block;margin:12px 0 7px;font-size:12px;font-weight:800;color:#65657d}
 input{display:block;width:100%;min-width:0;max-width:100%;margin-bottom:12px;padding:13px 14px;background:white;border:1px solid #dfeaf2;border-radius:13px;color:var(--ink);outline:none;font-size:16px}
 input:focus{border-color:#90c6ee;box-shadow:0 0 0 3px #bfe5ff55}
 .primary-button,.secondary-button{display:block;width:100%;padding:14px;border-radius:13px;border:0;font-weight:800;font-size:14px}
@@ -77,13 +77,6 @@ input:focus{border-color:#90c6ee;box-shadow:0 0 0 3px #bfe5ff55}
 .history-status{font-size:12px;white-space:nowrap;font-weight:800;color:#678bae}
 .invite-trigger{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;border:1px dashed #e6bcd3;border-radius:16px;background:#fff1f7;color:#a95883;font-size:14px;font-weight:800;padding:15px}
 .invite-trigger span:last-child{margin-left:auto}
-.reminder-card{display:flex;flex-direction:column;align-items:stretch;gap:0}
-.reminder-card h2{margin-bottom:3px}
-.reminder-card .muted{margin:0 0 10px}
-.reminder-card label{margin:6px 0}
-.reminder-card input,.reminder-card button{width:100%;max-width:100%;min-width:0}
-.reminder-card input{height:48px;margin-bottom:10px}
-.reminder-card .small-note{margin:11px 0 0;font-size:11px}
 .app-footer{text-align:center;padding-top:3px}
 dialog{width:min(calc(100vw - 30px),430px);max-width:calc(100vw - 30px);padding:24px;border:1px solid #e1eaf4;border-radius:24px;background:#fff;box-shadow:0 20px 70px #25384e40;color:var(--ink)}
 dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
@@ -101,11 +94,3 @@ dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
 .rename-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
 .rename-controls input{margin:0}
 .rename-controls button{width:100%}
-
-/* Consent-first WhatsApp reminder controls */
-.reminder-card .consent-row{display:flex;align-items:flex-start;gap:12px;padding:14px 12px;margin:6px 0 15px;border:1px solid var(--line);border-radius:13px;background:#f8fbff;cursor:pointer}
-.reminder-card .consent-row input{display:block;flex:0 0 20px;width:20px;min-width:20px;max-width:20px;height:20px;margin:0;accent-color:#e88ab3}
-.reminder-card .consent-row span{flex:1;min-width:0;font-size:12px;line-height:1.5;font-weight:500;color:var(--ink)}
-.reminder-card #wa-phone{margin-top:5px}
-.reminder-card #wa-time-zone{margin:-3px 0 12px}
-.reminder-card #disable-reminder{margin-top:9px;align-self:center;width:auto;max-width:100%;padding:10px 4px;background:transparent;color:#9a557c;text-align:center}
