@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
-let client, user, duo, me, members=[], todayTasks=[], challengeDefinitions=[], channel, signingUp=false;
+let client, user, duo, me, members=[], todayTasks=[], challengeDefinitions=[], channel, signingUp=false, myGroups=[];
 let historyExpanded=false, historyRows=[], historyDuoId=null;
 
 const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -17,8 +17,51 @@ function mode(signup){signingUp=signup;$('show-login').classList.toggle('active'
 function config(){const preset=window.DAILY_DUO_CONFIG;return preset?.url && (preset.key?.startsWith('sb_publishable_') || preset.key?.startsWith('eyJ')) ? preset : null;}
 function initClient(){const c=config();if(!c)return false;if(!window.supabase?.createClient)throw new Error('Supabase SDK не завантажився');client=window.supabase.createClient(c.url,c.key);return true;}
 async function boot(){try{if(!initClient()){show('auth-panel');toast('Конфігурація Supabase відсутня. Перевір config.js.');return;}const {data,error}=await client.auth.getSession();if(error)throw error;user=data.session?.user||null;await load();client.auth.onAuthStateChange((_e,session)=>{user=session?.user||null;setTimeout(()=>load().catch(e=>toast(e.message)),0);});}catch(e){show('auth-panel');toast(e.message);}}
-async function load(){if(!user){show('auth-panel');$('header-signout').classList.add('hidden');return;}const {data,error}=await client.from('duo_members').select('duo_id,user_id,display_name,joined_at,duos(*)').eq('user_id',user.id).order('joined_at',{ascending:false}).limit(1);if(error)throw error;me=data?.[0]||null;duo=me?.duos||null;if(!duo){historyRows=[];historyExpanded=false;todayTasks=[];challengeDefinitions=[];show('room-panel');$('header-signout').classList.add('hidden');return;}if(historyDuoId!==duo.id){historyDuoId=duo.id;historyExpanded=false;historyRows=[];}show('dashboard');$('header-signout').classList.remove('hidden');await render();subscribe();}
-
+const selectedGroupKey=()=>user?'daily-duo-selected-group-'+user.id:'';
+function displayGroupSwitcher(){
+ const dropdown=$('group-select');
+ dropdown.innerHTML=myGroups.map(g=>'<option value="'+g.duo_id+'">'+escapeHtml(g.duos?.name||'Нова група')+'</option>').join('');
+ if(duo)dropdown.value=duo.id;
+}
+async function load(preferredId=null){
+ if(!user){
+   if(channel){client.removeChannel(channel);channel=null;}
+   myGroups=[];duo=null;me=null;
+   show('auth-panel');$('header-signout').classList.add('hidden');
+   return;
+ }
+ const requestUser=user.id;
+ const {data,error}=await client.from('duo_members')
+   .select('duo_id,user_id,display_name,joined_at,duos(*)')
+   .eq('user_id',requestUser).order('joined_at',{ascending:false});
+ if(error)throw error;
+ if(user?.id!==requestUser)return;
+ myGroups=data||[];
+ const preferred=preferredId||localStorage.getItem(selectedGroupKey())||duo?.id;
+ me=myGroups.find(g=>g.duo_id===preferred)||myGroups[0]||null;
+ const previousId=duo?.id;
+ duo=me?.duos||null;
+ if(!duo){
+   if(channel){client.removeChannel(channel);channel=null;}
+   historyDuoId=null;historyRows=[];historyExpanded=false;todayTasks=[];challengeDefinitions=[];
+   show('room-panel');$('header-signout').classList.add('hidden');
+   return;
+ }
+ localStorage.setItem(selectedGroupKey(),duo.id);
+ if(previousId!==duo.id||historyDuoId!==duo.id){
+   historyDuoId=duo.id;historyExpanded=false;historyRows=[];todayTasks=[];challengeDefinitions=[];
+   if(channel){client.removeChannel(channel);channel=null;}
+ }
+ displayGroupSwitcher();
+ show('dashboard');
+ $('header-signout').classList.remove('hidden');
+ subscribe();
+ await render();
+}
+$('group-select').onchange=async e=>{
+ if(!myGroups.some(g=>g.duo_id===e.target.value))return;
+ try{await load(e.target.value);}catch(err){toast('Не вдалося змінити групу: '+err.message);}
+};
 async function render(){
  if(!duo||!user)return;
  const activeDuoId=duo.id;
@@ -49,9 +92,9 @@ async function render(){
  $('rename-open').classList.toggle('hidden',duo.created_by!==user.id);
  if(document.activeElement!==$('rename-room'))$('rename-room').value=roomName;
  $('today-label').textContent='TODAY · '+label(day()).toUpperCase();
- $('invite-title').textContent='Запросити подругу';
+ $('invite-title').textContent='Запросити Bestie';
  $('invite-code').textContent=duo.invite_code;
- $('invite-copy').textContent='Поділися цим кодом, щоб подруга приєдналася.';
+ $('invite-copy').textContent='Поділися кодом, щоб Bestie приєдналася до цієї групи.';
 
  $('challenge-list').innerHTML=todayTasks.length?todayTasks.map((t,index)=>{
    const completed=completionByTask.get(t.id)||new Set();
@@ -302,24 +345,96 @@ async function persistDuoName(value) {
  
  return verified.name;
 }
+async function createNewGroup(groupName){
+ const name=groupName.trim();
+ if(!name||name.length>40)throw new Error('Вкажи назву групи до 40 символів.');
+ const displayName=user.user_metadata?.display_name?.trim()||user.email.split('@')[0];
+ const {data,error}=await client.rpc('create_duo',{p_display_name:displayName});
+ if(error)throw error;
+ const newId=Array.isArray(data)?data[0]?.duo_id:data?.duo_id;
+ if(!newId)throw new Error('Групу створено, але сервер не повернув її ID. Онови сторінку.');
+ await load(newId);
+ try{await persistDuoName(name);}
+ catch(err){toast('Групу створено, але назву не збережено: '+err.message);throw err;}
+ await load(newId);
+ return newId;
+}
+async function joinExistingGroup(code){
+ const normalized=code.trim().toUpperCase();
+ if(!normalized)throw new Error('Введи код групи.');
+ const displayName=user.user_metadata?.display_name?.trim()||user.email.split('@')[0];
+ const {data,error}=await client.rpc('join_duo',{p_invite_code:normalized,p_display_name:displayName});
+ if(error)throw error;
+ await load(data);
+ return data;
+}
 $('create-room-form').onsubmit=async e=>{
  e.preventDefault();
+ const b=e.submitter;if(b)b.disabled=true;
+ try{await createNewGroup($('room-name').value);toast('Нову групу створено! 🐾');}
+ catch(err){toast('Помилка створення групи: '+err.message);}
+ finally{if(b)b.disabled=false;}
+};
+$('join-room-form').onsubmit=async e=>{
+ e.preventDefault();
+ const b=e.submitter;if(b)b.disabled=true;
+ try{await joinExistingGroup($('room-code').value);toast('Ти приєдналася до групи! 💗');}
+ catch(err){toast('Не вдалося приєднатися: '+err.message);}
+ finally{if(b)b.disabled=false;}
+};
+$('add-group-open').onclick=()=>{
+ $('group-create-form').reset();$('group-join-form').reset();
+ $('group-message').textContent='';$('group-dialog').showModal();
+};
+$('group-dialog-close').onclick=()=>$('group-dialog').close();
+$('group-dialog').addEventListener('click',e=>{
+ if(e.target===$('group-dialog'))$('group-dialog').close();
+});
+$('group-create-form').onsubmit=async e=>{
+ e.preventDefault();
+ const button=$('create-group-save');button.disabled=true;
+ $('group-message').textContent='Створюємо групу…';
  try{
-   const displayName=$('display-name').value.trim()||user.user_metadata?.display_name||user.email.split('@')[0];
-   const roomName=$('room-name').value.trim();
-   const {error}=await client.rpc('create_duo',{p_display_name:displayName});
+   await createNewGroup($('new-group-name').value);
+   $('group-dialog').close();
+   toast('Групу додано! Тепер у неї окремі челенджі 🐾');
+ }catch(err){$('group-message').textContent=err.message;}
+ finally{button.disabled=false;}
+};
+$('group-join-form').onsubmit=async e=>{
+ e.preventDefault();
+ const button=$('join-group-save');button.disabled=true;
+ $('group-message').textContent='Приєднуємося…';
+ try{
+   await joinExistingGroup($('new-group-code').value);
+   $('group-dialog').close();
+   toast('Готово! Групу додано до списку 💗');
+ }catch(err){$('group-message').textContent=err.message;}
+ finally{button.disabled=false;}
+};
+async function signout(){if(channel)client.removeChannel(channel);await client.auth.signOut();user=null;duo=null;myGroups=[];show('auth-panel');$('header-signout').classList.add('hidden');}
+$('header-signout').onclick=signout;$('signout-room').onclick=signout;
+$('leave-room').onclick=async()=>{
+ if(!user||!duo)return;
+ const groupId=duo.id;
+ const owner=duo.created_by===user.id;
+ const count=members.length;
+ const message=owner&&count===1
+   ? 'Ти єдина учасниця групи «'+(duo.name||'Daily Duo')+'». Якщо покинеш її, група й усі її челенджі та відмітки видаляться НАЗАВЖДИ. Продовжити?'
+   : owner
+     ? 'Покинути групу «'+(duo.name||'Daily Duo')+'»? Права власниці перейдуть Bestie. Група та історія залишаться.'
+     : 'Покинути групу «'+(duo.name||'Daily Duo')+'»? Ти втратиш доступ до її челенджів.';
+ if(!window.confirm(message))return;
+ if(owner&&count===1&&!window.confirm('Остаточно видалити цю групу з усією історією?'))return;
+ const b=$('leave-room');b.disabled=true;
+ try{
+   const {data,error}=await client.rpc('leave_duo',{p_duo_id:groupId});
    if(error)throw error;
    await load();
-   if(duo){
-     try{await persistDuoName(roomName);toast('Дует «'+roomName+'» створено! 🐾');}
-     catch(renameError){toast('Дует створено, але назва не збереглася.');$('rename-message').textContent=renameError.message;$('invite-dialog').showModal();}
-   }
- }catch(err){toast(err.message);}
+   toast(data==='deleted_group'?'Групу видалено 🐾':'Ти покинула групу 🐾');
+ }catch(err){toast('Не вдалося покинути групу: '+err.message);}
+ finally{b.disabled=false;}
 };
-$('join-room-form').onsubmit=async e=>{e.preventDefault();try{const name=$('display-name').value.trim()||user.user_metadata?.display_name||user.email.split('@')[0];const {error}=await client.rpc('join_duo',{p_invite_code:$('room-code').value.trim(),p_display_name:name});if(error)throw error;await load();toast('Ти приєдналася! 💞');}catch(err){toast(err.message);}};
-async function signout(){if(channel)client.removeChannel(channel);await client.auth.signOut();user=null;duo=null;show('auth-panel');$('header-signout').classList.add('hidden');}
-$('header-signout').onclick=signout;$('signout-room').onclick=signout;
-$('leave-room').onclick=()=>toast('Вихід із дуету поки недоступний; акаунт можна змінити через «Вийти».');
 $('copy-code').onclick=async()=>{try{await navigator.clipboard.writeText(duo.invite_code);toast('Код скопійовано! 💌');}catch{toast('Код: '+duo.invite_code);}};
 $('invite-open').onclick=()=>$('invite-dialog').showModal();
 $('rename-open').onclick=()=>{
@@ -343,6 +458,6 @@ $('save-room-name').onclick=async()=>{
 };
 $('invite-close').onclick=()=>$('invite-dialog').close();
 $('invite-dialog').addEventListener('click',e=>{if(e.target===$('invite-dialog'))$('invite-dialog').close();});
-$('share-code').onclick=async()=>{if(!duo)return;const text='Приєднуйся до нашого Daily Duo 🐾 Код: '+duo.invite_code+'\n'+location.href;if(navigator.share){try{await navigator.share({title:'Daily Duo 🐾',text});return;}catch(e){if(e.name==='AbortError')return;}}try{await navigator.clipboard.writeText(text);toast('Запрошення скопійовано! 🐾');}catch{toast('Код: '+duo.invite_code);}};
+$('share-code').onclick=async()=>{if(!duo)return;const text='Приєднуйся до нашої групи «'+(duo.name||'Daily Duo')+'» 🐾 Код: '+duo.invite_code+'\n'+location.href;if(navigator.share){try{await navigator.share({title:'Daily Duo 🐾',text});return;}catch(e){if(e.name==='AbortError')return;}}try{await navigator.clipboard.writeText(text);toast('Запрошення скопійовано! 🐾');}catch{toast('Код: '+duo.invite_code);}};
 mode(false);boot();
 })();
