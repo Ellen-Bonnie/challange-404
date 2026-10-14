@@ -163,6 +163,11 @@ async function processPreference(pref, now) {
 }
 
 export default async function handler() {
+  // Explicit production opt-in: stay in dry mode until the site owner enables sends.
+  if (process.env.WHATSAPP_SEND_ENABLED !== "true") {
+    console.log("Daily Duo WhatsApp: sending disabled until WHATSAPP_SEND_ENABLED=true");
+    return;
+  }
   const missing = needed.filter(name => !process.env[name]);
   if (missing.length) {
     console.error("Daily Duo WhatsApp: missing environment variable names:", missing.join(", "));
