@@ -51,7 +51,7 @@ with check (
   (select auth.uid()) = user_id
   and exists (
     select 1 from public.duo_members m
-    where m.user_id = (select auth.uid()) and m.duo_id = duo_id
+    where m.user_id = (select auth.uid()) and m.duo_id = daily_duo_whatsapp_preferences.duo_id
   )
 );
 
@@ -63,7 +63,7 @@ with check (
   (select auth.uid()) = user_id
   and exists (
     select 1 from public.duo_members m
-    where m.user_id = (select auth.uid()) and m.duo_id = duo_id
+    where m.user_id = (select auth.uid()) and m.duo_id = daily_duo_whatsapp_preferences.duo_id
   )
 );
 
