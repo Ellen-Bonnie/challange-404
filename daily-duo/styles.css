@@ -100,3 +100,9 @@ dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
 .room-title-row h1{min-width:0;overflow-wrap:anywhere}
 .rename-open{flex:0 0 34px;display:grid;place-items:center;width:34px;height:34px;border:1px solid #d1e7f8;background:#e5f3ff;color:#557ca2;border-radius:11px;font-size:18px;line-height:1}
 .rename-wrap .small-note{font-size:12px;line-height:1.5;margin:10px 0 0;color:#775e87}
+
+/* Three-row history preview with accessible expand/collapse control */
+.history-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:13px;padding:12px;border:1px solid #cde4f8;border-radius:13px;background:#edf7ff;color:#527c9b;font-size:13px;font-weight:800}
+.history-toggle:hover{background:#e2f1ff}
+.history-toggle span{font-size:18px;line-height:1}
+.history-empty{margin:0;padding:12px 0;font-size:13px;color:var(--muted)}
