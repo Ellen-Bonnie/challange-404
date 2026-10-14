@@ -197,3 +197,15 @@ dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
 #group-dialog .separator{margin:19px 0}
 #group-dialog .form-stack label{display:block}
 #group-dialog #group-message{margin:14px 0 0;font-size:12px;min-height:16px}
+
+/* Password visibility / recovery flows */
+.password-wrap{position:relative;margin-bottom:12px}
+.password-wrap input{margin:0;padding-right:52px}
+.password-visibility{position:absolute;right:5px;top:50%;transform:translateY(-50%);display:grid;place-items:center;min-width:40px;height:40px;border:0;border-radius:11px;background:#eef7ff;color:#527ea0;font-size:20px;font-weight:800}
+.password-visibility:active{transform:translateY(-50%) scale(.97)}
+.password-visibility:focus-visible{outline:2px solid #8cc7f7;outline-offset:1px}
+.forgot-password-button{display:block;margin:-2px 0 14px auto;padding:5px 0;border:0;background:transparent;color:#99739d;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+.password-message{min-height:17px;margin:12px 0 0;font-size:12px}
+#password-change-dialog .muted,#password-reset-request-dialog .muted{line-height:1.55}
+#password-change-dialog .form-stack label,#password-reset-request-dialog .form-stack label{margin-top:13px}
+#password-change-dialog .form-stack button.primary-button{margin-top:17px}
