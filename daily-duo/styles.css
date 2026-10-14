@@ -140,3 +140,40 @@ dialog::backdrop{background:#24375083;backdrop-filter:blur(3px)}
 #challenge-form textarea:focus{outline:none;border-color:#90c6ee;box-shadow:0 0 0 3px #bfe5ff55}
 #challenge-form .muted{margin:12px 0 15px}
 @media(max-width:380px){.challenge-list .challenge-card{padding:16px 13px}.challenges-heading h2{font-size:18px}.add-challenge-button{padding:9px 10px}.challenge-members .member-row{padding:9px 7px}}
+
+/* More compact daily cards and clearly separated challenges */
+.challenge-list{gap:22px}
+.challenge-list .challenge-card{padding:16px 17px 17px;border-radius:23px}
+.challenge-card-header{flex-wrap:nowrap;align-items:center;gap:10px;margin-bottom:7px}
+.challenge-card-header h3{flex:1 1 auto;font-size:clamp(17px,4.4vw,21px);line-height:1.25}
+.challenge-card-header .count-pill{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;white-space:nowrap;padding:6px 9px;font-size:11px}
+.challenge-description{margin:0 0 12px;max-width:100%;font-size:12.5px;line-height:1.45}
+.challenge-members{gap:6px}
+.challenge-members .member-row{flex-wrap:nowrap;gap:8px;padding:8px 9px;border-radius:13px}
+.challenge-members .avatar{width:33px;height:33px;flex:0 0 33px;font-size:16px;border-radius:10px}
+.challenge-members .member-info{flex:1 1 auto;min-width:0}
+.challenge-members .member-name{font-size:12px;line-height:1.3}
+.challenge-members .member-state{font-size:10px;margin-top:1px}
+.challenge-members .done-button{flex:0 0 auto;margin-left:0;padding:8px 9px;font-size:11px;white-space:nowrap}
+.challenge-together{margin-top:7px}
+@media(max-width:380px){
+ .challenge-list{gap:18px}
+ .challenge-list .challenge-card{padding:14px 12px}
+ .challenge-members .member-row{gap:6px;padding:7px}
+ .challenge-members .done-button{font-size:10px;padding:7px}
+ .challenge-members .member-info{min-width:0}
+}
+/* Manage/archive challenges from the bottom of the page */
+.app-footer{display:flex;align-items:center;flex-direction:column;gap:9px}
+.manage-challenges-button{width:100%;border:1px solid #d3e4f2;border-radius:15px;background:#f0f8ff;color:#607f9d;font-size:13px;font-weight:800;padding:13px}
+.manage-challenges-button:hover{background:#e4f2ff}
+.manage-challenges-description{margin:12px 0 15px}
+.manage-challenges-list{display:grid;gap:10px;max-height:min(52vh,460px);overflow-y:auto}
+.manage-challenge-row{display:flex;align-items:center;gap:10px;justify-content:space-between;min-width:0;background:#f8fbff;border:1px solid var(--line);border-radius:13px;padding:11px}
+.manage-challenge-info{min-width:0;flex:1;display:grid;gap:3px}
+.manage-challenge-info strong{font-size:13px;overflow-wrap:anywhere}
+.manage-challenge-info>span{font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.manage-challenge-info .manage-archived-label{color:#b47e98;font-weight:800}
+.manage-challenge-action{flex:0 0 auto;border-radius:10px;border:1px solid #e9cad8;background:#fff1f5;color:#a85577;font-size:11px;font-weight:800;padding:10px 11px}
+.manage-challenge-action.restore{border-color:#bddbcf;background:#ecf8f1;color:#4a836a}
+.manage-challenges-message{min-height:16px;margin:12px 0 0;font-size:12px}
