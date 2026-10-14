@@ -1,33 +1,29 @@
 # Daily Duo 🐾
 
-A mobile-first shared plank tracker for two friends, hosted under `/daily-duo/` in the existing static Netlify site.
+Mobile-first challenge tracker with multiple independent groups, hosted at `/daily-duo/`.
 
-## What is implemented
+## How it works
 
-- Supabase email/password sign-in, shared duo membership and invitation code.
-- One shared daily task from the existing `get_or_create_daily_task` Supabase RPC.
-- Individual completion controls, shared history and streak counters.
-- Supabase Realtime listening for completion and membership changes.
-- Mobile blue-and-pink interface, invitation popup, share/copy actions.
-- Duo display names persisted via the `duos.name` database column.
+- Create **several groups** under the same account, or join others using each group's invite code.
+- Switch the active group using **МОЇ ГРУПИ** above the group name. The selected group is remembered per account on this device.
+- **＋ Додати групу** at the bottom opens a popup for creating or joining a group. Existing groups stay available.
+- **Запросити Bestie** shares the invite code for the **currently selected** group.
+- Each group can have its own active challenges (title and description), daily checkboxes for each member, independent three-day history preview and streaks.
+- **Керувати челенджами** applies **only to the selected group**. Archiving preserves earlier records, while permanent deletion cascades to that challenge's records after double confirmation.
+- A group's owner can edit its name using the pencil beside the title.
+- **Покинути групу** leaves just the selected group. When an owner leaves a group that has a Bestie, ownership transfers to the other member; when the owner is the only member, leaving deletes that group and its records after an extra confirmation.
+- Current invite/join rules allow up to **two members per group**.
 
-## Required database update
+## Backend
 
-In Supabase Dashboard → SQL Editor, run `room-name-migration.sql` **once**. This adds `duos.name` and an owner-only update policy. Existing duo owners can then edit the name through **Запросити подругу** → **Назва вашого дуету**.
+Supabase project has the existing `duos`, `duo_members`, `duo_challenges`, `daily_tasks` and `task_completions` tables, plus `get_or_create_daily_tasks`, `create_duo`, `join_duo` and `leave_duo` RPC functions. Row-level security isolates data between groups. Changes made to the existing project have been applied through Supabase migrations. There is no requirement to execute the older `room-name-migration.sql` again.
 
-**Why this is needed:** Previous versions did not store the typed duo title at all, so older duo titles cannot be automatically recovered. After running this migration, set the desired title once in the popup.
-
-The existing application also depends on your previously deployed duo-membership tables, row-level-security policies and `get_or_create_daily_task`, `create_duo`, and `join_duo` RPC functions. This migration does not create those earlier objects.
+All challenge data, checkmarks, history and statistics are scoped to the selected `duo_id`. A new group starts with **no challenges** so every group can have different ones. Older groups and their data are preserved.
 
 ## Deployment
 
-The browser-side Supabase **publishable** key and project URL live in `config.js`. Never commit a service role key or Supabase secret key.
+The browser's Supabase publishable key and URL are in `config.js` (not service secrets). Do **not** store a `service_role` key or any privileged token in GitHub or browser JavaScript.
 
-If your Netlify site is connected to branch `main` with root publish directory, the page is served at `/daily-duo/` after Netlify deploys this commit. If not, redeploy the repository as a static site, using the repository root as the publish directory.
+Deploy GitHub `main` with the repository root as the Netlify publish directory so `/daily-duo/` resolves correctly. Refresh the page on each device after deployment.
 
-## Security and UX
-
-- Only a duo's creator can rename it under the provided SQL policy.
-- Supabase authorization rules must stay enabled on membership, tasks and completions; do not expose secret credentials in static JS.
-- Previous static pages remain untouched.
-- Daily challenges and completion history appear when each member opens the app.
+This project deliberately has no automatic notification delivery.
