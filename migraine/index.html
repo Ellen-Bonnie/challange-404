@@ -129,6 +129,46 @@
  .calendar-card .dots{gap:2px}
  .calendar-card .dot{width:4px;height:4px}
 }
+
+/* Monthly/yearly statistics and responsive 12-month trend */
+.analytics-card{padding:22px 20px 20px}
+.analytics-header{display:flex;align-items:center;justify-content:space-between;gap:11px;flex-wrap:wrap;margin-bottom:18px}
+.analytics-header h2{font-size:20px}
+.analytics-header .eyebrow{font-size:10px;letter-spacing:1.2px;margin:0 0 5px}
+.analytics-switch{display:flex;align-items:center;gap:3px;padding:4px;background:#f2f0fa;border:1px solid #eae5f3;border-radius:13px}
+.analytics-switch button{border:0;border-radius:10px;padding:9px 12px;background:transparent;color:#83768e;font-size:12px;font-weight:800;transition:background .16s}
+.analytics-switch button.active{background:white;color:#6b5091;box-shadow:0 2px 9px #75659920}
+.analytics-switch button:focus-visible{outline:2px solid #9e9cf0;outline-offset:1px}
+.analytics-period{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}
+.analytics-period h3{margin:0 0 3px;font-size:16px;font-weight:800}
+.analytics-caption{margin:0;color:#9c91a6;font-size:11px}
+.analytics-period .calnav{display:flex;gap:7px;flex-shrink:0}
+.analytics-period .calnav button{width:33px;height:33px;border:1px solid #ece7f3;background:#f7f4fd;color:#7a6894;border-radius:11px;font-size:21px}
+.analytics-card .stats{gap:10px}
+.analytics-card .stat{padding:16px 13px;min-width:0}
+.analytics-card .stat strong{font-size:26px}
+.analytics-card .stat span{line-height:1.45}
+.analytics-footnote{font-size:11px;line-height:1.6;color:#988da3;margin:14px 1px 0}
+.yearly-details{border-top:1px solid #f0ebf7;margin-top:17px;padding-top:19px}
+.yearly-heading h3{font-size:15px;margin:0 0 4px}
+.yearly-heading p{margin:0;color:#988da3;font-size:11px}
+.yearly-chart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;align-items:end;margin-top:19px;width:100%;height:175px;min-width:0}
+.yearly-month{display:flex;flex-direction:column;align-items:center;justify-content:end;min-width:0;height:100%;padding:0;border:0;border-radius:6px;background:transparent;cursor:pointer;color:#7a6b8b;gap:5px}
+.yearly-month:focus-visible{outline:2px solid #9e9cf0;outline-offset:2px}
+.yearly-count{display:block;min-height:15px;font-size:10px;font-weight:800;line-height:15px;color:#8c738f}
+.yearly-track{display:flex;flex-direction:column;justify-content:flex-end;flex-shrink:0;width:min(100%,22px);height:124px;background:#f6f3fa;border-radius:6px 6px 3px 3px;overflow:hidden}
+.yearly-bar{width:100%;flex-shrink:0;display:block;transition:height .2s}
+.yearly-bar.other{background:#8cc7f7}
+.yearly-bar.migraine{background:#e88ab3}
+.yearly-month:hover .yearly-track{box-shadow:0 0 0 2px #d6c8ef}
+.yearly-label{min-width:0;max-width:100%;font-size:10px;font-weight:700;line-height:14px;white-space:nowrap}
+.yearly-key{display:flex;flex-wrap:wrap;justify-content:center;gap:9px 14px;margin-top:15px;color:#847b93;font-size:11px}
+.yearly-key span{display:inline-flex;align-items:center;gap:6px}
+.yearly-swatch{display:inline-block;width:9px;height:9px;border-radius:3px}
+.yearly-swatch.migraine{background:#e88ab3}
+.yearly-swatch.headache{background:#8cc7f7}
+.yearly-empty{background:#faf8ff;border-radius:11px;padding:9px 11px;text-align:center;color:#81768d;font-size:11px;line-height:1.5;margin:13px 0 0}
+@media(max-width:420px){.analytics-card{padding:18px 15px}.analytics-header{align-items:flex-start}.analytics-switch button{padding:8px 10px}.yearly-chart{gap:2px}.yearly-track{height:110px;width:min(100%,17px)}.yearly-label{font-size:9px}.yearly-month{gap:4px}.analytics-card .stat{padding:13px 10px}}
 </style></head><body><main class="shell">
 <header class="top"><div class="brand"><div class="mark">🌷</div><span>headspace<span style="color:#c29bbc">.</span></span></div><div class="topright"><span class="muted" id="account-label" style="font-size:12px"></span><button class="small-btn hide" id="signout">Вийти</button></div></header>
 <section id="auth" class="card auth"><p class="eyebrow">YOUR PRIVATE SPACE</p><h2>Твій щоденник самопочуття 🌸</h2><p class="muted">Використовуй ті самі email і пароль, що й у Daily Duo. Якщо ти вже увійшла в челендж у цьому браузері, трекер відкриється автоматично.</p><form id="auth-form"><div class="field"><label for="email">Email</label><input type="email" id="email" required autocomplete="email"></div><div class="field"><label for="password">Пароль</label><input type="password" id="password" required autocomplete="current-password"></div><button class="primary" style="width:100%" type="submit">Увійти через акаунт Daily Duo ✨</button></form><p class="muted" style="font-size:12px">Якщо акаунта ще немає або треба відновити пароль, зроби це в <a href="/daily-duo/" style="color:#a07abb">Daily Duo</a>. Це спільний акаунт для обох застосунків.</p></section>
@@ -151,7 +191,35 @@
   </div>
 </div>
 <div class="card day-card"><div class="section-head"><h2 id="day-heading">Записи за день</h2><button class="text-link" id="day-add">＋ Додати</button></div><div id="day-entries" class="entries"></div></div></div>
-<div class="stack"><div class="card"><div class="section-head"><h2>Цей місяць</h2><span class="muted" style="font-size:12px" id="stat-month"></span></div><div class="stats"><div class="stat"><span>🌷 Днів з мігренню</span><strong id="stat-migraine">0</strong><span>за записами</span></div><div class="stat"><span>🩵 Днів з болем</span><strong id="stat-headache">0</strong><span>включно з мігренню</span></div><div class="stat"><span>🌿 Днів без болю</span><strong id="stat-free">0</strong><span>підтверджено</span></div><div class="stat"><span>✨ Середня інтенсивність</span><strong id="stat-intensity">—</strong><span>шкала 1–10</span></div></div></div><div class="card insight"><p class="eyebrow">GENTLE INSIGHTS</p><h2>Маленькі спостереження 🔎</h2><p class="muted" id="insight-text">Коли з'являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.</p></div><div class="card"><div class="section-head"><h2>Останні записи</h2><button class="text-link" id="export-csv">Експорт CSV ↗</button></div><div id="recent" class="entries"></div></div></div></div></section>
+<div class="stack"><div class="card analytics-card">
+  <div class="analytics-header">
+    <div><p class="eyebrow">WELLNESS IN NUMBERS</p><h2>Статистика</h2></div>
+    <div class="analytics-switch" role="group" aria-label="Період статистики">
+      <button type="button" id="stats-month" class="active" aria-pressed="true">Місяць</button>
+      <button type="button" id="stats-year" aria-pressed="false">Рік</button>
+    </div>
+  </div>
+  <div class="analytics-period">
+    <div><h3 id="stat-period">Цей місяць</h3><p id="stat-caption" class="analytics-caption">Підсумки за твоїми записами</p></div>
+    <div id="year-nav" class="calnav hide">
+      <button type="button" id="stats-prev-year" aria-label="Попередній рік">‹</button>
+      <button type="button" id="stats-next-year" aria-label="Наступний рік">›</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><span>🌷 Днів з мігренню</span><strong id="stat-migraine">0</strong><span>за записами</span></div>
+    <div class="stat"><span>🩵 Днів з болем</span><strong id="stat-headache">0</strong><span>включно з мігренню</span></div>
+    <div class="stat"><span>🌿 Днів без болю</span><strong id="stat-free">0</strong><span>підтверджено</span></div>
+    <div class="stat"><span>✨ Середня інтенсивність</span><strong id="stat-intensity">—</strong><span>шкала 1–10</span></div>
+  </div>
+  <p class="analytics-footnote">Дні без записів не враховуються як дні без болю.</p>
+  <div id="yearly-details" class="yearly-details hide">
+    <div class="yearly-heading"><h3>Рік за місяцями</h3><p>Натисни на стовпчик, щоб відкрити місяць</p></div>
+    <div id="yearly-chart" class="yearly-chart" role="group" aria-label="Дні з головним болем за місяцями"></div>
+    <div class="yearly-key"><span><i class="yearly-swatch migraine"></i>Мігрень</span><span><i class="yearly-swatch headache"></i>Інший головний біль</span></div>
+    <p id="yearly-empty" class="yearly-empty hide">За цей рік ще немає записів про головний біль.</p>
+  </div>
+</div><div class="card insight"><p class="eyebrow">GENTLE INSIGHTS</p><h2>Маленькі спостереження 🔎</h2><p class="muted" id="insight-text">Коли з'являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.</p></div><div class="card"><div class="section-head"><h2>Останні записи</h2><button class="text-link" id="export-csv">Експорт CSV ↗</button></div><div id="recent" class="entries"></div></div></div></div></section>
 <footer class="foot">Made with care ♡ · Приватний щоденник, не медична діагностика</footer></main>
 <dialog id="entry-modal" aria-labelledby="modal-title"><div class="dialog-body"><div class="dialog-head"><div><p class="eyebrow">YOUR WELLNESS JOURNAL</p><h2 id="modal-title">Новий запис 🌷</h2></div><button class="x" id="close-modal" type="button" aria-label="Закрити">×</button></div><form id="entry-form"><div class="modal-scroll"><div class="field"><label for="entry-type">Тип запису</label><select id="entry-type"><option value="migraine">Мігрень</option><option value="headache">Головний біль</option><option value="light_headache">Легкий головний біль</option><option value="pain_free">Без болю</option><option value="note">Нотатка</option></select></div><div class="field date-field"><label for="entry-date">Дата запису</label>
 <div class="date-control"><span class="date-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18"/></svg></span><span class="date-value" id="date-display">Обрати дату</span><span class="date-chevron" aria-hidden="true">⌄</span><input id="entry-date" class="date-native" type="date" aria-label="Дата запису" required></div>
@@ -159,7 +227,7 @@
 <div class="field intensity-field" id="intensity-field"><div class="intensity-heading"><label for="intensity">Інтенсивність болю</label><span class="intensity-value"><b id="intensity-number">5</b><small> / 10</small></span></div><input class="range" id="intensity" type="range" min="1" max="10" step="1" value="5" aria-label="Інтенсивність болю від 1 до 10"><div class="intensity-scale" aria-hidden="true"><span>1 · Легкий</span><span>10 · Сильний</span></div></div><div id="pain-fields"><div class="field"><span>Симптоми</span><div class="chips" id="symptoms"><label><input type="checkbox" value="Нудота"><span>Нудота</span></label><label><input type="checkbox" value="Чутливість до світла"><span>Світло</span></label><label><input type="checkbox" value="Чутливість до звуку"><span>Звук</span></label><label><input type="checkbox" value="Аура"><span>Аура</span></label><label><input type="checkbox" value="Запаморочення"><span>Запаморочення</span></label></div></div><div class="field"><span>Можливі тригери</span><div class="chips" id="triggers"><label><input type="checkbox" value="Стрес"><span>Стрес</span></label><label><input type="checkbox" value="Недосип"><span>Недосип</span></label><label><input type="checkbox" value="Погода"><span>Погода</span></label><label><input type="checkbox" value="Екран"><span>Екран</span></label><label><input type="checkbox" value="Харчування"><span>Харчування</span></label></div></div><div class="field"><label for="medication">Ліки (необов'язково)</label><input id="medication" maxlength="500" placeholder="Назва / час / ефект"></div></div><div class="field"><label for="notes">Нотатки</label><textarea id="notes" maxlength="4000" placeholder="Що ще хочеш запам'ятати?"></textarea></div></div><div class="actions"><button class="danger hide" type="button" id="delete-entry">Видалити</button><button class="primary" id="save-entry" type="submit">Зберегти запис ♡</button></div></form></div></dialog><div id="toast" role="status" aria-live="polite"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.min.js"></script><script src="/daily-duo/config.js"></script>
 <script>
-(()=>{'use strict';const $=id=>document.getElementById(id), TYPES={migraine:'Мігрень',headache:'Головний біль',light_headache:'Легкий біль',pain_free:'Без болю',note:'Нотатка'}, PAIN=['migraine','headache','light_headache'];let client,user,records=[],selected,shownMonth,editing=null,toastTimeout;
+(()=>{'use strict';const $=id=>document.getElementById(id), TYPES={migraine:'Мігрень',headache:'Головний біль',light_headache:'Легкий біль',pain_free:'Без болю',note:'Нотатка'}, PAIN=['migraine','headache','light_headache'];let client,user,records=[],selected,shownMonth,editing=null,toastTimeout,statsView='month',statsYear=new Date().getFullYear();
 const dateLocal=(d=new Date())=>{const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Sofia',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const v=k=>p.find(x=>x.type===k).value;return v('year')+'-'+v('month')+'-'+v('day')};
 const display=d=>new Date(d+'T12:00:00').toLocaleDateString('uk-UA',{day:'numeric',month:'long'});
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -168,7 +236,18 @@ const monthKey=d=>d.slice(0,7);
 function openForm(type='migraine',date=selected,row=null){editing=row?.id||null;$('entry-form').reset();$('entry-type').value=row?.type||type;$('entry-date').value=row?.entry_date||date;$('intensity').value=row?.intensity??5;$('medication').value=row?.medication||'';$('notes').value=row?.notes||'';for(const id of ['symptoms','triggers'])for(const input of $(id).querySelectorAll('input'))input.checked=(row?.[id]||[]).includes(input.value);$('delete-entry').classList.toggle('hide',!row);$('modal-title').textContent=row?'Редагувати запис ✏️':'Новий запис 🌷';syncForm();$('entry-modal').showModal();$('entry-modal').querySelector('.modal-scroll').scrollTop=0}
 function syncDateLabel(){const value=$('entry-date').value;$('date-display').textContent=value?new Date(value+'T12:00:00').toLocaleDateString('uk-UA',{day:'numeric',month:'long',year:'numeric'}):'Обрати дату'}
 function syncForm(){const pain=PAIN.includes($('entry-type').value);$('pain-fields').classList.toggle('hide',!pain);$('intensity-field').classList.toggle('hide',!pain);const level=Number($('intensity').value);$('intensity-number').textContent=level;$('intensity').style.setProperty('--progress',((level-1)/9*100).toFixed(1)+'%');syncDateLabel()}
-async function reload(){const {data,error}=await client.from('migraine_entries').select('*').eq('user_id',user.id).order('entry_date',{ascending:false}).order('created_at',{ascending:false}).limit(3000);if(error)throw error;records=data||[];render()}
+async function reload(){
+  const all=[],pageSize=1000;
+  for(let offset=0;;offset+=pageSize){
+    const {data,error}=await client.from('migraine_entries').select('*').eq('user_id',user.id)
+      .order('entry_date',{ascending:false}).order('created_at',{ascending:false})
+      .range(offset,offset+pageSize-1);
+    if(error)throw error;
+    all.push(...(data||[]));
+    if(!data||data.length<pageSize)break;
+  }
+  records=all;render();
+}
 const rowsFor=d=>records.filter(r=>r.entry_date===d), hasPain=r=>PAIN.includes(r.type);
 function renderCalendar(){
   const [y,m]=shownMonth.split('-').map(Number);
@@ -177,7 +256,7 @@ function renderCalendar(){
   const offset=(first.getDay()+6)%7;
   const monthName=first.toLocaleDateString('uk-UA',{month:'long'});
   $('calendar-title').textContent=monthName.charAt(0).toLocaleUpperCase('uk-UA')+monthName.slice(1)+' '+y;
-  $('stat-month').textContent=monthName;
+  
   const weekdays=['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
   const priority=['migraine','headache','light_headache','pain_free','note'];
   const calendarRows=Math.ceil((offset+count)/7)*7;
@@ -206,15 +285,85 @@ function renderCalendar(){
 }
 function entryHTML(r){return '<div class="entry"><div><div class="entry-title">'+({migraine:'🌷',headache:'💧',light_headache:'☁️',pain_free:'🌿',note:'📝'}[r.type])+' '+TYPES[r.type]+'</div><div class="entry-meta">'+escape(display(r.entry_date))+(r.intensity?' · '+r.intensity+'/10':'')+(r.notes?' · '+escape(r.notes.slice(0,55)):'')+'</div></div><button data-edit="'+escape(r.id)+'" aria-label="Редагувати запис">✎</button></div>'}
 function mountEntries(id,data,empty){$(id).innerHTML=data.length?data.map(entryHTML).join(''):'<div class="empty">'+empty+'</div>';$(id).querySelectorAll('[data-edit]').forEach(el=>el.onclick=()=>{const r=records.find(x=>x.id===el.dataset.edit);if(r)openForm(r.type,r.entry_date,r)})}
-function render(){renderCalendar();const today=dateLocal(),now=rowsFor(today),pain=now.filter(hasPain);$('today-label').textContent=new Date().toLocaleDateString('uk-UA',{timeZone:'Europe/Sofia',weekday:'long',day:'numeric',month:'long',year:'numeric'});$('hero-title').textContent=pain.length?'Сьогодні є запис про головний біль':now.some(r=>r.type==='pain_free')?'Ти відмітила день без болю 🌿':'Як ти почуваєшся сьогодні?';$('hero-text').textContent=now.length?'Сьогодні збережено записів: '+now.length+'. Ти завжди можеш їх відредагувати.':'Відмічай самопочуття, навіть коли болю немає. Це допоможе побачити закономірності.';const thisMonth=records.filter(r=>monthKey(r.entry_date)===shownMonth),dates=[...new Set(thisMonth.map(r=>r.entry_date))];$('stat-migraine').textContent=dates.filter(d=>rowsFor(d).some(r=>r.type==='migraine')).length;$('stat-headache').textContent=dates.filter(d=>rowsFor(d).some(hasPain)).length;$('stat-free').textContent=dates.filter(d=>rowsFor(d).some(r=>r.type==='pain_free')&&!rowsFor(d).some(hasPain)).length;const levels=thisMonth.filter(hasPain).map(r=>r.intensity);$('stat-intensity').textContent=levels.length?(levels.reduce((a,b)=>a+b,0)/levels.length).toFixed(1):'—';$('day-heading').textContent='Записи · '+display(selected);mountEntries('day-entries',rowsFor(selected),'На цей день записів ще немає. 🌸');mountEntries('recent',records.slice(0,5),'Твої перші записи з’являться тут.');const triggers=thisMonth.filter(hasPain).flatMap(r=>r.triggers||[]);const counts={};for(const t of triggers)counts[t]=(counts[t]||0)+1;const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];$('insight-text').textContent=top?'У записах цього місяця найчастіше вказано «'+top[0]+'» ('+top[1]+' разів). Це спостереження, а не встановлена причина.':levels.length?'Цього місяця зафіксовано '+levels.length+' записів болю. Додавай можливі тригери, щоб краще бачити тенденції.':'Коли з’являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.'}
+function getStats(rows){
+  const days=new Map();
+  for(const row of rows){
+    if(!days.has(row.entry_date))days.set(row.entry_date,new Set());
+    days.get(row.entry_date).add(row.type);
+  }
+  let migraineDays=0,headacheDays=0,freeDays=0;
+  for(const types of days.values()){
+    const hasMigraine=types.has('migraine');
+    const hasHeadache=PAIN.some(t=>types.has(t));
+    if(hasMigraine)migraineDays++;
+    if(hasHeadache)headacheDays++;
+    if(!hasHeadache&&types.has('pain_free'))freeDays++;
+  }
+  const levels=rows.filter(hasPain).map(r=>Number(r.intensity)).filter(n=>Number.isFinite(n)&&n>=1&&n<=10);
+  return {migraineDays,headacheDays,freeDays,
+    avgIntensity:levels.length?(levels.reduce((a,b)=>a+b,0)/levels.length).toFixed(1):'—',
+    painEntries:levels.length,entryCount:rows.length,dates:days.size};
+}
+function renderYearChart(year){
+  const months=Array.from({length:12},(_,index)=>{
+    const key=year+'-'+String(index+1).padStart(2,'0');
+    const stat=getStats(records.filter(r=>r.entry_date.startsWith(key+'-')));
+    const name=new Date(year,index,1).toLocaleDateString('uk-UA',{month:'short'});
+    return {key,label:name.charAt(0).toUpperCase()+name.slice(1),...stat};
+  });
+  const maxValue=Math.max(1,...months.map(m=>m.headacheDays));
+  $('yearly-chart').innerHTML=months.map(m=>{
+    const other=m.headacheDays-m.migraineDays;
+    const migraineHeight=(m.migraineDays/maxValue*100).toFixed(2);
+    const otherHeight=(other/maxValue*100).toFixed(2);
+    const title=m.label+' '+year+': '+m.migraineDays+' дн. з мігренню, '+other+' дн. з іншим болем, '+m.freeDays+' дн. без болю';
+    return '<button type="button" class="yearly-month" data-chart-month="'+m.key+'" title="'+escape(title)+'" aria-label="'+escape(title)+'. Відкрити місяць">'
+      +'<span class="yearly-count">'+(m.headacheDays||'')+'</span>'
+      +'<span class="yearly-track"><span class="yearly-bar other" style="height:'+otherHeight+'%"></span><span class="yearly-bar migraine" style="height:'+migraineHeight+'%"></span></span>'
+      +'<span class="yearly-label">'+escape(m.label)+'</span></button>';
+  }).join('');
+  $('yearly-chart').querySelectorAll('[data-chart-month]').forEach(button=>{
+    button.onclick=()=>{
+      shownMonth=button.dataset.chartMonth;
+      selected=shownMonth+'-01';
+      statsView='month';
+      render();
+      document.querySelector('.calendar-card')?.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+  });
+  $('yearly-empty').classList.toggle('hide',months.some(m=>m.headacheDays>0));
+}
+function renderStats(){
+  const yearly=statsView==='year';
+  const rows=yearly?records.filter(r=>r.entry_date.startsWith(String(statsYear)+'-')):records.filter(r=>r.entry_date.startsWith(shownMonth+'-'));
+  const summary=getStats(rows);
+  $('stats-month').classList.toggle('active',!yearly);
+  $('stats-year').classList.toggle('active',yearly);
+  $('stats-month').setAttribute('aria-pressed',String(!yearly));
+  $('stats-year').setAttribute('aria-pressed',String(yearly));
+  $('year-nav').classList.toggle('hide',!yearly);
+  $('yearly-details').classList.toggle('hide',!yearly);
+  $('stat-period').textContent=yearly?String(statsYear):new Date(Number(shownMonth.slice(0,4)),Number(shownMonth.slice(5,7))-1,1).toLocaleDateString('uk-UA',{month:'long',year:'numeric'});
+  $('stat-caption').textContent=yearly?summary.entryCount+' записів за рік':summary.entryCount+' записів за місяць';
+  $('stat-migraine').textContent=summary.migraineDays;
+  $('stat-headache').textContent=summary.headacheDays;
+  $('stat-free').textContent=summary.freeDays;
+  $('stat-intensity').textContent=summary.avgIntensity;
+  if(yearly)renderYearChart(statsYear);
+}
+function render(){renderCalendar();renderStats();const today=dateLocal(),now=rowsFor(today),pain=now.filter(hasPain);$('today-label').textContent=new Date().toLocaleDateString('uk-UA',{timeZone:'Europe/Sofia',weekday:'long',day:'numeric',month:'long',year:'numeric'});$('hero-title').textContent=pain.length?'Сьогодні є запис про головний біль':now.some(r=>r.type==='pain_free')?'Ти відмітила день без болю 🌿':'Як ти почуваєшся сьогодні?';$('hero-text').textContent=now.length?'Сьогодні збережено записів: '+now.length+'. Ти завжди можеш їх відредагувати.':'Відмічай самопочуття, навіть коли болю немає. Це допоможе побачити закономірності.';const thisMonth=records.filter(r=>monthKey(r.entry_date)===shownMonth),levels=thisMonth.filter(hasPain).map(r=>r.intensity);$('day-heading').textContent='Записи · '+display(selected);mountEntries('day-entries',rowsFor(selected),'На цей день записів ще немає. 🌸');mountEntries('recent',records.slice(0,5),'Твої перші записи з’являться тут.');const triggers=thisMonth.filter(hasPain).flatMap(r=>r.triggers||[]);const counts={};for(const t of triggers)counts[t]=(counts[t]||0)+1;const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];$('insight-text').textContent=top?'У записах цього місяця найчастіше вказано «'+top[0]+'» ('+top[1]+' разів). Це спостереження, а не встановлена причина.':levels.length?'Цього місяця зафіксовано '+levels.length+' записів болю. Додавай можливі тригери, щоб краще бачити тенденції.':'Коли з’являться записи, тут будуть короткі підсумки. Це не діагноз і не визначення причин болю.'}
 async function save(e){e.preventDefault();const button=$('save-entry');button.disabled=true;try{const date=$('entry-date').value,type=$('entry-type').value,pain=PAIN.includes(type);const payload={user_id:user.id,entry_date:date,type,intensity:pain?Number($('intensity').value):null,symptoms:pain?[...$('symptoms').querySelectorAll('input:checked')].map(x=>x.value):[],triggers:pain?[...$('triggers').querySelectorAll('input:checked')].map(x=>x.value):[],medication:pain?$('medication').value.trim():'',notes:$('notes').value.trim()};const q=editing?client.from('migraine_entries').update(payload).eq('id',editing).eq('user_id',user.id):client.from('migraine_entries').insert(payload);const {error}=await q;if(error)throw error;selected=date;shownMonth=monthKey(date);$('entry-modal').close();await reload();toast('Запис збережено ♡')}catch(error){toast('Не вдалося зберегти: '+error.message)}finally{button.disabled=false}}
 async function remove(){if(!editing||!confirm('Видалити цей запис назавжди?'))return;try{const {error}=await client.from('migraine_entries').delete().eq('id',editing).eq('user_id',user.id);if(error)throw error;$('entry-modal').close();await reload();toast('Запис видалено')}catch(e){toast(e.message)}}
 function exportCSV(){const headers=['Дата','Тип','Інтенсивність','Початок','Завершення','Триває','Симптоми','Можливі тригери','Ліки','Нотатки'];const lines=[headers,...records.map(r=>[r.entry_date,TYPES[r.type],r.intensity??'',r.started_at||'',r.ended_at||'',r.ongoing?'Так':'Ні',(r.symptoms||[]).join('; '),(r.triggers||[]).join('; '),r.medication,r.notes])].map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(','));const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='migraine-journal-'+dateLocal()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 async function showUser(u){user=u;$('auth').classList.toggle('hide',!!u);$('dashboard').classList.toggle('hide',!u);$('signout').classList.toggle('hide',!u);$('account-label').textContent=u?'Приватний щоденник 🔒':'';if(u){try{await reload()}catch(e){toast('Не вдалося отримати записи: '+e.message)}}else{records=[]}}
-async function boot(){selected=dateLocal();shownMonth=monthKey(selected);$('today-label').textContent='';const cfg=window.DAILY_DUO_CONFIG;if(!cfg?.url||!cfg?.key||!window.supabase){toast('Не вдалося завантажити підключення');return}client=window.supabase.createClient(cfg.url,cfg.key);const {data,error}=await client.auth.getSession();if(error)console.warn(error.message);await showUser(data?.session?.user||null);client.auth.onAuthStateChange((event,session)=>{if(['SIGNED_IN','SIGNED_OUT'].includes(event))setTimeout(()=>showUser(session?.user||null),0)})}
+async function boot(){selected=dateLocal();shownMonth=monthKey(selected);statsYear=Number(shownMonth.slice(0,4));$('today-label').textContent='';const cfg=window.DAILY_DUO_CONFIG;if(!cfg?.url||!cfg?.key||!window.supabase){toast('Не вдалося завантажити підключення');return}client=window.supabase.createClient(cfg.url,cfg.key);const {data,error}=await client.auth.getSession();if(error)console.warn(error.message);await showUser(data?.session?.user||null);client.auth.onAuthStateChange((event,session)=>{if(['SIGNED_IN','SIGNED_OUT'].includes(event))setTimeout(()=>showUser(session?.user||null),0)})}
 $('auth-form').onsubmit=async e=>{e.preventDefault();try{const {error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)throw error;$('password').value='';}catch(error){toast('Помилка входу: '+error.message)}};
 $('signout').onclick=async()=>{const {error}=await client.auth.signOut();if(error)toast(error.message)};
 $('add-entry').onclick=()=>openForm();$('day-add').onclick=()=>openForm();$('quick-free').onclick=()=>openForm('pain_free',dateLocal());document.querySelectorAll('[data-quick]').forEach(b=>b.onclick=()=>openForm(b.dataset.quick,dateLocal()));$('prev-month').onclick=()=>changeMonth(-1);$('next-month').onclick=()=>changeMonth(1);function changeMonth(n){const [y,m]=shownMonth.split('-').map(Number);const d=new Date(y,m-1+n,1);shownMonth=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');selected=shownMonth+'-01';render()}
+$('stats-month').onclick=()=>{statsView='month';renderStats()};
+$('stats-year').onclick=()=>{if(statsView!=='year')statsYear=Number(shownMonth.slice(0,4));statsView='year';renderStats()};
+$('stats-prev-year').onclick=()=>{statsYear--;renderStats()};
+$('stats-next-year').onclick=()=>{statsYear++;renderStats()};
 $('entry-type').onchange=syncForm;$('intensity').oninput=syncForm;$('entry-date').onchange=syncDateLabel;$('entry-date').oninput=syncDateLabel;$('close-modal').onclick=()=>$('entry-modal').close();$('entry-form').onsubmit=save;$('delete-entry').onclick=remove;$('export-csv').onclick=exportCSV;
 boot().catch(e=>toast(e.message));
 })();
