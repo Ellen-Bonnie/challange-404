@@ -88,10 +88,26 @@
 
 
 
-    <footer class="app-footer"><button type="button" id="leave-room" class="text-button">Покинути дует</button></footer>
+    <footer class="app-footer">
+      <button type="button" id="manage-challenges-open" class="manage-challenges-button">⚙ Керувати челенджами</button>
+      <button type="button" id="leave-room" class="text-button">Покинути дует</button>
+    </footer>
   </section>
   <div id="toast" role="status" aria-live="polite"></div>
 </main>
+
+<dialog id="manage-challenges-dialog" aria-labelledby="manage-challenges-title">
+  <div class="modal-head">
+    <div>
+      <p class="eyebrow">YOUR TEAM</p>
+      <h2 id="manage-challenges-title">Керування челенджами 🐾</h2>
+    </div>
+    <button id="manage-challenges-close" type="button" class="modal-close" aria-label="Закрити">×</button>
+  </div>
+  <p class="muted manage-challenges-description">Можна прибрати челендж з активних, не втрачаючи попередні відмітки в історії.</p>
+  <div id="manage-challenges-list" class="manage-challenges-list"></div>
+  <p id="manage-challenges-message" class="muted manage-challenges-message" aria-live="polite"></p>
+</dialog>
 
 <dialog id="challenge-dialog" aria-labelledby="challenge-dialog-title">
   <div class="modal-head">
